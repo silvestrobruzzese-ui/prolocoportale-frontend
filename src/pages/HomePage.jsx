@@ -45,28 +45,60 @@ export default function HomePage() {
   const [searchZoom, setSearchZoom] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  // Check if fullscreen API is available
+  const canFullscreen = typeof document !== 'undefined' && (
+    document.documentElement.requestFullscreen ||
+    document.documentElement.webkitRequestFullscreen ||
+    document.documentElement.mozRequestFullScreen ||
+    document.documentElement.msRequestFullscreen
+  );
+
+  // Detect iOS
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
   // Toggle fullscreen mode
   const toggleFullscreen = useCallback(() => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().then(() => {
+    const elem = document.documentElement;
+
+    if (isIOS) {
+      // iOS doesn't support fullscreen API - show install prompt
+      toast.info("Per schermo intero: Condividi → Aggiungi a Home", { duration: 5000 });
+      return;
+    }
+
+    const requestFS = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullScreen || elem.msRequestFullscreen;
+    const exitFS = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+    const isFS = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+
+    if (!isFS) {
+      requestFS?.call(elem).then(() => {
         setIsFullscreen(true);
       }).catch(() => {
-        toast.error("Fullscreen non supportato");
+        toast.info("Per schermo intero: Condividi → Aggiungi a Home", { duration: 5000 });
       });
     } else {
-      document.exitFullscreen().then(() => {
+      exitFS?.call(document).then(() => {
         setIsFullscreen(false);
       });
     }
-  }, []);
+  }, [isIOS]);
 
   // Listen for fullscreen changes (e.g., user presses Escape)
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const isFS = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+      setIsFullscreen(!!isFS);
     };
     document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange);
+    document.addEventListener("mozfullscreenchange", handleFullscreenChange);
+    document.addEventListener("MSFullscreenChange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      document.removeEventListener("webkitfullscreenchange", handleFullscreenChange);
+      document.removeEventListener("mozfullscreenchange", handleFullscreenChange);
+      document.removeEventListener("MSFullscreenChange", handleFullscreenChange);
+    };
   }, []);
 
   // Use searched location first, then user position, then default Calabria
