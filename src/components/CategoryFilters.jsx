@@ -5,7 +5,7 @@ const CATEGORIES = [
   { key: "restaurant", value: "Restaurant", icon: "🍽", color: "#E63946" },
   { key: "pizzerie", value: "Pizzerie", icon: "🍕", color: "#FF6B35" },
   { key: "hotel", value: "Hotel", icon: "🏨", color: "#FFD700" },
-  { key: "bb", value: "B&B", icon: "🏡", color: "#22C55E" },
+  { key: "bb", value: "B&B", icon: "B&B", color: "#22C55E" },
   { key: "beni_culturali", value: "Beni Culturali", icon: "🏛", color: "#8B5CF6" },
   { key: "itinerari", value: "Itinerari", icon: "🥾", color: "#10B981" },
   { key: "monumenti", value: "Monumenti", icon: "⛪", color: "#A855F7" },
@@ -24,19 +24,21 @@ export default function CategoryFilters({ value, onChange }) {
     <div className="flex gap-3 overflow-x-auto no-scrollbar px-4 py-3">
       {CATEGORIES.map((c, index) => {
         const isActive = c.value === value;
+        const isTextIcon = c.icon.length > 2; // "B&B" is text, not emoji
         return (
           <button
             key={c.key}
             data-testid={`category-filter-${c.key}`}
             onClick={() => onChange(isActive ? null : c.value)}
-            className={`category-btn flex-shrink-0 w-14 h-14 rounded-full text-2xl inline-flex items-center justify-center border-3 ${
+            className={`category-btn flex-shrink-0 w-14 h-14 rounded-full inline-flex items-center justify-center border-3 ${
               isActive ? "active" : ""
-            }`}
+            } ${isTextIcon ? "text-xs font-bold" : "text-2xl"}`}
             style={{
               backgroundColor: isActive ? c.color : "white",
               borderColor: c.color,
               borderWidth: "3px",
               animationDelay: `${index * 50}ms`,
+              color: isTextIcon && !isActive ? c.color : undefined,
             }}
             title={c.value}
           >
