@@ -42,10 +42,10 @@ const categoryEmoji = {
 };
 
 function pinIcon(business, inProximity) {
-  const baseColor = categoryColors[business.category] || categoryColors.Other;
-  const color = inProximity ? PRIMARY : baseColor;
+  const color = categoryColors[business.category] || categoryColors.Other;
   const emoji = categoryEmoji[business.category] || categoryEmoji.Other;
-  const html = `<div class="proxi-pin" style="background:${color}"><span>${emoji}</span></div>`;
+  const proximityClass = inProximity ? "in-proximity" : "";
+  const html = `<div class="proxi-pin ${proximityClass}" style="background:${color}"><span>${emoji}</span></div>`;
   return L.divIcon({ html, className: "proxi-marker-icon", iconSize: [36, 36], iconAnchor: [18, 36] });
 }
 
