@@ -32,7 +32,7 @@ export default function CategoryFilters({ value, onChange }) {
             onClick={() => onChange(isActive ? null : c.value)}
             className={`category-btn flex-shrink-0 w-14 h-14 rounded-full inline-flex items-center justify-center border-3 ${
               isActive ? "active" : ""
-            } ${isTextIcon ? "text-xs font-bold" : "text-2xl"}`}
+            } ${isTextIcon ? "text-sm font-bold" : "text-2xl"}`}
             style={{
               backgroundColor: isActive ? c.color : "white",
               borderColor: c.color,
