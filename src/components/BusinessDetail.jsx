@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X } from "lucide-react";
 
-const FALLBACK_IMG = "https://images.pexels.com/photos/7385395/pexels-photo-7385395.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940";
-
 function formatDistance(km) {
   if (km == null) return "—";
   if (km < 1) return `${Math.round(km * 1000)} m`;
@@ -29,42 +27,35 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
         className="w-full sm:max-w-md p-0 overflow-y-auto rounded-t-3xl sm:rounded-l-3xl sm:rounded-t-none"
         data-testid="business-detail-sheet"
       >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full glass inline-flex items-center justify-center"
-          data-testid="business-detail-close"
-        >
-          <X className="w-4 h-4" />
-        </button>
-
-        <div className="relative h-56 bg-[var(--bg)]">
-          <img
-            src={business.image_url || FALLBACK_IMG}
-            alt={business.name}
-            className="w-full h-full object-cover"
-            onError={(e) => { e.currentTarget.src = FALLBACK_IMG; }}
-          />
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent" />
-          <div className="absolute left-4 right-4 bottom-3 flex items-end justify-between gap-3">
-            <div>
-              <Badge className="bg-white/90 text-[var(--text-primary)] hover:bg-white rounded-full mb-1">{business.category}</Badge>
-              <h2 className="font-display text-2xl font-semibold text-white drop-shadow-md">{business.name}</h2>
-            </div>
+        <div className="p-5 pb-0 flex items-start justify-between gap-3">
+          <div className="flex-1 min-w-0">
+            <Badge className="bg-[var(--bg)] text-[var(--text-secondary)] rounded-full mb-2">{business.category}</Badge>
+            <h2 className="font-display text-xl font-semibold text-[var(--text-primary)]">{business.name}</h2>
+            {(business.description || business.promotion_description) && (
+              <p className="text-sm text-[var(--text-secondary)] mt-1">{business.description || business.promotion_description}</p>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
             {eff > 0 && (
-              <div className={`px-3 py-2 rounded-full text-white font-bold shadow-lg ${inProx ? "bg-[var(--primary)]" : "bg-[var(--secondary)]"}`}
+              <div className={`px-3 py-2 rounded-full text-white font-bold text-sm ${inProx ? "bg-[var(--primary)]" : "bg-[var(--secondary)]"}`}
                 data-testid="proximity-discount-badge"
               >
                 -{Math.round(eff)}%
               </div>
             )}
+            <button
+              onClick={onClose}
+              className="w-9 h-9 rounded-full bg-[var(--bg)] inline-flex items-center justify-center"
+              data-testid="business-detail-close"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
-        <SheetHeader className="px-5 pt-5">
-          <SheetTitle className="font-display">{business.name}</SheetTitle>
-          <SheetDescription className="text-[var(--text-secondary)]">
-            {business.description || business.promotion_description || ""}
-          </SheetDescription>
+        <SheetHeader className="sr-only">
+          <SheetTitle>{business.name}</SheetTitle>
+          <SheetDescription>{business.category}</SheetDescription>
         </SheetHeader>
 
         <div className="p-5 space-y-4">

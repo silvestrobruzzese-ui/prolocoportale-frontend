@@ -1,6 +1,5 @@
-// Category filter buttons - vertical sidebar
+// Category filter buttons - horizontal scrollable bar
 import React from "react";
-import { useI18n } from "@/lib/i18n";
 
 const CATEGORIES = [
   { key: "restaurant", value: "Restaurant", icon: "🍽", color: "#E63946" },
@@ -19,9 +18,8 @@ const CATEGORIES = [
 ];
 
 export default function CategoryFilters({ value, onChange }) {
-  const { t } = useI18n();
   return (
-    <div className="flex flex-col gap-2 p-2">
+    <div className="flex gap-2 overflow-x-auto no-scrollbar px-3 py-2">
       {CATEGORIES.map((c) => {
         const isActive = c.value === value;
         return (
@@ -29,18 +27,17 @@ export default function CategoryFilters({ value, onChange }) {
             key={c.key}
             data-testid={`category-filter-${c.key}`}
             onClick={() => onChange(isActive ? null : c.value)}
-            className={`h-12 px-4 rounded-xl text-sm font-medium whitespace-nowrap inline-flex items-center gap-3 transition-all duration-200 border-2 ${
+            className={`flex-shrink-0 w-11 h-11 rounded-full text-xl inline-flex items-center justify-center transition-all duration-200 ${
               isActive
-                ? "text-white shadow-lg scale-105"
-                : "bg-white/90 text-[var(--text-primary)] border-transparent hover:scale-102 hover:shadow-md"
+                ? "text-white shadow-lg scale-110"
+                : "bg-white/90 shadow-md"
             }`}
             style={{
               backgroundColor: isActive ? c.color : undefined,
-              borderColor: isActive ? c.color : "transparent",
             }}
+            title={c.value}
           >
-            <span className="text-xl">{c.icon}</span>
-            <span className="hidden xl:inline">{t(c.key)}</span>
+            {c.icon}
           </button>
         );
       })}

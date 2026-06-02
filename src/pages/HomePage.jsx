@@ -246,64 +246,62 @@ export default function HomePage() {
     }
   };
 
-  const distanceFmt = (km) => km == null ? "—" : (km < 1 ? `${Math.round(km * 1000)} m` : `${km.toFixed(2)} km`);
-
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-[var(--bg)]">
       {/* Floating top bar */}
-      <div className="absolute top-0 inset-x-0 z-[1000] p-3 sm:p-4 flex items-center gap-2">
-        <div className="glass rounded-full h-12 flex items-center px-4 gap-2 flex-1 max-w-2xl" data-testid="search-bar">
-          <Search className="w-4 h-4 text-[var(--text-secondary)]" />
-          <Input
-            placeholder={t("search_placeholder")}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleSearchKeyDown}
-            className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 h-10 px-0"
-            data-testid="search-input"
-          />
+      <div className="absolute top-0 inset-x-0 z-[1000]">
+        <div className="p-3 sm:p-4 flex items-center gap-2">
+          <div className="glass rounded-full h-12 flex items-center px-4 gap-2 flex-1 max-w-2xl" data-testid="search-bar">
+            <Search className="w-4 h-4 text-[var(--text-secondary)]" />
+            <Input
+              placeholder={t("search_placeholder")}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleSearchKeyDown}
+              className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 h-10 px-0"
+              data-testid="search-input"
+            />
+          </div>
+
+          <LanguageSwitcher />
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="glass rounded-full h-12 w-12 inline-flex items-center justify-center hover:bg-white" data-testid="user-menu-btn">
+                <Menu className="w-5 h-5" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="rounded-xl w-56">
+              {user ? (
+                <>
+                  <DropdownMenuItem className="font-medium" disabled data-testid="user-menu-name">
+                    <User className="w-4 h-4 mr-2" /> {user.name || user.email}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => toast.info(`${favorites.length} ${t("favorites")}`)} data-testid="user-menu-favorites">
+                    <Heart className="w-4 h-4 mr-2" /> {t("favorites")} ({favorites.length})
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={logout} data-testid="user-menu-logout">
+                    <LogOut className="w-4 h-4 mr-2" /> {t("logout")}
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <DropdownMenuItem onClick={() => setAuthOpen(true)} data-testid="user-menu-login">
+                  <User className="w-4 h-4 mr-2" /> {t("login")} / {t("register")}
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild data-testid="user-menu-admin-link">
+                <Link to="/admin/login"><ShieldCheck className="w-4 h-4 mr-2" /> {t("sign_in_admin")}</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild data-testid="user-menu-proloco-link">
+                <Link to="/proloco/login"><KeyRound className="w-4 h-4 mr-2" /> {t("sign_in_proloco")}</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
-        <LanguageSwitcher />
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="glass rounded-full h-12 w-12 inline-flex items-center justify-center hover:bg-white" data-testid="user-menu-btn">
-              <Menu className="w-5 h-5" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="rounded-xl w-56">
-            {user ? (
-              <>
-                <DropdownMenuItem className="font-medium" disabled data-testid="user-menu-name">
-                  <User className="w-4 h-4 mr-2" /> {user.name || user.email}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => toast.info(`${favorites.length} ${t("favorites")}`)} data-testid="user-menu-favorites">
-                  <Heart className="w-4 h-4 mr-2" /> {t("favorites")} ({favorites.length})
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={logout} data-testid="user-menu-logout">
-                  <LogOut className="w-4 h-4 mr-2" /> {t("logout")}
-                </DropdownMenuItem>
-              </>
-            ) : (
-              <DropdownMenuItem onClick={() => setAuthOpen(true)} data-testid="user-menu-login">
-                <User className="w-4 h-4 mr-2" /> {t("login")} / {t("register")}
-              </DropdownMenuItem>
-            )}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild data-testid="user-menu-admin-link">
-              <Link to="/admin/login"><ShieldCheck className="w-4 h-4 mr-2" /> {t("sign_in_admin")}</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild data-testid="user-menu-proloco-link">
-              <Link to="/proloco/login"><KeyRound className="w-4 h-4 mr-2" /> {t("sign_in_proloco")}</Link>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      {/* Left sidebar category filters */}
-      <div className="absolute left-3 top-20 bottom-4 z-[999] overflow-y-auto">
+        {/* Horizontal category filters */}
         <CategoryFilters value={category} onChange={setCategory} />
       </div>
 
