@@ -6,6 +6,8 @@ const CATEGORIES = [
   { key: "pizzerie", value: "Pizzerie", icon: "🍕", color: "#FF6B35" },
   { key: "hotel", value: "Hotel", icon: "🏨", color: "#FFD700" },
   { key: "bb", value: "B&B", icon: "🛏", color: "#228B22" },
+  { key: "beni_culturali", value: "Beni Culturali", icon: "🏛", color: "#7B68EE" },
+  { key: "itinerari", value: "Itinerari", icon: "🥾", color: "#2E8B57" },
   { key: "monumenti", value: "Monumenti", icon: "⛪", color: "#8B4513" },
   { key: "musei", value: "Musei", icon: "🏛", color: "#9C27B0" },
   { key: "spiagge", value: "Spiagge", icon: "🏖", color: "#00CED1" },

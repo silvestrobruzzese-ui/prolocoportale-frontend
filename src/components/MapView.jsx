@@ -21,6 +21,8 @@ const categoryColors = {
   Archeologia: "#FF8C00", // Arancione
   Discoteche: "#E040FB",  // Fucsia/Magenta
   Supermercati: "#3498DB", // Blu
+  "Beni Culturali": "#7B68EE", // Viola medio
+  Itinerari: "#2E8B57",   // Verde mare
   Other: "#6C757D",       // Grigio
 };
 
@@ -38,6 +40,8 @@ const categoryEmoji = {
   Archeologia: "🏺",
   Discoteche: "🎵",
   Supermercati: "🛒",
+  "Beni Culturali": "🏛",
+  Itinerari: "🥾",
   Other: "📍",
 };
 
