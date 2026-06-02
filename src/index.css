@@ -1,0 +1,145 @@
+/* ProxiMap - Organic & Earthy theme */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=Fraunces:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #F9F8F6;
+  --surface: #FFFFFF;
+  --primary: #D96C4A;
+  --primary-hover: #C55B39;
+  --secondary: #81B29A;
+  --secondary-hover: #6D9E86;
+  --text-primary: #2D302A;
+  --text-secondary: #5C6356;
+  --border: #E5E3DB;
+  --warning: #F2CC8F;
+  --danger: #E07A5F;
+  --proximity: rgba(217, 108, 74, 0.18);
+}
+
+body {
+  margin: 0;
+  font-family: 'Work Sans', system-ui, sans-serif;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: 'Fraunces', 'Cabinet Grotesk', Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+/* Shadcn tokens */
+@layer base {
+  :root {
+    --background: 40 25% 97%;
+    --foreground: 60 8% 18%;
+    --card: 0 0% 100%;
+    --card-foreground: 60 8% 18%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 60 8% 18%;
+    --primary: 14 64% 57%;
+    --primary-foreground: 40 25% 97%;
+    --secondary: 150 22% 60%;
+    --secondary-foreground: 60 8% 18%;
+    --muted: 40 15% 92%;
+    --muted-foreground: 80 6% 38%;
+    --accent: 35 75% 76%;
+    --accent-foreground: 60 8% 18%;
+    --destructive: 11 67% 63%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 14% 86%;
+    --input: 40 14% 86%;
+    --ring: 14 64% 57%;
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground; }
+}
+
+/* Leaflet sit below shadcn dialogs/sheets */
+.leaflet-container { z-index: 0; background: #E9EBE5; font-family: 'Work Sans', sans-serif; }
+.leaflet-pane, .leaflet-top, .leaflet-bottom { z-index: 0 !important; }
+.leaflet-top.leaflet-left { z-index: 1 !important; }
+
+/* Custom map markers */
+.proxi-marker-icon {
+  background: transparent;
+  border: 0;
+}
+.proxi-pin {
+  width: 36px;
+  height: 36px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(45, 48, 42, 0.25);
+  border: 2px solid #fff;
+  position: relative;
+}
+.proxi-pin > span {
+  transform: rotate(45deg);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+}
+.proxi-pin.user {
+  border-radius: 50%;
+  background: #2D302A;
+  width: 18px;
+  height: 18px;
+  transform: none;
+  box-shadow: 0 0 0 6px rgba(217, 108, 74, 0.3), 0 0 0 14px rgba(217, 108, 74, 0.12);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 6px rgba(217, 108, 74, 0.35), 0 0 0 14px rgba(217, 108, 74, 0.12); }
+  50% { box-shadow: 0 0 0 9px rgba(217, 108, 74, 0.2), 0 0 0 22px rgba(217, 108, 74, 0.04); }
+}
+
+/* Glass panel */
+.glass {
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px rgba(45, 48, 42, 0.10);
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Subtle grain backdrop for hero/empty states */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: radial-gradient(rgba(45,48,42,0.4) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.slide-up { animation: slideUp 0.4s ease both; }
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.fade-in { animation: fadeIn 0.3s ease both; }
