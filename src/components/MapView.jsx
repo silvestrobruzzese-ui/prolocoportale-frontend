@@ -32,7 +32,7 @@ const categoryEmoji = {
   Cafe: "☕",
   Shop: "🛍",
   Hotel: "🏨",
-  "B&B": "🛏",
+  "B&B": "🏡",
   Pharmacy: "💊",
   Monumenti: "⛪",
   Musei: "🏛",
