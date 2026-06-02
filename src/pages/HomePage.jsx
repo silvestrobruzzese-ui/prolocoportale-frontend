@@ -9,6 +9,7 @@ import BusinessList from "@/components/BusinessList";
 import BusinessDetail from "@/components/BusinessDetail";
 import AuthModal from "@/components/AuthModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import InstallBanner from "@/components/InstallBanner";
 
 import { useI18n } from "@/lib/i18n";
 import { useGeolocation } from "@/lib/useGeolocation";
@@ -382,6 +383,8 @@ export default function HomePage() {
       />
 
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
+
+      <InstallBanner />
     </div>
   );
 }
