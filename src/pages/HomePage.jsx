@@ -363,7 +363,7 @@ export default function HomePage() {
         <div className="absolute inset-0 z-[1200] flex flex-col items-center justify-center bg-[#F9F6F1] overflow-auto">
           <div className="relative w-full min-h-full flex flex-col items-center justify-center p-4">
             <img
-              src="/welcome-hero.jpg"
+              src="/welcome-hero.png"
               alt="Pro Loco in Calabria"
               className="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl"
             />
