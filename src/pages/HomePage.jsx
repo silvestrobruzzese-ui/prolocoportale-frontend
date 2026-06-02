@@ -249,8 +249,8 @@ export default function HomePage() {
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-[var(--bg)]">
       {/* Floating top bar */}
-      <div className="absolute top-0 inset-x-0 z-[1000]" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
-        <div className="p-3 sm:p-4 pt-4 flex items-center gap-2">
+      <div className="absolute top-0 inset-x-0 z-[1000] mt-12 sm:mt-0">
+        <div className="p-3 sm:p-4 flex items-center gap-2">
           <div className="glass rounded-full h-12 flex items-center px-4 gap-2 flex-1 max-w-2xl" data-testid="search-bar">
             <Search className="w-4 h-4 text-[var(--text-secondary)]" />
             <Input
