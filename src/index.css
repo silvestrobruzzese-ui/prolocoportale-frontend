@@ -95,16 +95,24 @@ h1, h2, h3, h4, .font-display {
 }
 .proxi-pin.user {
   border-radius: 50%;
-  background: #2D302A;
+  background: #D96C4A;
   width: 18px;
   height: 18px;
   transform: none;
-  box-shadow: 0 0 0 6px rgba(217, 108, 74, 0.3), 0 0 0 14px rgba(217, 108, 74, 0.12);
-  animation: pulse 2s infinite;
+  box-shadow: 0 0 0 6px rgba(217, 108, 74, 0.4), 0 0 0 14px rgba(217, 108, 74, 0.15);
+  animation: blink 1.2s ease-in-out infinite;
 }
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 6px rgba(217, 108, 74, 0.35), 0 0 0 14px rgba(217, 108, 74, 0.12); }
-  50% { box-shadow: 0 0 0 9px rgba(217, 108, 74, 0.2), 0 0 0 22px rgba(217, 108, 74, 0.04); }
+@keyframes blink {
+  0%, 100% {
+    background: #D96C4A;
+    box-shadow: 0 0 0 6px rgba(217, 108, 74, 0.5), 0 0 0 16px rgba(217, 108, 74, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    background: #ff8c66;
+    box-shadow: 0 0 0 10px rgba(217, 108, 74, 0.3), 0 0 0 24px rgba(217, 108, 74, 0.1);
+    transform: scale(1.15);
+  }
 }
 
 /* Glass panel */
