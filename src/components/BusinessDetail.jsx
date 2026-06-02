@@ -27,30 +27,31 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
         className="w-full sm:max-w-md p-0 overflow-y-auto rounded-t-3xl sm:rounded-l-3xl sm:rounded-t-none"
         data-testid="business-detail-sheet"
       >
-        <div className="p-5 pb-0 flex items-start justify-between gap-3">
-          <div className="flex-1 min-w-0">
-            <Badge className="bg-[var(--bg)] text-[var(--text-secondary)] rounded-full mb-2">{business.category}</Badge>
-            <h2 className="font-display text-xl font-semibold text-[var(--text-primary)]">{business.name}</h2>
-            {(business.description || business.promotion_description) && (
-              <p className="text-sm text-[var(--text-secondary)] mt-1">{business.description || business.promotion_description}</p>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            {eff > 0 && (
-              <div className={`px-3 py-2 rounded-full text-white font-bold text-sm ${inProx ? "bg-[var(--primary)]" : "bg-[var(--secondary)]"}`}
-                data-testid="proximity-discount-badge"
-              >
-                -{Math.round(eff)}%
-              </div>
-            )}
-            <button
-              onClick={onClose}
-              className="w-9 h-9 rounded-full bg-[var(--bg)] inline-flex items-center justify-center"
-              data-testid="business-detail-close"
+        {/* Close button - prominent at top */}
+        <div className="p-4 pb-2 flex items-center justify-between border-b border-[var(--border)]">
+          <button
+            onClick={onClose}
+            className="flex items-center gap-2 text-[var(--primary)] font-medium"
+            data-testid="business-detail-close"
+          >
+            <X className="w-5 h-5" />
+            <span>Chiudi</span>
+          </button>
+          {eff > 0 && (
+            <div className={`px-3 py-1.5 rounded-full text-white font-bold text-sm ${inProx ? "bg-[var(--primary)]" : "bg-[var(--secondary)]"}`}
+              data-testid="proximity-discount-badge"
             >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
+              -{Math.round(eff)}%
+            </div>
+          )}
+        </div>
+
+        <div className="p-5 pt-4 pb-0">
+          <Badge className="bg-[var(--bg)] text-[var(--text-secondary)] rounded-full mb-2">{business.category}</Badge>
+          <h2 className="font-display text-xl font-semibold text-[var(--text-primary)]">{business.name}</h2>
+          {(business.description || business.promotion_description) && (
+            <p className="text-sm text-[var(--text-secondary)] mt-1">{business.description || business.promotion_description}</p>
+          )}
         </div>
 
         <SheetHeader className="sr-only">

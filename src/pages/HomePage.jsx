@@ -248,7 +248,8 @@ export default function HomePage() {
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-[var(--bg)]">
-      {/* Floating top bar */}
+      {/* Floating top bar - hidden when detail is open */}
+      {!detailOpen && (
       <div className="absolute top-0 inset-x-0 z-[1000] mt-12 sm:mt-0">
         <div className="p-3 sm:p-4 flex items-center gap-2">
           <div className="glass rounded-full h-12 flex items-center px-4 gap-2 flex-1 max-w-2xl" data-testid="search-bar">
@@ -304,6 +305,7 @@ export default function HomePage() {
         {/* Horizontal category filters */}
         <CategoryFilters value={category} onChange={setCategory} />
       </div>
+      )}
 
       {/* Recenter / locate / fullscreen fab */}
       <div className="absolute right-3 sm:right-4 bottom-8 z-[1000] flex flex-col gap-2">
