@@ -4,26 +4,26 @@ import { MapContainer, TileLayer, Marker, Circle, Polyline, Polygon, useMap } fr
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-const PRIMARY = "#D96C4A";
+const PRIMARY = "#FF6B35";
 
-// Colori per categoria
+// Colori per categoria - più vivaci e pop
 const categoryColors = {
-  Restaurant: "#E63946",  // Rosso
+  Restaurant: "#E63946",  // Rosso vivace
   Pizzerie: "#FF6B35",    // Arancione pizza
-  Cafe: "#8B4513",        // Marrone caffè
-  Shop: "#2A9D8F",        // Verde acqua
-  Hotel: "#FFD700",       // Giallo oro
-  "B&B": "#228B22",       // Verde
-  Pharmacy: "#4CAF50",    // Verde chiaro
-  Monumenti: "#8B4513",   // Marrone (chiese, castelli, palazzi)
-  Musei: "#9C27B0",       // Viola
-  Spiagge: "#00CED1",     // Turchese
-  Archeologia: "#FF8C00", // Arancione
-  Discoteche: "#E040FB",  // Fucsia/Magenta
-  Supermercati: "#3498DB", // Blu
-  "Beni Culturali": "#7B68EE", // Viola medio
-  Itinerari: "#2E8B57",   // Verde mare
-  Other: "#6C757D",       // Grigio
+  Cafe: "#A855F7",        // Viola
+  Shop: "#14B8A6",        // Teal
+  Hotel: "#FBBF24",       // Giallo oro
+  "B&B": "#22C55E",       // Verde brillante
+  Pharmacy: "#22C55E",    // Verde
+  Monumenti: "#A855F7",   // Viola
+  Musei: "#EC4899",       // Rosa/Magenta
+  Spiagge: "#06B6D4",     // Ciano
+  Archeologia: "#F59E0B", // Ambra
+  Discoteche: "#D946EF",  // Fucsia
+  Supermercati: "#3B82F6", // Blu
+  "Beni Culturali": "#8B5CF6", // Viola
+  Itinerari: "#10B981",   // Smeraldo
+  Other: "#6366F1",       // Indaco
 };
 
 const categoryEmoji = {
@@ -50,11 +50,11 @@ function pinIcon(business, inProximity) {
   const emoji = categoryEmoji[business.category] || categoryEmoji.Other;
   const proximityClass = inProximity ? "in-proximity" : "";
   const html = `<div class="proxi-pin ${proximityClass}" style="background:${color}"><span>${emoji}</span></div>`;
-  return L.divIcon({ html, className: "proxi-marker-icon", iconSize: [36, 36], iconAnchor: [18, 36] });
+  return L.divIcon({ html, className: "proxi-marker-icon", iconSize: [40, 40], iconAnchor: [20, 40] });
 }
 
 function userIcon() {
-  return L.divIcon({ html: '<div class="proxi-pin user"></div>', className: "proxi-marker-icon", iconSize: [18, 18], iconAnchor: [9, 9] });
+  return L.divIcon({ html: '<div class="proxi-pin user"></div>', className: "proxi-marker-icon", iconSize: [20, 20], iconAnchor: [10, 10] });
 }
 
 function MapRecenter({ center, zoom, trigger }) {
