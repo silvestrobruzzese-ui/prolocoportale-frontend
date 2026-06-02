@@ -1,10 +1,11 @@
 // Business detail sheet (full info, promo, navigate button)
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useI18n } from "@/lib/i18n";
+import { translateFields } from "@/lib/translate";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X } from "lucide-react";
+import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X, Loader2 } from "lucide-react";
 
 function formatDistance(km) {
   if (km == null) return "—";
@@ -12,9 +13,46 @@ function formatDistance(km) {
   return `${km.toFixed(2)} km`;
 }
 
+// Fields to translate
+const TRANSLATABLE_FIELDS = ["name", "description", "promotion_title", "promotion_description", "address", "city", "hours"];
+
 export default function BusinessDetail({ open, onClose, business, onNavigate, onToggleFavorite, isFavorite }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const [translatedBusiness, setTranslatedBusiness] = useState(null);
+  const [isTranslating, setIsTranslating] = useState(false);
+
+  // Translate business content when language changes or business changes
+  useEffect(() => {
+    if (!business || !open) {
+      setTranslatedBusiness(null);
+      return;
+    }
+
+    // If Italian, no translation needed
+    if (lang === "it") {
+      setTranslatedBusiness(business);
+      return;
+    }
+
+    // Translate the content
+    setIsTranslating(true);
+    translateFields(business, TRANSLATABLE_FIELDS, lang)
+      .then((translated) => {
+        setTranslatedBusiness(translated);
+      })
+      .catch(() => {
+        setTranslatedBusiness(business); // Fallback to original
+      })
+      .finally(() => {
+        setIsTranslating(false);
+      });
+  }, [business, lang, open]);
+
   if (!business) return null;
+
+  // Use translated content or original
+  const biz = translatedBusiness || business;
+
   const inProx = !!business.in_proximity;
   const base = Number(business.base_discount || 0);
   const bonus = Number(business.proximity_discount || 0);
@@ -35,27 +73,32 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
             data-testid="business-detail-close"
           >
             <X className="w-5 h-5" />
-            <span>Chiudi</span>
+            <span>{t("back")}</span>
           </button>
-          {eff > 0 && (
-            <div className={`px-3 py-1.5 rounded-full text-white font-bold text-sm ${inProx ? "bg-[var(--primary)]" : "bg-[var(--secondary)]"}`}
-              data-testid="proximity-discount-badge"
-            >
-              -{Math.round(eff)}%
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            {isTranslating && (
+              <Loader2 className="w-4 h-4 animate-spin text-[var(--text-secondary)]" />
+            )}
+            {eff > 0 && (
+              <div className={`px-3 py-1.5 rounded-full text-white font-bold text-sm ${inProx ? "bg-[var(--primary)]" : "bg-[var(--secondary)]"}`}
+                data-testid="proximity-discount-badge"
+              >
+                -{Math.round(eff)}%
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="p-5 pt-4 pb-0">
           <Badge className="bg-[var(--bg)] text-[var(--text-secondary)] rounded-full mb-2">{business.category}</Badge>
-          <h2 className="font-display text-xl font-semibold text-[var(--text-primary)]">{business.name}</h2>
-          {(business.description || business.promotion_description) && (
-            <p className="text-sm text-[var(--text-secondary)] mt-1">{business.description || business.promotion_description}</p>
+          <h2 className="font-display text-xl font-semibold text-[var(--text-primary)]">{biz.name}</h2>
+          {(biz.description || biz.promotion_description) && (
+            <p className="text-sm text-[var(--text-secondary)] mt-1">{biz.description || biz.promotion_description}</p>
           )}
         </div>
 
         <SheetHeader className="sr-only">
-          <SheetTitle>{business.name}</SheetTitle>
+          <SheetTitle>{biz.name}</SheetTitle>
           <SheetDescription>{business.category}</SheetDescription>
         </SheetHeader>
 
@@ -81,29 +124,29 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
             </div>
           </div>
 
-          {business.promotion_title && (
+          {biz.promotion_title && (
             <div className="rounded-2xl p-4 bg-[var(--warning)]/30 border border-[var(--warning)]">
               <div className="flex items-center gap-2 font-semibold text-[var(--text-primary)]">
                 <Sparkles className="w-4 h-4 text-[var(--primary)]" />
-                {business.promotion_title}
+                {biz.promotion_title}
               </div>
-              {business.promotion_description && (
-                <div className="text-sm text-[var(--text-secondary)] mt-1">{business.promotion_description}</div>
+              {biz.promotion_description && (
+                <div className="text-sm text-[var(--text-secondary)] mt-1">{biz.promotion_description}</div>
               )}
             </div>
           )}
 
           <div className="space-y-2 text-sm">
-            {business.address && (
+            {biz.address && (
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 mt-0.5 text-[var(--text-secondary)]" />
-                <span>{business.address}{business.city ? `, ${business.city}` : ""}</span>
+                <span>{biz.address}{biz.city ? `, ${biz.city}` : ""}</span>
               </div>
             )}
-            {business.hours && (
+            {biz.hours && (
               <div className="flex items-start gap-2">
                 <Clock className="w-4 h-4 mt-0.5 text-[var(--text-secondary)]" />
-                <span>{business.hours}</span>
+                <span>{biz.hours}</span>
               </div>
             )}
             {business.phone && (
