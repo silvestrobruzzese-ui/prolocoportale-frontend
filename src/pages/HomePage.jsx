@@ -1,7 +1,7 @@
 // HomePage - main map experience
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Search, Crosshair, User, Menu, LogOut, Heart, ShieldCheck, KeyRound, Navigation2 } from "lucide-react";
+import { MapPin, Search, Crosshair, User, Menu, LogOut, Heart, ShieldCheck, KeyRound, Navigation2, Maximize2, Minimize2 } from "lucide-react";
 
 import MapView from "@/components/MapView";
 import CategoryFilters from "@/components/CategoryFilters";
@@ -43,6 +43,31 @@ export default function HomePage() {
   const [showWelcome, setShowWelcome] = useState(true);
   const [searchedCenter, setSearchedCenter] = useState(null);
   const [searchZoom, setSearchZoom] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Toggle fullscreen mode
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+      }).catch(() => {
+        toast.error("Fullscreen non supportato");
+      });
+    } else {
+      document.exitFullscreen().then(() => {
+        setIsFullscreen(false);
+      });
+    }
+  }, []);
+
+  // Listen for fullscreen changes (e.g., user presses Escape)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
 
   // Use searched location first, then user position, then default Calabria
   const mapCenter = searchedCenter || (hasPosition ? position : CALABRIA_CENTER);
@@ -250,8 +275,20 @@ export default function HomePage() {
         <CategoryFilters value={category} onChange={setCategory} />
       </div>
 
-      {/* Recenter / locate fab */}
-      <div className="absolute right-3 sm:right-4 bottom-44 sm:bottom-8 z-[1000] flex flex-col gap-2">
+      {/* Recenter / locate / fullscreen fab */}
+      <div className="absolute right-3 sm:right-4 bottom-8 z-[1000] flex flex-col gap-2">
+        <button
+          onClick={toggleFullscreen}
+          className="glass rounded-full w-12 h-12 inline-flex items-center justify-center hover:bg-white"
+          data-testid="fullscreen-btn"
+          aria-label="fullscreen"
+        >
+          {isFullscreen ? (
+            <Minimize2 className="w-5 h-5 text-[var(--primary)]" />
+          ) : (
+            <Maximize2 className="w-5 h-5 text-[var(--primary)]" />
+          )}
+        </button>
         <button
           onClick={handleRecenter}
           className="glass rounded-full w-12 h-12 inline-flex items-center justify-center hover:bg-white"
