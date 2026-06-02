@@ -162,7 +162,7 @@ export default function HomePage() {
       return;
     }
     try {
-      const params = { category };
+      const params = { category, limit: 100 };
       if (hasPosition) {
         params.lat = position[0];
         params.lng = position[1];
