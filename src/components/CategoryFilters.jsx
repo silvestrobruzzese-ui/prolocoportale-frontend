@@ -27,17 +27,18 @@ export default function CategoryFilters({ value, onChange }) {
             key={c.key}
             data-testid={`category-filter-${c.key}`}
             onClick={() => onChange(isActive ? null : c.value)}
-            className={`flex-shrink-0 w-11 h-11 rounded-full text-xl inline-flex items-center justify-center transition-all duration-200 ${
-              isActive
-                ? "text-white shadow-lg scale-110"
-                : "bg-white/90 shadow-md"
+            className={`flex-shrink-0 w-12 h-12 rounded-full text-xl inline-flex items-center justify-center transition-all duration-200 border-2 ${
+              isActive ? "scale-110 shadow-lg" : "shadow-md"
             }`}
             style={{
-              backgroundColor: isActive ? c.color : undefined,
+              backgroundColor: isActive ? c.color : "white",
+              borderColor: c.color,
             }}
             title={c.value}
           >
-            {c.icon}
+            <span style={{ filter: isActive ? "brightness(0) invert(1)" : "none" }}>
+              {c.icon}
+            </span>
           </button>
         );
       })}
