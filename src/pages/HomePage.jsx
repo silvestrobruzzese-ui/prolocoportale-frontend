@@ -112,10 +112,22 @@ export default function HomePage() {
       if (query) params.q = query;
       const { data } = await api.get("/businesses", { params });
       setBusinesses(data);
+      // Se ci sono attività e non siamo già centrati sulla posizione utente, centra sulla prima attività
+      if (data.length > 0 && !hasPosition && !searchedCenter) {
+        const firstBiz = data[0];
+        setSearchedCenter([firstBiz.lat, firstBiz.lng]);
+        setSearchZoom(13);
+        setRecenterTrigger((n) => n + 1);
+      }
     } catch (err) {
-      toast.error(formatApiError(err.response?.data?.detail) || err.message);
+      console.error("fetchBusinesses error:", err);
+      const msg = err.response?.data?.detail;
+      if (msg) {
+        toast.error(formatApiError(msg));
+      }
+      // Non mostrare errore generico per problemi di rete
     }
-  }, [hasPosition, position, category, query]);
+  }, [hasPosition, position, category, query, searchedCenter]);
 
   useEffect(() => { fetchBusinesses(); }, [fetchBusinesses]);
 
@@ -130,7 +142,11 @@ export default function HomePage() {
   useEffect(() => { fetchFavorites(); }, [fetchFavorites]);
 
   useEffect(() => {
-    if (hasPosition) setShowLocationPrompt(false);
+    if (hasPosition) {
+      setShowLocationPrompt(false);
+      // Centra la mappa sulla posizione utente quando viene ottenuta
+      setRecenterTrigger((n) => n + 1);
+    }
   }, [hasPosition]);
 
   const selected = useMemo(() => businesses.find((b) => b.business_id === selectedId), [businesses, selectedId]);
