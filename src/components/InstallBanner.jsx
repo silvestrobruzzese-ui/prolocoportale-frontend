@@ -50,8 +50,8 @@ export default function InstallBanner() {
                 <Download className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="font-semibold text-lg">Installa ProxiMap</h3>
-                <p className="text-white/80 text-sm">Esperienza fullscreen</p>
+                <h3 className="font-semibold text-lg">Apri a schermo intero</h3>
+                <p className="text-white/80 text-sm">Senza barra del browser</p>
               </div>
             </div>
             <button
@@ -68,7 +68,7 @@ export default function InstallBanner() {
           {isIOS && (
             <div className="space-y-3">
               <p className="text-sm text-[var(--text-secondary)]">
-                Per installare l'app su iPhone/iPad:
+                Per aprire a schermo intero su iPhone/iPad:
               </p>
               <div className="flex items-center gap-3 p-3 bg-[var(--bg)] rounded-xl">
                 <div className="w-8 h-8 bg-[#007AFF] rounded-lg flex items-center justify-center">
@@ -94,7 +94,7 @@ export default function InstallBanner() {
           {isAndroid && (
             <div className="space-y-3">
               <p className="text-sm text-[var(--text-secondary)]">
-                Per installare l'app su Android:
+                Per aprire a schermo intero su Android:
               </p>
               <div className="flex items-center gap-3 p-3 bg-[var(--bg)] rounded-xl">
                 <div className="w-8 h-8 bg-[var(--text-primary)] rounded-lg flex items-center justify-center">
@@ -110,7 +110,7 @@ export default function InstallBanner() {
                   <Download className="w-4 h-4 text-white" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium">2. "Installa app" o "Aggiungi a Home"</p>
+                  <p className="text-sm font-medium">2. "Aggiungi a schermata Home"</p>
                   <p className="text-xs text-[var(--text-secondary)]">Tocca l'opzione nel menu</p>
                 </div>
               </div>
