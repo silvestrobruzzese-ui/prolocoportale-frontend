@@ -272,7 +272,7 @@ export default function HomePage() {
                 <Menu className="w-5 h-5" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="rounded-xl w-56">
+            <DropdownMenuContent align="end" className="rounded-xl w-56 z-[1100]">
               {user ? (
                 <>
                   <DropdownMenuItem className="font-medium" disabled data-testid="user-menu-name">
