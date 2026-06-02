@@ -289,35 +289,6 @@ export default function HomePage() {
         </main>
       </div>
 
-      {/* Mobile bottom carousel of nearest businesses */}
-      <div className="lg:hidden absolute bottom-0 inset-x-0 z-[1000] pb-3 pointer-events-none">
-        <div className="overflow-x-auto no-scrollbar pointer-events-auto">
-          <div className="flex gap-3 px-3 w-max">
-            {businesses.slice(0, 12).map((b) => (
-              <button
-                key={b.business_id}
-                onClick={() => handleSelect(b.business_id)}
-                className="glass rounded-2xl w-64 p-3 text-left hover:bg-white transition-colors"
-                data-testid={`mobile-card-${b.business_id}`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="font-display font-semibold truncate">{b.name}</div>
-                  {b.effective_discount > 0 && (
-                    <div className={`text-xs font-bold px-2 py-1 rounded-full text-white ${b.in_proximity ? "bg-[var(--primary)]" : "bg-[var(--secondary)]"}`}>
-                      -{Math.round(b.effective_discount)}%
-                    </div>
-                  )}
-                </div>
-                <div className="text-xs text-[var(--text-secondary)] mt-1 truncate">{b.category} • {distanceFmt(b.distance_km)}</div>
-                {b.promotion_title && (
-                  <div className="text-xs text-[var(--text-primary)] mt-1 truncate">{b.promotion_title}</div>
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* Welcome screen overlay */}
       {showWelcome && (
         <div className="absolute inset-0 z-[1200] flex flex-col items-center justify-center bg-[#F9F6F1] overflow-auto">
