@@ -359,16 +359,25 @@ Permissions-Policy: geolocation=(self), microphone=(), camera=()
 | `ADMIN_EMAIL` | Email superadmin |
 | `ADMIN_PASSWORD` | Password superadmin (cambiata da default) |
 
+### Cloudflare Web Analytics (Attivo)
+
+Analytics gratuito senza cookie, no banner GDPR richiesto.
+
+- **Configurazione**: Script aggiunto in `public/index.html`
+- **Token**: `a283742a83d346fea69b351443892f5e`
+- **Dashboard**: Cloudflare → Analytics → Web Analytics
+- **Dati disponibili**: Visite, visitatori unici, paesi, pagine, dispositivi
+
 ### Raccomandazioni Residue
 
 1. **Ruotare JWT_SECRET** - Impostare un secret forte e persistente su Railway
 2. **Backup MongoDB** - Configurare backup automatici su MongoDB Atlas
 3. **Monitoraggio** - Configurare alerting per tentativi di accesso anomali
 4. **WAF** - Considerare Cloudflare WAF per protezione aggiuntiva
-5. **Cloudflare Analytics** - Analytics gratuito senza cookie banner
 
 ---
 
-*Ultimo aggiornamento: 3 Giugno 2026 - ore 17:00*
+*Ultimo aggiornamento: 3 Giugno 2026 - ore 18:00*
 *Stato: PRODUZIONE ONLINE - Cloudflare Pages + Railway + MongoDB Atlas*
 *Security: HARDENING COMPLETATO*
+*Analytics: CLOUDFLARE WEB ANALYTICS ATTIVO*
