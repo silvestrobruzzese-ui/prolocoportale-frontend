@@ -377,7 +377,113 @@ Analytics gratuito senza cookie, no banner GDPR richiesto.
 
 ---
 
-*Ultimo aggiornamento: 3 Giugno 2026 - ore 18:00*
+## Sessione 3 Giugno 2026 (notte) - Landing Page Personalizzate Pro Loco
+
+### Nuova Funzionalità: Landing Page per ogni Pro Loco
+
+Ogni Pro Loco ha ora una **pagina di benvenuto personalizzata** con la propria immagine di copertina. Questo permette alle Pro Loco di condividere un link dedicato ai turisti invece del link generico.
+
+### Come Funziona
+
+| Pro Loco | Link Turisti | Cosa Vede il Turista |
+|----------|--------------|---------------------|
+| Soverato | `/p/soverato` | Immagine copertina Soverato |
+| Catanzaro | `/p/catanzaro` | Immagine copertina Catanzaro |
+| Tropea | `/p/tropea` | Immagine copertina Tropea |
+
+### Flusso Utente
+
+1. **Superadmin** crea Pro Loco → viene generato automaticamente uno **slug** dal nome
+2. **Pro Loco** accede con PIN → vede il proprio **link turisti** nella dashboard
+3. **Pro Loco** clicca "Branding" → carica **immagine di copertina** dal PC
+4. **Turista** apre link `/p/nome-proloco` → vede immagine personalizzata
+5. **Turista** clicca "Esplora la Mappa" → mappa centrata sulla Pro Loco
+6. **Turista** aggiorna pagina → **rimane centrata** (parametro URL `?proloco=slug`)
+
+### Modifiche Backend
+
+| Endpoint | Metodo | Descrizione |
+|----------|--------|-------------|
+| `/api/proloco/by-slug/{slug}` | GET | Ottiene dati Pro Loco per landing page |
+| `/api/proloco/upload-image` | POST | Carica immagine copertina (max 2MB) |
+| `/api/images/{image_id}` | GET | Serve immagine da MongoDB |
+
+### Nuovi Campi Pro Loco
+
+| Campo | Tipo | Descrizione |
+|-------|------|-------------|
+| `slug` | string | URL-friendly identifier (auto-generato dal nome) |
+| `cover_image_url` | string | URL immagine copertina |
+
+### Nuova Collezione MongoDB
+
+**Collezione `images`**:
+```javascript
+{
+  image_id: "img_xxxxxxxxxxxx",
+  proloco_id: "prl_xxxxxxxxxx",
+  image_type: "cover",
+  content_type: "image/jpeg",
+  data: "base64...",  // Immagine codificata
+  filename: "copertina.jpg",
+  size: 123456,
+  created_at: "2026-06-03T..."
+}
+```
+
+### Nuove Pagine Frontend
+
+| Pagina | Route | Descrizione |
+|--------|-------|-------------|
+| `ProlocoLandingPage.jsx` | `/p/:slug` | Landing personalizzata per turisti |
+
+### Modifiche Dashboard Pro Loco
+
+- **Link turisti** visibile nell'header con pulsanti copia/apri
+- **Pulsante "Branding"** per caricare immagine di copertina
+- **Modal upload** con anteprima immagine caricata
+
+### Modifiche Dashboard Superadmin
+
+- **Colonna "Link Turisti"** nella tabella Pro Loco
+- **Link mostrato nel modal** dopo creazione nuova Pro Loco
+- **Pulsanti copia/apri** per ogni link
+
+### Migrazione Automatica
+
+All'avvio del backend, le Pro Loco esistenti senza slug ricevono automaticamente:
+- `slug` generato dal nome (es. "Pro Loco Soverato" → "soverato")
+- `cover_image_url` vuoto (useranno immagine default)
+
+### Limiti Upload Immagini
+
+| Parametro | Valore |
+|-----------|--------|
+| Dimensione massima | 2MB |
+| Formati accettati | JPG, PNG, WebP, GIF |
+| Storage | MongoDB (base64) |
+| Cache | 1 anno (Cache-Control header) |
+
+### URL Persistente dopo Refresh
+
+Quando il turista arriva da una landing Pro Loco:
+- URL diventa `/?proloco=soverato`
+- Il parametro persiste dopo refresh
+- La mappa rimane centrata sulla Pro Loco
+
+---
+
+## Repository GitHub
+
+| Repository | URL |
+|------------|-----|
+| **Frontend** | https://github.com/silvestrobruzzese-ui/prolocoportale-frontend |
+| **Backend** | https://github.com/silvestrobruzzese-ui/prolocoportale-backend |
+
+---
+
+*Ultimo aggiornamento: 3 Giugno 2026 - ore 23:15*
 *Stato: PRODUZIONE ONLINE - Cloudflare Pages + Railway + MongoDB Atlas*
 *Security: HARDENING COMPLETATO*
 *Analytics: CLOUDFLARE WEB ANALYTICS ATTIVO*
+*Landing Page: PERSONALIZZATE PER OGNI PRO LOCO*
