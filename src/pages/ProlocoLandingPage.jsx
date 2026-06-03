@@ -61,10 +61,10 @@ export default function ProlocoLandingPage() {
     );
   }
 
-  // Build full image URLs (handle both /api/... paths and full URLs)
+  // Build full image URLs (handle both /images/... paths and full URLs)
   const buildImageUrl = (url) => {
     if (!url) return null;
-    if (url.startsWith('/api')) {
+    if (url.startsWith('/images')) {
       return `${api.defaults.baseURL}${url}`;
     }
     return url;

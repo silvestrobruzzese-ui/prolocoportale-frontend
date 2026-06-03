@@ -632,7 +632,7 @@ export default function PrologoDashboard() {
               {proloco?.cover_image_url && (
                 <div className="mb-3 border rounded-lg overflow-hidden">
                   <img
-                    src={proloco.cover_image_url.startsWith('/api')
+                    src={proloco.cover_image_url.startsWith('/images')
                       ? `${api.defaults.baseURL}${proloco.cover_image_url}`
                       : proloco.cover_image_url}
                     alt="Copertina attuale"
