@@ -23,7 +23,6 @@ const categoryColors = {
   Supermercati: "#3B82F6", // Blu
   "Beni Culturali": "#8B5CF6", // Viola
   Itinerari: "#10B981",   // Smeraldo
-  Telefonia: "#0EA5E9",   // Azzurro
   Other: "#6366F1",       // Indaco
 };
 
@@ -43,7 +42,6 @@ const categoryEmoji = {
   Supermercati: "🛒",
   "Beni Culturali": "🏛",
   Itinerari: "🥾",
-  Telefonia: "📱",
   Other: "📍",
 };
 
