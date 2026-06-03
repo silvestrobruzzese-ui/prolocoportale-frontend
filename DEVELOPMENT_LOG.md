@@ -108,6 +108,11 @@ mongodb+srv://giannibruzzese_db_user:v9zTcwPVwsE3SSb5@cluster0.w3gsrfr.mongodb.n
 - [x] **Emoji/testo categoria** visibile nel marker
 - [x] **Ombre più pronunciate** per effetto pop
 
+### Navigazione
+- [x] **Navigatore esterno** - Apre Google Maps (Android) o Apple Maps (iOS)
+- [x] **Indicazioni stradali reali** - Percorso con voce e indicazioni turn-by-turn
+- [x] **Auto-detect piattaforma** - Rileva iOS vs Android e apre l'app giusta
+
 ### Traduzione Automatica
 - [x] **LibreTranslate** integrato per traduzione gratuita
 - [x] **Cache traduzioni** per evitare chiamate API ripetute
@@ -150,9 +155,13 @@ mongodb+srv://giannibruzzese_db_user:v9zTcwPVwsE3SSb5@cluster0.w3gsrfr.mongodb.n
 18. **B&B** - Cambiato da emoji 🛏 a testo "B&B" (più leggibile)
 19. **Colori aggiornati** - Tutti i colori più vivaci e moderni
 
+### Navigazione
+20. **Navigatore esterno** - Pulsante "Naviga" apre Google Maps (Android) o Apple Maps (iOS)
+21. **Indicazioni stradali reali** - Non più linea retta, ma percorso con navigatore vero
+
 ### Performance
-20. **Limite marker** - Solo 100 marker più vicini alla posizione utente
-21. **API limit** - Parametro `limit` aggiunto all'endpoint `/businesses`
+22. **Limite marker** - Solo 100 marker più vicini alla posizione utente
+23. **API limit** - Parametro `limit` aggiunto all'endpoint `/businesses`
 
 ---
 
@@ -254,12 +263,12 @@ Implementare un assistente AI che conosce il territorio:
 - [ ] Cluster marker per zoom bassi (performance con molti marker)
 - [ ] Notifiche push prossimità
 - [ ] Sistema preferiti persistente (richiede login utente)
-- [ ] Navigazione turn-by-turn integrata
 - [ ] Self-hosted LibreTranslate (evitare rate limit)
 - [ ] Immagini attività (storage cloud)
 - [ ] PWA completa con offline support
+- [x] ~~Navigazione turn-by-turn~~ → **FATTO** (apre Google Maps/Apple Maps)
 
 ---
 
-*Ultimo aggiornamento: 3 Giugno 2026 - ore 02:15*
+*Ultimo aggiornamento: 3 Giugno 2026 - ore 02:30*
 *Stato: PRODUZIONE ONLINE - Tutto funzionante su mobile e desktop*
