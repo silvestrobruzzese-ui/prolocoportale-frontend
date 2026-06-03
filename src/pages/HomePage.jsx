@@ -226,7 +226,24 @@ export default function HomePage() {
       request();
       return;
     }
-    setNavigatingTo([b.lat, b.lng]);
+
+    // Open external navigation app
+    const origin = `${position[0]},${position[1]}`;
+    const destination = `${b.lat},${b.lng}`;
+
+    // Detect platform and open appropriate maps app
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    let navUrl;
+    if (isIOS) {
+      // Apple Maps (or Google Maps if installed)
+      navUrl = `https://maps.apple.com/?saddr=${origin}&daddr=${destination}&dirflg=d`;
+    } else {
+      // Google Maps for Android and others
+      navUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
+    }
+
+    window.open(navUrl, '_blank');
     setDetailOpen(false);
     toast.success(t("navigator_running"));
   };
