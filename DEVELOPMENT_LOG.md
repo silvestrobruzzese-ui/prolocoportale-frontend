@@ -19,7 +19,7 @@ L'applicazione è completamente funzionante online su dispositivi mobili e deskt
 
 | Servizio | Piattaforma | URL |
 |----------|-------------|-----|
-| **Frontend** | Netlify | https://prolocoportale.netlify.app |
+| **Frontend** | Cloudflare Pages | https://prolocoportale-frontend.pages.dev |
 | **Backend API** | Railway | https://web-production-b3201.up.railway.app |
 | **Database** | MongoDB Atlas | Cluster0 (vedi credenziali sotto) |
 | **Traduzione** | LibreTranslate | https://libretranslate.com (API pubblica) |
@@ -33,7 +33,7 @@ mongodb+srv://giannibruzzese_db_user:v9zTcwPVwsE3SSb5@cluster0.w3gsrfr.mongodb.n
 - **Frontend**: https://github.com/silvestrobruzzese-ui/prolocoportale-frontend
 
 ### Deploy Automatico
-- **Netlify**: Deploy automatico ad ogni push su `main`
+- **Cloudflare Pages**: Deploy automatico ad ogni push su `main`
 - **Railway**: Deploy automatico ad ogni push su `main`
 
 ---
@@ -165,6 +165,47 @@ mongodb+srv://giannibruzzese_db_user:v9zTcwPVwsE3SSb5@cluster0.w3gsrfr.mongodb.n
 
 ---
 
+## Sessione 3 Giugno 2026 (pomeriggio) - Migrazione Cloudflare
+
+### Migrazione da Netlify a Cloudflare Pages
+Il sito Netlify ha raggiunto il limite di bandwidth (100GB/mese). Migrato a Cloudflare Pages per bandwidth illimitato.
+
+### Passaggi Migrazione
+1. **Creato progetto Cloudflare Pages** collegato a GitHub
+2. **Configurato build settings**:
+   - Build command: `npm install --force && npm run build`
+   - Output directory: `build`
+   - Node version: 20
+3. **Risolto errore overrides** - Rimossa sezione `overrides` da package.json su GitHub
+4. **Aggiunta variabile SKIP_DEPENDENCY_INSTALL** per bypassare npm ci
+5. **Configurato REACT_APP_BACKEND_URL** su Cloudflare
+6. **Aggiornato CORS su Railway** - Aggiunto dominio Cloudflare
+
+### Fix Emoji Firefox
+7. **Aggiunto font emoji** ai marker in `index.css`
+8. **Aggiunto font emoji** ai pulsanti categoria in `CategoryFilters.jsx`
+9. **Font utilizzato**: `"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla"`
+
+### Variabili Ambiente Cloudflare Pages
+| Nome | Valore |
+|------|--------|
+| `NODE_VERSION` | `20` |
+| `SKIP_DEPENDENCY_INSTALL` | `true` |
+| `REACT_APP_BACKEND_URL` | `https://web-production-b3201.up.railway.app` |
+
+### Variabili Ambiente Railway (CORS)
+```
+CORS_ORIGINS=https://prolocoportale.netlify.app,http://localhost:3000,https://prolocoportale-frontend.pages.dev
+```
+
+### Risultato
+- ✅ Sito online su Cloudflare Pages
+- ✅ Bandwidth illimitato
+- ✅ Emoji funzionanti su Chrome, Safari, Firefox
+- ✅ Deploy automatico da GitHub
+
+---
+
 ## File Principali
 
 ### Frontend
@@ -201,19 +242,24 @@ cd /Users/gianni/Desktop/ProlocoPortale-main/frontend
 npm start
 ```
 
+### URL Produzione
+- **Mappa Turista**: https://prolocoportale-frontend.pages.dev
+- **Superadmin**: https://prolocoportale-frontend.pages.dev/admin/login
+  - Email: `admin@prolocoportale.it`
+  - Password: `admin123`
+- **Pro Loco Soverato**: https://prolocoportale-frontend.pages.dev/proloco/login
+  - PIN: `UW5W4CUD`
+
 ### URL Sviluppo Locale
 - **Mappa Turista**: http://localhost:3000
 - **Superadmin**: http://localhost:3000/admin/login
-  - Email: `admin@prolocoportale.it`
-  - Password: `admin123`
 - **Pro Loco Soverato**: http://localhost:3000/proloco/login
-  - PIN: `UW5W4CUD`
 
 ---
 
 ## Note Tecniche Importanti
 
-1. **CORS**: Configurato per accettare richieste da Netlify
+1. **CORS**: Configurato per accettare richieste da Cloudflare Pages
 2. **Geolocalizzazione**: Richiede HTTPS (funziona su Netlify, non su localhost HTTP)
 3. **LibreTranslate**: API pubblica gratuita, possibili rate limit
 4. **iOS Safari**: Fullscreen API non supportata, suggerito "Aggiungi a Home"
@@ -270,5 +316,5 @@ Implementare un assistente AI che conosce il territorio:
 
 ---
 
-*Ultimo aggiornamento: 3 Giugno 2026 - ore 02:30*
-*Stato: PRODUZIONE ONLINE - Tutto funzionante su mobile e desktop*
+*Ultimo aggiornamento: 3 Giugno 2026 - ore 14:30*
+*Stato: PRODUZIONE ONLINE - Cloudflare Pages (bandwidth illimitato) + Railway + MongoDB Atlas*
