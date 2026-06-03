@@ -7,7 +7,7 @@
 
 ## STATO ATTUALE: PRODUZIONE ONLINE
 
-**Ultimo aggiornamento: 3 Giugno 2026**
+**Ultimo aggiornamento: 3 Giugno 2026 - ore 02:15**
 
 L'applicazione è completamente funzionante online su dispositivi mobili e desktop.
 
@@ -47,6 +47,7 @@ mongodb+srv://giannibruzzese_db_user:v9zTcwPVwsE3SSb5@cluster0.w3gsrfr.mongodb.n
 - **UI Components**: Tailwind CSS + shadcn/ui
 - **Internazionalizzazione**: Sistema i18n custom (5 lingue: IT, EN, FR, DE, ES)
 - **Traduzione dinamica**: LibreTranslate API
+- **Tema**: Pop/Vibrant con gradienti e colori saturi
 
 ### Backend
 - **Framework**: FastAPI (Python)
@@ -64,25 +65,25 @@ mongodb+srv://giannibruzzese_db_user:v9zTcwPVwsE3SSb5@cluster0.w3gsrfr.mongodb.n
 
 ---
 
-## Categorie Disponibili (15 totali)
+## Categorie Disponibili (15 totali) - Colori Pop
 
-| Categoria | Colore | Emoji |
+| Categoria | Colore | Icona |
 |-----------|--------|-------|
-| Restaurant | #E63946 (Rosso) | 🍽 |
+| Restaurant | #E63946 (Rosso vivace) | 🍽 |
 | Pizzerie | #FF6B35 (Arancione) | 🍕 |
-| Hotel | #FFD700 (Giallo oro) | 🏨 |
-| B&B | #228B22 (Verde) | 🛏 |
-| **Beni Culturali** | #7B68EE (Viola medio) | 🏛 |
-| **Itinerari** | #2E8B57 (Verde mare) | 🥾 |
-| Monumenti | #8B4513 (Marrone) | ⛪ |
-| Musei | #9C27B0 (Viola) | 🏛 |
-| Spiagge | #00CED1 (Turchese) | 🏖 |
-| Archeologia | #FF8C00 (Arancione) | 🏺 |
-| Discoteche | #E040FB (Fucsia) | 🎵 |
-| Supermercati | #3498DB (Blu) | 🛒 |
-| Shop | #2A9D8F (Verde acqua) | 🛍 |
-| Pharmacy | #4CAF50 (Verde chiaro) | 💊 |
-| Other | #6C757D (Grigio) | 📍 |
+| Hotel | #FBBF24 (Giallo oro) | 🏨 |
+| B&B | #22C55E (Verde brillante) | **B&B** (testo) |
+| Beni Culturali | #8B5CF6 (Viola) | 🏛 |
+| Itinerari | #10B981 (Smeraldo) | 🥾 |
+| Monumenti | #A855F7 (Viola) | ⛪ |
+| Musei | #EC4899 (Rosa/Magenta) | 🏛 |
+| Spiagge | #06B6D4 (Ciano) | 🏖 |
+| Archeologia | #F59E0B (Ambra) | 🏺 |
+| Discoteche | #D946EF (Fucsia) | 🎵 |
+| Supermercati | #3B82F6 (Blu) | 🛒 |
+| Shop | #14B8A6 (Teal) | 🛍 |
+| Pharmacy | #22C55E (Verde) | 💊 |
+| Other | #6366F1 (Indaco) | 📍 |
 
 ---
 
@@ -92,17 +93,20 @@ mongodb+srv://giannibruzzese_db_user:v9zTcwPVwsE3SSb5@cluster0.w3gsrfr.mongodb.n
 - [x] **Schermata di benvenuto** con logo Pro Loco Soverato
 - [x] **Mappa interattiva** con marker colorati per categoria
 - [x] **Barra categorie orizzontale** scorrevole (sotto la ricerca)
-- [x] **Pulsanti rotondi** con bordo colorato e icona emoji
+- [x] **Pulsanti rotondi 14x14** con bordo colorato 3px e icona emoji/testo
 - [x] **Dettaglio attività** in pannello laterale con pulsante "Chiudi" visibile
 - [x] **Menu/ricerca nascosti** quando si apre il dettaglio attività
 - [x] **Limite 100 marker** più vicini per performance
 - [x] **Geolocalizzazione** funzionante su mobile
 - [x] **Safe area iOS** - margine superiore per evitare sovrapposizione con barra browser
+- [x] **Menu dropdown** con z-index corretto (sopra le categorie)
 
 ### Marker sulla Mappa
+- [x] **Marker 40x40px** più grandi e visibili
 - [x] **Colore fisso per categoria** (non cambia in prossimità)
 - [x] **Bordo pulsante** per indicare prossimità (animazione CSS)
-- [x] **Emoji categoria** visibile nel marker
+- [x] **Emoji/testo categoria** visibile nel marker
+- [x] **Ombre più pronunciate** per effetto pop
 
 ### Traduzione Automatica
 - [x] **LibreTranslate** integrato per traduzione gratuita
@@ -117,25 +121,38 @@ mongodb+srv://giannibruzzese_db_user:v9zTcwPVwsE3SSb5@cluster0.w3gsrfr.mongodb.n
 
 ---
 
-## Sessione 3 Giugno 2026 - Modifiche
+## Sessione 3 Giugno 2026 - Tutte le Modifiche
+
+### Traduzione e Contenuti
+1. **Traduzione automatica** - LibreTranslate integrato per dettagli attività
+2. **Immagine benvenuto** - Sostituita con logo Pro Loco Soverato (`welcome-hero.png`)
 
 ### UI/UX Mobile
-1. **Marker colori** - Rimosso cambio colore in prossimità, mantenuto colore categoria
-2. **Indicatore prossimità** - Bordo pulsante animato invece di cambio colore
-3. **Categorie** - Spostate da sidebar sinistra a barra orizzontale scorrevole
-4. **Pulsanti categoria** - Rotondi con bordo colorato, sfondo bianco/colorato se attivo
-5. **Dettaglio attività** - Rimossa immagine, aggiunto pulsante "Chiudi" prominente
-6. **Safe area** - Aggiunto margine `mt-12` su mobile per iOS browser bar
-7. **Nascondi menu** - Menu e categorie nascosti quando dettaglio aperto
+3. **Menu dropdown z-index** - Risolto problema menu coperto da categorie
+4. **Marker colori** - Rimosso cambio colore in prossimità, mantenuto colore categoria
+5. **Indicatore prossimità** - Bordo pulsante animato invece di cambio colore
+6. **Categorie** - Spostate da sidebar sinistra a barra orizzontale scorrevole
+7. **Pulsanti categoria** - Rotondi 14x14 con bordo 3px, sfondo bianco/colorato se attivo
+8. **Dettaglio attività** - Rimossa immagine, aggiunto pulsante "Chiudi" prominente
+9. **Safe area** - Aggiunto margine `mt-12` su mobile per iOS browser bar
+10. **Nascondi menu** - Menu e categorie nascosti quando dettaglio aperto
+
+### Tema Pop/Vibrant
+11. **Palette colori** - Colori più saturi e vivaci
+12. **Sfondo gradiente** - Blu chiaro sfumato (#F0F4FF → #E8EFFF)
+13. **Glass effect** - Pannelli con blur e saturazione aumentati
+14. **Marker 40px** - Più grandi con ombre pronunciate
+15. **Pulsanti categoria** - Effetto hover con scale e shadow
+16. **Animazioni** - popIn, float, slideUp migliorate
+17. **CSS variables** - Nuovi gradienti (--gradient-primary, --gradient-hero)
+
+### Icone Categorie
+18. **B&B** - Cambiato da emoji 🛏 a testo "B&B" (più leggibile)
+19. **Colori aggiornati** - Tutti i colori più vivaci e moderni
 
 ### Performance
-8. **Limite marker** - Solo 100 marker più vicini alla posizione utente
-9. **API limit** - Parametro `limit` aggiunto all'endpoint `/businesses`
-
-### Nuove Funzionalità
-10. **Traduzione automatica** - LibreTranslate per contenuti business
-11. **Nuove categorie** - Beni Culturali e Itinerari con import CSV
-12. **Immagine benvenuto** - Sostituita con logo Pro Loco Soverato
+20. **Limite marker** - Solo 100 marker più vicini alla posizione utente
+21. **API limit** - Parametro `limit` aggiunto all'endpoint `/businesses`
 
 ---
 
@@ -145,12 +162,13 @@ mongodb+srv://giannibruzzese_db_user:v9zTcwPVwsE3SSb5@cluster0.w3gsrfr.mongodb.n
 | File | Descrizione |
 |------|-------------|
 | `src/pages/HomePage.jsx` | Mappa turista, welcome screen, logica principale |
-| `src/components/MapView.jsx` | Mappa Leaflet con marker colorati |
-| `src/components/CategoryFilters.jsx` | Barra categorie orizzontale (15 categorie) |
+| `src/components/MapView.jsx` | Mappa Leaflet con marker colorati (40px) |
+| `src/components/CategoryFilters.jsx` | Barra categorie orizzontale (15 categorie, B&B testo) |
 | `src/components/BusinessDetail.jsx` | Dettaglio attività con traduzione |
 | `src/lib/translate.js` | Integrazione LibreTranslate |
 | `src/lib/i18n.jsx` | Traduzioni UI (5 lingue) |
 | `src/lib/api.js` | Configurazione API |
+| `src/index.css` | Tema Pop/Vibrant con gradienti e animazioni |
 | `public/welcome-hero.png` | Logo Pro Loco Soverato |
 
 ### Backend
@@ -191,6 +209,7 @@ npm start
 3. **LibreTranslate**: API pubblica gratuita, possibili rate limit
 4. **iOS Safari**: Fullscreen API non supportata, suggerito "Aggiungi a Home"
 5. **Marker limit**: 100 per performance mobile
+6. **Z-index**: Menu dropdown ha z-[1100] per stare sopra categorie
 
 ---
 
@@ -204,9 +223,9 @@ npm start
 
 ---
 
-## Prossimi Passi Possibili
+## Prossimi Passi - PRIORITÀ
 
-### PRIORITÀ: Chatbot AI Assistente Turistico
+### 1. Chatbot AI Assistente Turistico
 Implementare un assistente AI che conosce il territorio:
 
 **Come funziona:**
@@ -231,27 +250,16 @@ Implementare un assistente AI che conosce il territorio:
 - OpenAI GPT-4: ~€0.01/messaggio
 - Groq: gratuito con limiti
 
-### Altre Funzionalità
+### 2. Altre Funzionalità Future
 - [ ] Cluster marker per zoom bassi (performance con molti marker)
 - [ ] Notifiche push prossimità
 - [ ] Sistema preferiti persistente (richiede login utente)
 - [ ] Navigazione turn-by-turn integrata
-
-### Miglioramenti
 - [ ] Self-hosted LibreTranslate (evitare rate limit)
 - [ ] Immagini attività (storage cloud)
 - [ ] PWA completa con offline support
 
 ---
 
-## Modifiche UI Pop (3 Giugno 2026 - notte)
-- Interfaccia più vivace con colori saturi e gradienti
-- Pulsanti categoria più grandi (14x14) con effetti hover
-- Marker mappa più grandi (40px) con ombre
-- B&B con testo invece di emoji
-- Sfondo gradiente blu chiaro
-
----
-
-*Ultimo aggiornamento: 3 Giugno 2026 - ore 02:00*
-*Stato: PRODUZIONE ONLINE - Tutto funzionante*
+*Ultimo aggiornamento: 3 Giugno 2026 - ore 02:15*
+*Stato: PRODUZIONE ONLINE - Tutto funzionante su mobile e desktop*
