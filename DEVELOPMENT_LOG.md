@@ -245,7 +245,7 @@ npm start
 - **Mappa Turista**: https://prolocoportale-frontend.pages.dev
 - **Superadmin**: https://prolocoportale-frontend.pages.dev/admin/login
   - Email: `admin@prolocoportale.it`
-  - Password: `admin123`
+  - Password: (configurata su Railway come variabile `ADMIN_PASSWORD`)
 - **Pro Loco Soverato**: https://prolocoportale-frontend.pages.dev/proloco/login
   - PIN: `UW5W4CUD`
 
@@ -315,26 +315,18 @@ Implementare un assistente AI che conosce il territorio:
 
 ---
 
-## Security Hardening (3 Giugno 2026)
+## Sessione 3 Giugno 2026 (sera) - Security + Ricerca Località
 
-### Vulnerabilita Identificate e Risolte
+### Security Hardening
 
 | # | Vulnerabilita | Rischio | Stato | Fix |
 |---|--------------|---------|-------|-----|
 | 1 | NoSQL Injection via parametro `q` | HIGH | RISOLTO | Sanitizzazione input con `re.escape()` |
 | 2 | Nessuna policy password | HIGH | RISOLTO | Min 8 char, 1 maiuscola, 1 minuscola, 1 numero |
 | 3 | Security headers mancanti | HIGH | RISOLTO | Middleware con X-Frame-Options, CSP, HSTS |
-| 4 | Scraping facile (20k records) | HIGH | RISOLTO | Limite 200/richiesta + anti-scraping |
-| 5 | No rate limiting su endpoint pubblici | MEDIUM | RISOLTO | Rate limiting su tutti gli endpoint |
-| 6 | Credenziali in file pubblico | MEDIUM | RISOLTO | Rimosse da DEVELOPMENT_LOG.md |
-
-### Misure Anti-Scraping Implementate
-
-1. **Request Throttling**: Max 100 richieste per IP ogni 60 secondi
-2. **Bot Detection**: Blocco automatico di User-Agent sospetti (curl, wget, scrapy, python)
-3. **IP Blocking**: Blocco temporaneo (5 minuti) per IP che superano le soglie
-4. **Pagination Forzata**: Max 200 record per richiesta (era 20.000)
-5. **Rate Limiting API**: 30 req/min su `/businesses`, 10 req/min su `/geocode`
+| 4 | No rate limiting su endpoint pubblici | MEDIUM | RISOLTO | Rate limiting su tutti gli endpoint |
+| 5 | Credenziali in file pubblico | MEDIUM | RISOLTO | Rimosse da DEVELOPMENT_LOG.md |
+| 6 | Password admin default | MEDIUM | RISOLTO | Configurata su Railway come variabile ambiente |
 
 ### Security Headers Aggiunti
 
@@ -347,16 +339,36 @@ Referrer-Policy: strict-origin-when-cross-origin
 Permissions-Policy: geolocation=(self), microphone=(), camera=()
 ```
 
+### Nuova Logica Ricerca e Raggio 20km
+
+1. **Raggio 20km** - Mostra TUTTI i business entro 20km dalla posizione
+2. **Ricerca località** - Quando cerchi una città (es. "Reggio Calabria"), i marker mostrano i business entro 20km da quella città
+3. **Priorità coordinate**:
+   - Se cerchi una località → usa coordinate della località cercata
+   - Se non cerchi → usa geolocalizzazione utente
+   - Se nessuna posizione → mostra tutto senza filtro distanza
+
+### Variabili Ambiente Railway
+
+| Nome | Descrizione |
+|------|-------------|
+| `MONGO_URL` | Connection string MongoDB Atlas |
+| `DB_NAME` | Nome database (`prolocoportale`) |
+| `JWT_SECRET` | Secret per token JWT |
+| `CORS_ORIGINS` | Domini autorizzati per CORS |
+| `ADMIN_EMAIL` | Email superadmin |
+| `ADMIN_PASSWORD` | Password superadmin (cambiata da default) |
+
 ### Raccomandazioni Residue
 
-1. **Cambiare password admin** - Le credenziali di default devono essere cambiate
-2. **Ruotare JWT_SECRET** - Impostare un secret forte e persistente su Railway
-3. **Backup MongoDB** - Configurare backup automatici su MongoDB Atlas
-4. **Monitoraggio** - Configurare alerting per tentativi di accesso anomali
-5. **WAF** - Considerare Cloudflare WAF per protezione aggiuntiva
+1. **Ruotare JWT_SECRET** - Impostare un secret forte e persistente su Railway
+2. **Backup MongoDB** - Configurare backup automatici su MongoDB Atlas
+3. **Monitoraggio** - Configurare alerting per tentativi di accesso anomali
+4. **WAF** - Considerare Cloudflare WAF per protezione aggiuntiva
+5. **Cloudflare Analytics** - Analytics gratuito senza cookie banner
 
 ---
 
-*Ultimo aggiornamento: 3 Giugno 2026 - ore 15:30*
-*Stato: PRODUZIONE ONLINE - Cloudflare Pages (bandwidth illimitato) + Railway + MongoDB Atlas*
+*Ultimo aggiornamento: 3 Giugno 2026 - ore 17:00*
+*Stato: PRODUZIONE ONLINE - Cloudflare Pages + Railway + MongoDB Atlas*
 *Security: HARDENING COMPLETATO*
