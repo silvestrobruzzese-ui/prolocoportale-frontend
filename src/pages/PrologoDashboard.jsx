@@ -14,7 +14,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Plus, Trash2, Upload, LogOut, Edit3, MapPin, Map, Search } from "lucide-react";
+import { Plus, Trash2, Upload, LogOut, Edit3, MapPin, Map, Search, Link2, Image, Copy, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
 // Category colors (same as MapView)
@@ -260,6 +260,14 @@ export default function PrologoDashboard() {
   const [editing, setEditing] = useState(null);
   const [searchBusiness, setSearchBusiness] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
+  const [showBrandingModal, setShowBrandingModal] = useState(false);
+  const [brandingForm, setBrandingForm] = useState({ cover_image_url: "", logo_url: "" });
+  const [savingBranding, setSavingBranding] = useState(false);
+
+  // Get the personalized link for this Pro Loco
+  const personalizedLink = proloco?.slug
+    ? `${window.location.origin}/p/${proloco.slug}`
+    : null;
 
   // Filtered businesses for list (sorted alphabetically)
   const filteredBusinesses = useMemo(() => {
@@ -292,6 +300,11 @@ export default function PrologoDashboard() {
       ]);
       setProloco(me);
       setBusinesses(list);
+      // Initialize branding form with existing values
+      setBrandingForm({
+        cover_image_url: me.cover_image_url || "",
+        logo_url: me.logo_url || "",
+      });
     } catch (err) {
       if (err.response?.status === 401 || err.response?.status === 403) {
         navigate("/proloco/login");
@@ -300,6 +313,27 @@ export default function PrologoDashboard() {
       }
     }
   }, [navigate]);
+
+  const saveBranding = async () => {
+    setSavingBranding(true);
+    try {
+      await api.patch("/proloco/branding", brandingForm);
+      toast.success("Branding aggiornato");
+      setShowBrandingModal(false);
+      fetchAll();
+    } catch (err) {
+      toast.error(formatApiError(err.response?.data?.detail) || err.message);
+    } finally {
+      setSavingBranding(false);
+    }
+  };
+
+  const copyLink = () => {
+    if (personalizedLink) {
+      navigator.clipboard.writeText(personalizedLink);
+      toast.success("Link copiato!");
+    }
+  };
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
 
@@ -395,13 +429,44 @@ export default function PrologoDashboard() {
 
   return (
     <div className="min-h-screen bg-[var(--bg)]">
-      <header className="bg-white border-b border-[var(--border)] px-6 py-4 flex items-center justify-between">
-        <div>
-          <div className="text-xs uppercase tracking-widest text-[var(--secondary-hover)] font-semibold">Proloco</div>
-          <h1 className="font-display text-2xl font-bold">{proloco?.name || t("proloco_panel")}</h1>
-          {proloco && <div className="text-xs text-[var(--text-secondary)]">{proloco.region} • {proloco.country} • {(proloco.territory_polygon || []).length} pts</div>}
+      <header className="bg-white border-b border-[var(--border)] px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-xs uppercase tracking-widest text-[var(--secondary-hover)] font-semibold">Proloco</div>
+            <h1 className="font-display text-2xl font-bold">{proloco?.name || t("proloco_panel")}</h1>
+            {proloco && <div className="text-xs text-[var(--text-secondary)]">{proloco.region} • {proloco.country} • {(proloco.territory_polygon || []).length} pts</div>}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => setShowBrandingModal(true)} className="rounded-full" data-testid="proloco-branding-btn">
+              <Image className="w-4 h-4 mr-2" />Branding
+            </Button>
+            <Button variant="outline" onClick={logout} className="rounded-full" data-testid="proloco-logout-btn"><LogOut className="w-4 h-4 mr-2" />{t("logout")}</Button>
+          </div>
         </div>
-        <Button variant="outline" onClick={logout} className="rounded-full" data-testid="proloco-logout-btn"><LogOut className="w-4 h-4 mr-2" />{t("logout")}</Button>
+
+        {/* Personalized Link Section */}
+        {personalizedLink && (
+          <div className="mt-4 bg-[var(--bg)] rounded-xl p-4 border border-[var(--border)]">
+            <div className="flex items-center gap-2 mb-2">
+              <Link2 className="w-4 h-4 text-[var(--primary)]" />
+              <span className="text-sm font-semibold text-[var(--text)]">Il tuo link per i turisti</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <code className="flex-1 bg-white border border-[var(--border)] rounded-lg px-3 py-2 text-sm font-mono text-[var(--primary)] truncate">
+                {personalizedLink}
+              </code>
+              <Button size="sm" variant="outline" onClick={copyLink} className="rounded-lg" title="Copia link">
+                <Copy className="w-4 h-4" />
+              </Button>
+              <Button size="sm" variant="outline" onClick={() => window.open(personalizedLink, '_blank')} className="rounded-lg" title="Apri link">
+                <ExternalLink className="w-4 h-4" />
+              </Button>
+            </div>
+            <p className="text-xs text-[var(--text-secondary)] mt-2">
+              Condividi questo link con i turisti. Vedranno la tua immagine di copertina e logo.
+            </p>
+          </div>
+        )}
       </header>
       <main className="p-6">
         <Tabs defaultValue="businesses">
@@ -547,6 +612,72 @@ export default function PrologoDashboard() {
             <DialogDescription className="sr-only">Business</DialogDescription>
           </DialogHeader>
           <PrologoBusinessForm initial={editing} onSave={save} onCancel={() => setShowModal(false)} />
+        </DialogContent>
+      </Dialog>
+
+      {/* Branding Modal */}
+      <Dialog open={showBrandingModal} onOpenChange={setShowBrandingModal}>
+        <DialogContent className="rounded-3xl max-w-lg">
+          <DialogHeader>
+            <DialogTitle><Image className="w-5 h-5 inline mr-2" />Personalizza la tua Landing Page</DialogTitle>
+            <DialogDescription>
+              Inserisci gli URL delle immagini per personalizzare la pagina di benvenuto per i turisti.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>Immagine di copertina (URL)</Label>
+              <Input
+                value={brandingForm.cover_image_url}
+                onChange={(e) => setBrandingForm((f) => ({ ...f, cover_image_url: e.target.value }))}
+                placeholder="https://esempio.com/copertina.jpg"
+              />
+              <p className="text-xs text-[var(--text-secondary)] mt-1">
+                L'immagine principale che i turisti vedranno quando aprono il tuo link.
+              </p>
+              {brandingForm.cover_image_url && (
+                <div className="mt-2 border rounded-lg overflow-hidden">
+                  <img
+                    src={brandingForm.cover_image_url}
+                    alt="Anteprima copertina"
+                    className="w-full h-32 object-cover"
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                </div>
+              )}
+            </div>
+            <div>
+              <Label>Logo (URL)</Label>
+              <Input
+                value={brandingForm.logo_url}
+                onChange={(e) => setBrandingForm((f) => ({ ...f, logo_url: e.target.value }))}
+                placeholder="https://esempio.com/logo.png"
+              />
+              <p className="text-xs text-[var(--text-secondary)] mt-1">
+                Il logo della tua Pro Loco (apparirà in alto a sinistra).
+              </p>
+              {brandingForm.logo_url && (
+                <div className="mt-2 flex items-center gap-2">
+                  <img
+                    src={brandingForm.logo_url}
+                    alt="Anteprima logo"
+                    className="h-12 w-auto object-contain bg-gray-100 rounded p-1"
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowBrandingModal(false)}>Annulla</Button>
+            <Button
+              onClick={saveBranding}
+              disabled={savingBranding}
+              className="bg-[var(--primary)] hover:bg-[var(--primary-hover)]"
+            >
+              {savingBranding ? "Salvataggio..." : "Salva"}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

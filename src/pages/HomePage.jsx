@@ -44,6 +44,24 @@ export default function HomePage() {
   const [searchedCenter, setSearchedCenter] = useState(null);
   const [searchZoom, setSearchZoom] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [prolocoLanding, setProlocoLanding] = useState(null);
+
+  // Check if user came from a Pro Loco landing page
+  useEffect(() => {
+    const landingData = sessionStorage.getItem("proloco_landing");
+    if (landingData) {
+      try {
+        const parsed = JSON.parse(landingData);
+        setProlocoLanding(parsed);
+        setSearchedCenter(parsed.center);
+        setSearchZoom(13);
+        setShowWelcome(false); // Skip welcome screen
+        sessionStorage.removeItem("proloco_landing"); // Clear after use
+      } catch (e) {
+        console.error("Error parsing proloco_landing", e);
+      }
+    }
+  }, []);
 
   // Check if fullscreen API is available
   const canFullscreen = typeof document !== 'undefined' && (

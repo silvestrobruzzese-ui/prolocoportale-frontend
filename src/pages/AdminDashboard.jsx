@@ -11,7 +11,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Plus, Trash2, RefreshCw, Upload, LogOut, MapPin, Edit3, Copy, KeyRound, CheckCircle2, Search } from "lucide-react";
+import { Plus, Trash2, RefreshCw, Upload, LogOut, MapPin, Edit3, Copy, KeyRound, CheckCircle2, Search, Link2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
 function PrologoForm({ initial, onSave, onCancel }) {
@@ -413,14 +413,17 @@ export default function AdminDashboard() {
                     <TableHead>{t("comune")}</TableHead>
                     <TableHead>{t("contact")}</TableHead>
                     <TableHead>PIN</TableHead>
+                    <TableHead>Link Turisti</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredProlocos.length === 0 && (
-                    <TableRow><TableCell colSpan={5} className="text-center text-[var(--text-secondary)] py-8">{searchProloco ? "Nessun risultato" : t("no_proloco_yet")}</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={6} className="text-center text-[var(--text-secondary)] py-8">{searchProloco ? "Nessun risultato" : t("no_proloco_yet")}</TableCell></TableRow>
                   )}
-                  {filteredProlocos.map((p) => (
+                  {filteredProlocos.map((p) => {
+                    const prolocoLink = p.slug ? `${window.location.origin}/p/${p.slug}` : null;
+                    return (
                     <TableRow key={p.proloco_id} data-testid={`proloco-row-${p.proloco_id}`}>
                       <TableCell className="font-medium">
                         {p.name}
@@ -452,13 +455,45 @@ export default function AdminDashboard() {
                           </Button>
                         </div>
                       </TableCell>
+                      <TableCell>
+                        {prolocoLink ? (
+                          <div className="flex items-center gap-1">
+                            <code className="bg-[var(--bg)] px-2 py-1 rounded text-xs font-mono text-[var(--primary)] max-w-[150px] truncate" title={prolocoLink}>
+                              /p/{p.slug}
+                            </code>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 w-7 p-0"
+                              onClick={() => {
+                                navigator.clipboard.writeText(prolocoLink);
+                                toast.success("Link copiato!");
+                              }}
+                              title="Copia link"
+                            >
+                              <Copy className="w-3.5 h-3.5" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 w-7 p-0"
+                              onClick={() => window.open(prolocoLink, '_blank')}
+                              title="Apri link"
+                            >
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </Button>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-[var(--text-secondary)]">—</span>
+                        )}
+                      </TableCell>
                       <TableCell className="text-right">
                         <Button size="sm" variant="ghost" onClick={() => regenPin(p.proloco_id)} title={t("regen_pin")} data-testid={`proloco-regen-${p.proloco_id}`}><RefreshCw className="w-4 h-4" /></Button>
                         <Button size="sm" variant="ghost" onClick={() => { setEditingProloco(p); setShowPrologoModal(true); }} data-testid={`proloco-edit-${p.proloco_id}`}><Edit3 className="w-4 h-4" /></Button>
                         <Button size="sm" variant="ghost" onClick={() => deleteProloco(p.proloco_id)} data-testid={`proloco-delete-${p.proloco_id}`}><Trash2 className="w-4 h-4 text-[var(--danger)]" /></Button>
                       </TableCell>
                     </TableRow>
-                  ))}
+                  );})}
                 </TableBody>
               </Table>
             </div>
@@ -616,6 +651,29 @@ export default function AdminDashboard() {
             <p className="text-sm text-[var(--text-secondary)] bg-[var(--warning)]/20 border border-[var(--warning)] rounded-xl p-3">
               {t("pin_info")}
             </p>
+            {pinModal?.proloco?.slug && (
+              <div>
+                <div className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-semibold mb-2">
+                  <Link2 className="w-3.5 h-3.5 inline mr-1" />
+                  Link per i turisti
+                </div>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 bg-[var(--bg)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm font-mono text-[var(--primary)] truncate">
+                    {window.location.origin}/p/{pinModal.proloco.slug}
+                  </code>
+                  <Button
+                    variant="outline"
+                    className="rounded-lg h-10 w-10 p-0"
+                    onClick={() => {
+                      navigator.clipboard.writeText(`${window.location.origin}/p/${pinModal.proloco.slug}`);
+                      toast.success("Link copiato!");
+                    }}
+                  >
+                    <Copy className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
             {pinModal?.proloco?.center && (
               <div className="text-xs text-[var(--text-secondary)] flex items-center gap-1">
                 <MapPin className="w-3 h-3" /> {pinModal.proloco.center[0].toFixed(4)}, {pinModal.proloco.center[1].toFixed(4)}
