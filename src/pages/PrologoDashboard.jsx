@@ -261,8 +261,8 @@ export default function PrologoDashboard() {
   const [searchBusiness, setSearchBusiness] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [showBrandingModal, setShowBrandingModal] = useState(false);
-  const [brandingForm, setBrandingForm] = useState({ cover_image_url: "", logo_url: "" });
-  const [savingBranding, setSavingBranding] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
 
   // Get the personalized link for this Pro Loco
   const personalizedLink = proloco?.slug
@@ -300,11 +300,6 @@ export default function PrologoDashboard() {
       ]);
       setProloco(me);
       setBusinesses(list);
-      // Initialize branding form with existing values
-      setBrandingForm({
-        cover_image_url: me.cover_image_url || "",
-        logo_url: me.logo_url || "",
-      });
     } catch (err) {
       if (err.response?.status === 401 || err.response?.status === 403) {
         navigate("/proloco/login");
@@ -314,17 +309,22 @@ export default function PrologoDashboard() {
     }
   }, [navigate]);
 
-  const saveBranding = async () => {
-    setSavingBranding(true);
+  const uploadImage = async (file, imageType) => {
+    const setUploading = imageType === "cover" ? setUploadingCover : setUploadingLogo;
+    setUploading(true);
     try {
-      await api.patch("/proloco/branding", brandingForm);
-      toast.success("Branding aggiornato");
-      setShowBrandingModal(false);
-      fetchAll();
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("image_type", imageType);
+      await api.post("/proloco/upload-image", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      toast.success(imageType === "cover" ? "Copertina caricata!" : "Logo caricato!");
+      fetchAll(); // Refresh to get new image URLs
     } catch (err) {
       toast.error(formatApiError(err.response?.data?.detail) || err.message);
     } finally {
-      setSavingBranding(false);
+      setUploading(false);
     }
   };
 
@@ -621,62 +621,72 @@ export default function PrologoDashboard() {
           <DialogHeader>
             <DialogTitle><Image className="w-5 h-5 inline mr-2" />Personalizza la tua Landing Page</DialogTitle>
             <DialogDescription>
-              Inserisci gli URL delle immagini per personalizzare la pagina di benvenuto per i turisti.
+              Carica le immagini per personalizzare la pagina di benvenuto per i turisti.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-6">
+            {/* Cover Image Upload */}
             <div>
-              <Label>Immagine di copertina (URL)</Label>
-              <Input
-                value={brandingForm.cover_image_url}
-                onChange={(e) => setBrandingForm((f) => ({ ...f, cover_image_url: e.target.value }))}
-                placeholder="https://esempio.com/copertina.jpg"
-              />
-              <p className="text-xs text-[var(--text-secondary)] mt-1">
-                L'immagine principale che i turisti vedranno quando aprono il tuo link.
+              <Label className="text-base font-semibold">Immagine di copertina</Label>
+              <p className="text-xs text-[var(--text-secondary)] mb-2">
+                L'immagine principale che i turisti vedranno (max 2MB, JPG/PNG/WebP)
               </p>
-              {brandingForm.cover_image_url && (
-                <div className="mt-2 border rounded-lg overflow-hidden">
+              {proloco?.cover_image_url && (
+                <div className="mb-3 border rounded-lg overflow-hidden">
                   <img
-                    src={brandingForm.cover_image_url}
-                    alt="Anteprima copertina"
+                    src={proloco.cover_image_url.startsWith('/api')
+                      ? `${api.defaults.baseURL}${proloco.cover_image_url}`
+                      : proloco.cover_image_url}
+                    alt="Copertina attuale"
                     className="w-full h-32 object-cover"
                     onError={(e) => { e.target.style.display = 'none'; }}
                   />
                 </div>
               )}
-            </div>
-            <div>
-              <Label>Logo (URL)</Label>
               <Input
-                value={brandingForm.logo_url}
-                onChange={(e) => setBrandingForm((f) => ({ ...f, logo_url: e.target.value }))}
-                placeholder="https://esempio.com/logo.png"
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                disabled={uploadingCover}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) uploadImage(file, "cover");
+                }}
               />
-              <p className="text-xs text-[var(--text-secondary)] mt-1">
-                Il logo della tua Pro Loco (apparirà in alto a sinistra).
+              {uploadingCover && <p className="text-sm text-[var(--primary)] mt-1">Caricamento in corso...</p>}
+            </div>
+
+            {/* Logo Upload */}
+            <div>
+              <Label className="text-base font-semibold">Logo</Label>
+              <p className="text-xs text-[var(--text-secondary)] mb-2">
+                Il logo della tua Pro Loco (apparirà in alto a sinistra, max 2MB)
               </p>
-              {brandingForm.logo_url && (
-                <div className="mt-2 flex items-center gap-2">
+              {proloco?.logo_url && (
+                <div className="mb-3 flex items-center gap-2">
                   <img
-                    src={brandingForm.logo_url}
-                    alt="Anteprima logo"
-                    className="h-12 w-auto object-contain bg-gray-100 rounded p-1"
+                    src={proloco.logo_url.startsWith('/api')
+                      ? `${api.defaults.baseURL}${proloco.logo_url}`
+                      : proloco.logo_url}
+                    alt="Logo attuale"
+                    className="h-16 w-auto object-contain bg-gray-100 rounded p-2"
                     onError={(e) => { e.target.style.display = 'none'; }}
                   />
                 </div>
               )}
+              <Input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                disabled={uploadingLogo}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) uploadImage(file, "logo");
+                }}
+              />
+              {uploadingLogo && <p className="text-sm text-[var(--primary)] mt-1">Caricamento in corso...</p>}
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowBrandingModal(false)}>Annulla</Button>
-            <Button
-              onClick={saveBranding}
-              disabled={savingBranding}
-              className="bg-[var(--primary)] hover:bg-[var(--primary-hover)]"
-            >
-              {savingBranding ? "Salvataggio..." : "Salva"}
-            </Button>
+            <Button variant="outline" onClick={() => setShowBrandingModal(false)}>Chiudi</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

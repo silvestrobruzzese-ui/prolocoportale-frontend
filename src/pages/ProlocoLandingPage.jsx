@@ -61,9 +61,17 @@ export default function ProlocoLandingPage() {
     );
   }
 
-  // Use Pro Loco's cover image or fallback to default
-  const coverImage = proloco?.cover_image_url || "/welcome-hero.png";
-  const logoImage = proloco?.logo_url;
+  // Build full image URLs (handle both /api/... paths and full URLs)
+  const buildImageUrl = (url) => {
+    if (!url) return null;
+    if (url.startsWith('/api')) {
+      return `${api.defaults.baseURL}${url}`;
+    }
+    return url;
+  };
+
+  const coverImage = buildImageUrl(proloco?.cover_image_url) || "/welcome-hero.png";
+  const logoImage = buildImageUrl(proloco?.logo_url);
 
   return (
     <div className="absolute inset-0 z-[1200] flex flex-col items-center justify-center bg-[#F9F6F1] overflow-auto">
