@@ -25,9 +25,8 @@ L'applicazione è completamente funzionante online su dispositivi mobili e deskt
 | **Traduzione** | LibreTranslate | https://libretranslate.com (API pubblica) |
 
 ### Credenziali Database MongoDB Atlas
-```
-mongodb+srv://giannibruzzese_db_user:v9zTcwPVwsE3SSb5@cluster0.w3gsrfr.mongodb.net/prolocoportale
-```
+**ATTENZIONE**: Le credenziali sono memorizzate nelle variabili ambiente di Railway.
+Non committare mai credenziali in file pubblici.
 
 ### Repository GitHub
 - **Frontend**: https://github.com/silvestrobruzzese-ui/prolocoportale-frontend
@@ -316,5 +315,48 @@ Implementare un assistente AI che conosce il territorio:
 
 ---
 
-*Ultimo aggiornamento: 3 Giugno 2026 - ore 14:30*
+## Security Hardening (3 Giugno 2026)
+
+### Vulnerabilita Identificate e Risolte
+
+| # | Vulnerabilita | Rischio | Stato | Fix |
+|---|--------------|---------|-------|-----|
+| 1 | NoSQL Injection via parametro `q` | HIGH | RISOLTO | Sanitizzazione input con `re.escape()` |
+| 2 | Nessuna policy password | HIGH | RISOLTO | Min 8 char, 1 maiuscola, 1 minuscola, 1 numero |
+| 3 | Security headers mancanti | HIGH | RISOLTO | Middleware con X-Frame-Options, CSP, HSTS |
+| 4 | Scraping facile (20k records) | HIGH | RISOLTO | Limite 200/richiesta + anti-scraping |
+| 5 | No rate limiting su endpoint pubblici | MEDIUM | RISOLTO | Rate limiting su tutti gli endpoint |
+| 6 | Credenziali in file pubblico | MEDIUM | RISOLTO | Rimosse da DEVELOPMENT_LOG.md |
+
+### Misure Anti-Scraping Implementate
+
+1. **Request Throttling**: Max 100 richieste per IP ogni 60 secondi
+2. **Bot Detection**: Blocco automatico di User-Agent sospetti (curl, wget, scrapy, python)
+3. **IP Blocking**: Blocco temporaneo (5 minuti) per IP che superano le soglie
+4. **Pagination Forzata**: Max 200 record per richiesta (era 20.000)
+5. **Rate Limiting API**: 30 req/min su `/businesses`, 10 req/min su `/geocode`
+
+### Security Headers Aggiunti
+
+```
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Strict-Transport-Security: max-age=31536000; includeSubDomains (solo HTTPS)
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: geolocation=(self), microphone=(), camera=()
+```
+
+### Raccomandazioni Residue
+
+1. **Cambiare password admin** - Le credenziali di default devono essere cambiate
+2. **Ruotare JWT_SECRET** - Impostare un secret forte e persistente su Railway
+3. **Backup MongoDB** - Configurare backup automatici su MongoDB Atlas
+4. **Monitoraggio** - Configurare alerting per tentativi di accesso anomali
+5. **WAF** - Considerare Cloudflare WAF per protezione aggiuntiva
+
+---
+
+*Ultimo aggiornamento: 3 Giugno 2026 - ore 15:30*
 *Stato: PRODUZIONE ONLINE - Cloudflare Pages (bandwidth illimitato) + Railway + MongoDB Atlas*
+*Security: HARDENING COMPLETATO*
