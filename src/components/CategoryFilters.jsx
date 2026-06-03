@@ -16,6 +16,7 @@ const CATEGORIES = [
   { key: "supermercati", value: "Supermercati", icon: "🛒", color: "#3B82F6" },
   { key: "shop", value: "Shop", icon: "🛍", color: "#14B8A6" },
   { key: "pharmacy", value: "Pharmacy", icon: "💊", color: "#22C55E" },
+  { key: "telefonia", value: "Telefonia", icon: "📱", color: "#0EA5E9" },
   { key: "other", value: "Other", icon: "📍", color: "#6366F1" },
 ];
 
