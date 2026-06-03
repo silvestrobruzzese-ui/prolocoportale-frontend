@@ -163,7 +163,11 @@ export default function HomePage() {
     }
     try {
       const params = { category, limit: 100 };
-      if (hasPosition) {
+      // Use searched location first, otherwise use geolocation
+      if (searchedCenter) {
+        params.lat = searchedCenter[0];
+        params.lng = searchedCenter[1];
+      } else if (hasPosition) {
         params.lat = position[0];
         params.lng = position[1];
       }
