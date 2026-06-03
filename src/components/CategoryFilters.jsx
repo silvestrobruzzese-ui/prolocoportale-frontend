@@ -46,6 +46,7 @@ export default function CategoryFilters({ value, onChange }) {
               className="drop-shadow-sm"
               style={{
                 filter: isActive ? "brightness(0) invert(1) drop-shadow(0 2px 4px rgba(0,0,0,0.3))" : "drop-shadow(0 1px 2px rgba(0,0,0,0.1))",
+                fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif',
               }}
             >
               {c.icon}
