@@ -29,17 +29,8 @@ export default function ProlocoLandingPage() {
   }, [slug]);
 
   const handleExplore = () => {
-    // Navigate to homepage with Pro Loco center coordinates
-    if (proloco?.center) {
-      const [lat, lng] = proloco.center;
-      // Store in sessionStorage so HomePage can use it
-      sessionStorage.setItem("proloco_landing", JSON.stringify({
-        center: [lat, lng],
-        name: proloco.name,
-        slug: proloco.slug
-      }));
-    }
-    navigate("/");
+    // Navigate to homepage with Pro Loco slug in URL
+    navigate(`/?proloco=${proloco.slug}`);
   };
 
   if (loading) {

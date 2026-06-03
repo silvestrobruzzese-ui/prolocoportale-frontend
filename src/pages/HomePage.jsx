@@ -1,6 +1,6 @@
 // HomePage - main map experience
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { MapPin, Search, Crosshair, User, Menu, LogOut, Heart, ShieldCheck, KeyRound, Navigation2, Maximize2, Minimize2 } from "lucide-react";
 
 import MapView from "@/components/MapView";
@@ -29,6 +29,7 @@ export default function HomePage() {
   const { t } = useI18n();
   const { user, logout } = useAuth();
   const { position, hasPosition, status, request } = useGeolocation(true);
+  const [searchParams] = useSearchParams();
 
   const [businesses, setBusinesses] = useState([]);
   const [favorites, setFavorites] = useState([]);
@@ -44,24 +45,30 @@ export default function HomePage() {
   const [searchedCenter, setSearchedCenter] = useState(null);
   const [searchZoom, setSearchZoom] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [prolocoLanding, setProlocoLanding] = useState(null);
+  const [prolocoSlug, setProlocoSlug] = useState(null);
 
-  // Check if user came from a Pro Loco landing page
+  // Check if user came from a Pro Loco landing page (via URL param)
   useEffect(() => {
-    const landingData = sessionStorage.getItem("proloco_landing");
-    if (landingData) {
-      try {
-        const parsed = JSON.parse(landingData);
-        setProlocoLanding(parsed);
-        setSearchedCenter(parsed.center);
-        setSearchZoom(13);
-        setShowWelcome(false); // Skip welcome screen
-        sessionStorage.removeItem("proloco_landing"); // Clear after use
-      } catch (e) {
-        console.error("Error parsing proloco_landing", e);
-      }
+    const slug = searchParams.get("proloco");
+    if (slug && slug !== prolocoSlug) {
+      setProlocoSlug(slug);
+      // Fetch Pro Loco data to get center coordinates
+      api.get(`/proloco/by-slug/${slug}`)
+        .then(({ data }) => {
+          if (data.center) {
+            setSearchedCenter(data.center);
+            setSearchZoom(13);
+            setShowWelcome(false);
+            setRecenterTrigger((n) => n + 1);
+          }
+        })
+        .catch(() => {
+          // Pro Loco not found, ignore
+        });
+    } else if (!slug) {
+      setProlocoSlug(null);
     }
-  }, []);
+  }, [searchParams, prolocoSlug]);
 
   // Check if fullscreen API is available
   const canFullscreen = typeof document !== 'undefined' && (
