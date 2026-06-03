@@ -206,7 +206,32 @@ npm start
 
 ## Prossimi Passi Possibili
 
-### Funzionalità
+### PRIORITÀ: Chatbot AI Assistente Turistico
+Implementare un assistente AI che conosce il territorio:
+
+**Come funziona:**
+1. Turista chiede es. "Dove posso mangiare pesce a Soverato?"
+2. Backend cerca nel database MongoDB i ristoranti pertinenti
+3. Invia i dati trovati + domanda a Google Gemini (gratuito)
+4. Gemini risponde con i nostri dati in modo naturale e cordiale
+
+**Cosa serve:**
+- [ ] API Key Google Gemini (gratuito: 60 richieste/minuto)
+- [ ] Endpoint backend `/api/chat` che:
+  - Riceve domanda utente
+  - Cerca attività rilevanti nel database
+  - Invia contesto + domanda a Gemini
+  - Restituisce risposta AI
+- [ ] Widget chat frontend (pulsante flottante + finestra chat)
+- [ ] Prompt di sistema per far rispondere l'AI come assistente Pro Loco
+
+**Alternative AI:**
+- Google Gemini: GRATUITO (consigliato per iniziare)
+- OpenAI GPT-3.5: ~€0.001/messaggio
+- OpenAI GPT-4: ~€0.01/messaggio
+- Groq: gratuito con limiti
+
+### Altre Funzionalità
 - [ ] Cluster marker per zoom bassi (performance con molti marker)
 - [ ] Notifiche push prossimità
 - [ ] Sistema preferiti persistente (richiede login utente)
@@ -219,5 +244,14 @@ npm start
 
 ---
 
-*Ultimo aggiornamento: 3 Giugno 2026 - ore 01:30*
+## Modifiche UI Pop (3 Giugno 2026 - notte)
+- Interfaccia più vivace con colori saturi e gradienti
+- Pulsanti categoria più grandi (14x14) con effetti hover
+- Marker mappa più grandi (40px) con ombre
+- B&B con testo invece di emoji
+- Sfondo gradiente blu chiaro
+
+---
+
+*Ultimo aggiornamento: 3 Giugno 2026 - ore 02:00*
 *Stato: PRODUZIONE ONLINE - Tutto funzionante*
