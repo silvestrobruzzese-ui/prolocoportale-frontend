@@ -71,22 +71,10 @@ export default function ProlocoLandingPage() {
   };
 
   const coverImage = buildImageUrl(proloco?.cover_image_url) || "/welcome-hero.png";
-  const logoImage = buildImageUrl(proloco?.logo_url);
 
   return (
     <div className="absolute inset-0 z-[1200] flex flex-col items-center justify-center bg-[#F9F6F1] overflow-auto">
       <div className="relative w-full min-h-full flex flex-col items-center justify-center p-4">
-        {/* Logo overlay if available */}
-        {logoImage && (
-          <div className="absolute top-4 left-4 z-10">
-            <img
-              src={logoImage}
-              alt={`Logo ${proloco.name}`}
-              className="h-16 w-auto object-contain rounded-lg shadow-md bg-white p-2"
-            />
-          </div>
-        )}
-
         {/* Cover image */}
         <img
           src={coverImage}

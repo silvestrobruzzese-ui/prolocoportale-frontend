@@ -262,7 +262,6 @@ export default function PrologoDashboard() {
   const [filterCategory, setFilterCategory] = useState("");
   const [showBrandingModal, setShowBrandingModal] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
-  const [uploadingLogo, setUploadingLogo] = useState(false);
 
   // Get the personalized link for this Pro Loco
   const personalizedLink = proloco?.slug
@@ -309,22 +308,21 @@ export default function PrologoDashboard() {
     }
   }, [navigate]);
 
-  const uploadImage = async (file, imageType) => {
-    const setUploading = imageType === "cover" ? setUploadingCover : setUploadingLogo;
-    setUploading(true);
+  const uploadImage = async (file) => {
+    setUploadingCover(true);
     try {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("image_type", imageType);
+      formData.append("image_type", "cover");
       await api.post("/proloco/upload-image", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
-      toast.success(imageType === "cover" ? "Copertina caricata!" : "Logo caricato!");
-      fetchAll(); // Refresh to get new image URLs
+      toast.success("Immagine caricata!");
+      fetchAll();
     } catch (err) {
       toast.error(formatApiError(err.response?.data?.detail) || err.message);
     } finally {
-      setUploading(false);
+      setUploadingCover(false);
     }
   };
 
@@ -624,11 +622,11 @@ export default function PrologoDashboard() {
               Carica le immagini per personalizzare la pagina di benvenuto per i turisti.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Cover Image Upload */}
             <div>
               <Label className="text-base font-semibold">Immagine di copertina</Label>
-              <p className="text-xs text-[var(--text-secondary)] mb-2">
+              <p className="text-xs text-[var(--text-secondary)] mb-3">
                 L'immagine principale che i turisti vedranno (max 2MB, JPG/PNG/WebP)
               </p>
               {proloco?.cover_image_url && (
@@ -638,7 +636,7 @@ export default function PrologoDashboard() {
                       ? `${api.defaults.baseURL}${proloco.cover_image_url}`
                       : proloco.cover_image_url}
                     alt="Copertina attuale"
-                    className="w-full h-32 object-cover"
+                    className="w-full h-40 object-cover"
                     onError={(e) => { e.target.style.display = 'none'; }}
                   />
                 </div>
@@ -649,40 +647,10 @@ export default function PrologoDashboard() {
                 disabled={uploadingCover}
                 onChange={(e) => {
                   const file = e.target.files?.[0];
-                  if (file) uploadImage(file, "cover");
+                  if (file) uploadImage(file);
                 }}
               />
               {uploadingCover && <p className="text-sm text-[var(--primary)] mt-1">Caricamento in corso...</p>}
-            </div>
-
-            {/* Logo Upload */}
-            <div>
-              <Label className="text-base font-semibold">Logo</Label>
-              <p className="text-xs text-[var(--text-secondary)] mb-2">
-                Il logo della tua Pro Loco (apparirà in alto a sinistra, max 2MB)
-              </p>
-              {proloco?.logo_url && (
-                <div className="mb-3 flex items-center gap-2">
-                  <img
-                    src={proloco.logo_url.startsWith('/api')
-                      ? `${api.defaults.baseURL}${proloco.logo_url}`
-                      : proloco.logo_url}
-                    alt="Logo attuale"
-                    className="h-16 w-auto object-contain bg-gray-100 rounded p-2"
-                    onError={(e) => { e.target.style.display = 'none'; }}
-                  />
-                </div>
-              )}
-              <Input
-                type="file"
-                accept="image/jpeg,image/png,image/webp,image/gif"
-                disabled={uploadingLogo}
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) uploadImage(file, "logo");
-                }}
-              />
-              {uploadingLogo && <p className="text-sm text-[var(--primary)] mt-1">Caricamento in corso...</p>}
             </div>
           </div>
           <DialogFooter>
