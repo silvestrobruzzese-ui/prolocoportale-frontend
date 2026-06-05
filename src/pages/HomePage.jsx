@@ -251,6 +251,14 @@ export default function HomePage() {
     setSelectedCammino(null);
   }, [category]);
 
+  // Auto-select business when a single sentiero is selected
+  useEffect(() => {
+    if (selectedCammino && selectedCammino.startsWith("__sentiero__")) {
+      const sentieroId = selectedCammino.replace("__sentiero__", "");
+      setSelectedId(sentieroId);
+    }
+  }, [selectedCammino]);
+
   // Filter businesses by selected cammino/sentiero
   const filteredBusinesses = useMemo(() => {
     if (!selectedCammino) return businesses;
