@@ -1,6 +1,6 @@
 // AuthModal: tabs for sign in / register
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -54,8 +54,8 @@ export default function AuthModal({ open, onClose }) {
         <div className="bg-[var(--primary)] p-6 text-white">
           <DialogHeader>
             <DialogTitle className="font-display text-2xl text-white">{t("sign_in")}</DialogTitle>
+            <DialogDescription className="text-white/85 text-sm mt-1">{t("register_to_save")}</DialogDescription>
           </DialogHeader>
-          <p className="text-white/85 text-sm mt-1">{t("register_to_save")}</p>
         </div>
         <div className="p-6">
           <Tabs value={tab} onValueChange={setTab}>
