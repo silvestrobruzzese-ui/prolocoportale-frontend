@@ -1,26 +1,29 @@
 // Category filter buttons - horizontal scrollable bar with pop style
 import React from "react";
 
-// SVG Hiker Icon Component - Orange body with blue backpack
+// SVG Hiker Icon Component - Stylized hiker matching reference image
 const HikerIcon = ({ size = 24, isActive = false }) => {
-  const orangeColor = isActive ? "#FFFFFF" : "#F97316"; // Orange for body
-  const blueColor = isActive ? "#FFFFFF" : "#38BDF8";   // Sky blue for backpack
+  const orangeColor = isActive ? "#FFFFFF" : "#E8945A"; // Coral/orange for body
+  const blueColor = isActive ? "#FFFFFF" : "#5BA4B5";   // Muted blue for backpack
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       {/* Head */}
-      <circle cx="12" cy="3.5" r="2.5" fill={orangeColor} />
+      <circle cx="13" cy="3" r="2.5" fill={orangeColor} />
       {/* Backpack */}
-      <path d="M7 8C7 7 7.5 6 9 6L9 12L7 11L7 8Z" fill={blueColor} />
-      <rect x="6.5" y="7" width="3" height="5" rx="1" fill={blueColor} />
-      {/* Body */}
-      <path d="M12 6.5L12 11L9.5 11" stroke={orangeColor} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 7.5C8 6.5 8.5 6 9.5 6C9.5 6 10 6 10 7L10 12L8.5 12.5L8 7.5Z" fill={blueColor} />
+      <rect x="7.5" y="7" width="3" height="6" rx="1.5" fill={blueColor} />
+      {/* Torso - leaning forward */}
+      <path d="M13 5.5C13 5.5 12 8 11 10C10.5 11 10 12 10 12" stroke={orangeColor} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Back arm */}
+      <path d="M11.5 8L9 10" stroke={orangeColor} strokeWidth="2" strokeLinecap="round" />
+      {/* Front arm holding stick */}
+      <path d="M12 8L15 7" stroke={orangeColor} strokeWidth="2" strokeLinecap="round" />
       {/* Walking stick */}
-      <path d="M15 8L17.5 18" stroke={orangeColor} strokeWidth="2" strokeLinecap="round" />
-      {/* Arm to stick */}
-      <path d="M12 9L15 8" stroke={orangeColor} strokeWidth="2" strokeLinecap="round" />
-      {/* Legs */}
-      <path d="M12 11L14 16L16 21" stroke={orangeColor} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M12 11L9 16L7 21" stroke={orangeColor} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M15 7L18 20" stroke={orangeColor} strokeWidth="1.5" strokeLinecap="round" />
+      {/* Back leg - stepping */}
+      <path d="M10 12L7 17L5 21" stroke={orangeColor} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Front leg - extended */}
+      <path d="M10 12L13 17L15 21" stroke={orangeColor} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 };

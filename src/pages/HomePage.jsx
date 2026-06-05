@@ -189,14 +189,19 @@ export default function HomePage() {
       return;
     }
     try {
-      const params = { category, limit: 100 };
-      // Use searched location first, otherwise use geolocation
-      if (searchedCenter) {
-        params.lat = searchedCenter[0];
-        params.lng = searchedCenter[1];
-      } else if (hasPosition) {
-        params.lat = position[0];
-        params.lng = position[1];
+      // For "Sentieri e Cammini", fetch ALL without location filter (they're few)
+      const isSentieriCammini = category === "Sentieri e Cammini";
+      const params = { category, limit: isSentieriCammini ? 500 : 100 };
+
+      // Only add location params for other categories
+      if (!isSentieriCammini) {
+        if (searchedCenter) {
+          params.lat = searchedCenter[0];
+          params.lng = searchedCenter[1];
+        } else if (hasPosition) {
+          params.lat = position[0];
+          params.lng = position[1];
+        }
       }
       if (query) params.q = query;
       const { data } = await api.get("/businesses", { params });

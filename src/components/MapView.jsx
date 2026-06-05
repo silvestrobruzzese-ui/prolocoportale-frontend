@@ -47,16 +47,17 @@ const categoryEmoji = {
   Other: "📍",
 };
 
-// SVG Hiker icon for map markers
+// SVG Hiker icon for map markers - stylized version matching reference
 const hikerSvgWhite = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="12" cy="3.5" r="2.5" fill="white"/>
-  <path d="M7 8C7 7 7.5 6 9 6L9 12L7 11L7 8Z" fill="white"/>
-  <rect x="6.5" y="7" width="3" height="5" rx="1" fill="white"/>
-  <path d="M12 6.5L12 11L9.5 11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M15 8L17.5 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
-  <path d="M12 9L15 8" stroke="white" stroke-width="2" stroke-linecap="round"/>
-  <path d="M12 11L14 16L16 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M12 11L9 16L7 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="13" cy="3" r="2.5" fill="white"/>
+  <path d="M8 7.5C8 6.5 8.5 6 9.5 6C9.5 6 10 6 10 7L10 12L8.5 12.5L8 7.5Z" fill="white"/>
+  <rect x="7.5" y="7" width="3" height="6" rx="1.5" fill="white"/>
+  <path d="M13 5.5C13 5.5 12 8 11 10C10.5 11 10 12 10 12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M11.5 8L9 10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M12 8L15 7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M15 7L18 20" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M10 12L7 17L5 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M10 12L13 17L15 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`;
 
 function pinIcon(business, inProximity) {
