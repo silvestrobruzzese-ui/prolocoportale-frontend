@@ -160,7 +160,7 @@ export default function CamminoSelector({ businesses, selectedCammino, onSelect 
 
       {/* Cammini submenu */}
       {activeSubmenu === "cammini" && (
-        <div className="px-3 pb-3 pt-1 border-t border-gray-100">
+        <div className="px-3 pb-3 pt-1 border-t border-gray-100 max-h-48 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" }}>
           <div className="flex flex-wrap gap-2">
             {cammini.map((cammino) => (
               <button
@@ -181,7 +181,7 @@ export default function CamminoSelector({ businesses, selectedCammino, onSelect 
 
       {/* Sentieri submenu */}
       {activeSubmenu === "sentieri" && (
-        <div className="px-3 pb-3 pt-1 border-t border-gray-100">
+        <div className="px-3 pb-3 pt-1 border-t border-gray-100 max-h-48 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: "touch" }}>
           <div className="flex flex-wrap gap-2">
             {/* All sentieri option */}
             <button
