@@ -5,7 +5,9 @@ import { translateFields } from "@/lib/translate";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X, Loader2, Mountain, Route, Timer, TrendingUp, RotateCcw, ChevronRight, List } from "lucide-react";
+import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X, Loader2, Mountain, Route, Timer, TrendingUp, RotateCcw, ChevronRight, List, Download, Compass } from "lucide-react";
+import { downloadGpx } from "@/lib/gpxExport";
+import TrailFollower from "@/components/TrailFollower";
 
 function formatDistance(km) {
   if (km == null) return "—";
@@ -21,6 +23,10 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
   const [translatedBusiness, setTranslatedBusiness] = useState(null);
   const [isTranslating, setIsTranslating] = useState(false);
   const [showTappeList, setShowTappeList] = useState(false);
+  const [showTrailFollower, setShowTrailFollower] = useState(false);
+
+  // Check if business has GPS track
+  const hasGpsTrack = business?.geojson_data?.geometry?.coordinates?.length > 0;
 
   // Get other tappe of the same cammino
   const camminoTappe = React.useMemo(() => {
@@ -299,8 +305,35 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
               {isFavorite ? t("remove_favorite") : t("add_favorite")}
             </Button>
           </div>
+
+          {/* Trail-specific buttons for GPS tracks */}
+          {hasGpsTrack && (
+            <div className="grid grid-cols-2 gap-2 pt-2">
+              <Button
+                onClick={() => downloadGpx(business.geojson_data, business.name, business.description || "")}
+                variant="outline"
+                className="rounded-full border-sky-300 text-sky-700 hover:bg-sky-50"
+              >
+                <Download className="w-4 h-4 mr-2" /> Scarica GPX
+              </Button>
+              <Button
+                onClick={() => setShowTrailFollower(true)}
+                className="rounded-full bg-gradient-to-r from-orange-500 to-sky-500 hover:from-orange-600 hover:to-sky-600 text-white"
+              >
+                <Compass className="w-4 h-4 mr-2" /> Segui Sentiero
+              </Button>
+            </div>
+          )}
         </div>
       </SheetContent>
+
+      {/* Trail Follower Modal */}
+      {showTrailFollower && hasGpsTrack && (
+        <TrailFollower
+          trail={business}
+          onClose={() => setShowTrailFollower(false)}
+        />
+      )}
     </Sheet>
   );
 }
