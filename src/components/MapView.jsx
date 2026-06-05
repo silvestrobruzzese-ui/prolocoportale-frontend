@@ -97,6 +97,7 @@ export default function MapView({
   routeTo, // [lat, lng] or null
   prolocoTerritory, // polygon points
   camminoTappe, // array of tappe for drawing connecting line
+  camminoRoute, // actual walking route coordinates from OSRM
 }) {
   const mapRef = useRef(null);
 
@@ -193,8 +194,20 @@ export default function MapView({
         />
       )}
 
-      {/* Line connecting cammino tappe */}
-      {camminoLine && camminoLine.length > 1 && (
+      {/* Walking route for cammino (actual path from OSRM) */}
+      {camminoRoute && camminoRoute.length > 1 && (
+        <Polyline
+          positions={camminoRoute}
+          pathOptions={{
+            color: "#F97316", // Orange - matches trail style
+            weight: 4,
+            opacity: 0.85,
+          }}
+        />
+      )}
+
+      {/* Fallback: dashed line connecting cammino tappe if no route available */}
+      {!camminoRoute && camminoLine && camminoLine.length > 1 && (
         <Polyline
           positions={camminoLine}
           pathOptions={{

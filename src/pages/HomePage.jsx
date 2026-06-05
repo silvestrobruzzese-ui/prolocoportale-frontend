@@ -16,6 +16,7 @@ import { useI18n } from "@/lib/i18n";
 import { useGeolocation } from "@/lib/useGeolocation";
 import { useAuth } from "@/lib/auth";
 import api, { formatApiError } from "@/lib/api";
+import { getWalkingRoute } from "@/lib/routing";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,6 +49,8 @@ export default function HomePage() {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [prolocoSlug, setProlocoSlug] = useState(null);
   const [selectedCammino, setSelectedCammino] = useState(null);
+  const [camminoRoute, setCamminoRoute] = useState(null);
+  const [isLoadingRoute, setIsLoadingRoute] = useState(false);
 
   // Check if user came from a Pro Loco landing page (via URL param)
   useEffect(() => {
@@ -271,6 +274,26 @@ export default function HomePage() {
     return tappe.length > 1 ? tappe : null;
   }, [businesses, selectedCammino]);
 
+  // Fetch walking route when cammino tappe change
+  useEffect(() => {
+    if (!camminoTappe || camminoTappe.length < 2) {
+      setCamminoRoute(null);
+      return;
+    }
+
+    setIsLoadingRoute(true);
+    getWalkingRoute(camminoTappe)
+      .then((route) => {
+        setCamminoRoute(route);
+      })
+      .catch(() => {
+        setCamminoRoute(null);
+      })
+      .finally(() => {
+        setIsLoadingRoute(false);
+      });
+  }, [camminoTappe]);
+
   const selected = useMemo(() => filteredBusinesses.find((b) => b.business_id === selectedId), [filteredBusinesses, selectedId]);
   const isFav = useMemo(() => favorites.some((f) => f.business_id === selectedId), [favorites, selectedId]);
 
@@ -445,6 +468,7 @@ export default function HomePage() {
             recenterTrigger={recenterTrigger}
             routeTo={navigatingTo}
             camminoTappe={camminoTappe}
+            camminoRoute={camminoRoute}
           />
         </main>
       </div>
