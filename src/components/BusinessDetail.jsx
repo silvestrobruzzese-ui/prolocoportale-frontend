@@ -312,19 +312,20 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
           {/* Trail-specific buttons for GPS tracks */}
           {hasGpsTrack && (
             <div className="grid grid-cols-2 gap-2 pt-2">
-              <Button
+              <button
+                type="button"
                 onClick={() => downloadGpx(business.geojson_data, business.name, business.description || "")}
-                variant="outline"
-                className="rounded-full border-sky-300 text-sky-700 hover:bg-sky-50"
+                className="flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-sky-300 text-sky-700 hover:bg-sky-50 active:bg-sky-100 font-medium text-sm"
               >
-                <Download className="w-4 h-4 mr-2" /> Scarica GPX
-              </Button>
-              <Button
+                <Download className="w-4 h-4" /> Scarica GPX
+              </button>
+              <button
+                type="button"
                 onClick={() => setShowTrailFollower(true)}
-                className="rounded-full bg-gradient-to-r from-orange-500 to-sky-500 hover:from-orange-600 hover:to-sky-600 text-white"
+                className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-sky-500 hover:from-orange-600 hover:to-sky-600 active:from-orange-700 active:to-sky-700 text-white font-medium text-sm"
               >
-                <Compass className="w-4 h-4 mr-2" /> Segui Sentiero
-              </Button>
+                <Compass className="w-4 h-4" /> Segui Sentiero
+              </button>
             </div>
           )}
         </div>

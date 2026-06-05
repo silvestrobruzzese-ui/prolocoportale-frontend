@@ -84,7 +84,6 @@ export function downloadGpx(geojsonData, name, description = "") {
 
   // Create blob and download
   const blob = new Blob([gpxContent], { type: "application/gpx+xml" });
-  const url = URL.createObjectURL(blob);
 
   // Create filename from trail name
   const filename = name
@@ -92,18 +91,38 @@ export function downloadGpx(geojsonData, name, description = "") {
     .replace(/[^a-z0-9]+/g, "_")
     .replace(/^_|_$/g, "") + ".gpx";
 
-  // Trigger download
+  // Check if Web Share API is available (mobile)
+  if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], filename, { type: "application/gpx+xml" })] })) {
+    const file = new File([blob], filename, { type: "application/gpx+xml" });
+    navigator.share({
+      files: [file],
+      title: name,
+      text: description || "Tracciato GPX"
+    }).catch(() => {
+      // Fallback to traditional download if share fails
+      triggerDownload(blob, filename);
+    });
+  } else {
+    triggerDownload(blob, filename);
+  }
+
+  return true;
+}
+
+function triggerDownload(blob, filename) {
+  const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
   link.download = filename;
+  link.style.display = "none";
   document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
 
-  // Cleanup
-  URL.revokeObjectURL(url);
-
-  return true;
+  // Use setTimeout for better mobile compatibility
+  setTimeout(() => {
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }, 100);
 }
 
 /**
