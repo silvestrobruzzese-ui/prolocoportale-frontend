@@ -1,8 +1,10 @@
-// CamminoSelector - Dropdown to select a specific cammino
-import React, { useMemo } from "react";
-import { Route, ChevronDown, X } from "lucide-react";
+// CamminoSelector - Collapsible dropdown to select a specific cammino
+import React, { useMemo, useState } from "react";
+import { Route, ChevronDown, ChevronUp, X } from "lucide-react";
 
 export default function CamminoSelector({ businesses, selectedCammino, onSelect }) {
+  const [isExpanded, setIsExpanded] = useState(true);
+
   // Extract unique cammino names from businesses
   const cammini = useMemo(() => {
     const camminoSet = new Set();
@@ -32,64 +34,106 @@ export default function CamminoSelector({ businesses, selectedCammino, onSelect 
 
   if (cammini.length === 0 && sentieriCount === 0) return null;
 
+  // Get display name for selected cammino
+  const getDisplayName = (cammino) => {
+    if (!cammino) return "Tutti";
+    if (cammino === "__sentieri__") return "Sentieri";
+    return cammino.replace("Cammino ", "").replace("di ", "").replace("della ", "").replace("del ", "").replace("dell'", "");
+  };
+
+  const handleSelect = (value) => {
+    onSelect(value);
+    // Auto-collapse on mobile when selection is made
+    if (value) {
+      setIsExpanded(false);
+    }
+  };
+
   return (
-    <div className="glass rounded-2xl p-3 mx-4 mb-2">
-      <div className="flex items-center gap-2 mb-2">
-        <Route className="w-4 h-4 text-orange-500" />
-        <span className="text-sm font-medium text-gray-700">Seleziona un percorso</span>
-      </div>
-
-      <div className="flex flex-wrap gap-2">
-        {/* All option */}
-        <button
-          onClick={() => onSelect(null)}
-          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-            !selectedCammino
-              ? "bg-gradient-to-r from-orange-500 to-sky-500 text-white shadow-md"
-              : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"
-          }`}
-        >
-          Tutti ({businesses.length})
-        </button>
-
-        {/* Sentieri option */}
-        {sentieriCount > 0 && (
-          <button
-            onClick={() => onSelect("__sentieri__")}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-              selectedCammino === "__sentieri__"
-                ? "bg-gradient-to-r from-orange-500 to-sky-500 text-white shadow-md"
-                : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"
-            }`}
-          >
-            Sentieri ({sentieriCount})
-          </button>
+    <div className="glass rounded-2xl mx-4 mb-2 overflow-hidden">
+      {/* Header - always visible */}
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full p-3 flex items-center justify-between"
+      >
+        <div className="flex items-center gap-2">
+          <Route className="w-4 h-4 text-orange-500" />
+          <span className="text-sm font-medium text-gray-700">
+            {selectedCammino ? (
+              <span className="flex items-center gap-2">
+                <span className="text-gray-500">Percorso:</span>
+                <span className="px-2 py-0.5 rounded-full bg-gradient-to-r from-orange-500 to-sky-500 text-white text-xs">
+                  {getDisplayName(selectedCammino)}
+                </span>
+              </span>
+            ) : (
+              "Seleziona un percorso"
+            )}
+          </span>
+        </div>
+        {isExpanded ? (
+          <ChevronUp className="w-4 h-4 text-gray-500" />
+        ) : (
+          <ChevronDown className="w-4 h-4 text-gray-500" />
         )}
+      </button>
 
-        {/* Cammini options */}
-        {cammini.map((cammino) => (
-          <button
-            key={cammino}
-            onClick={() => onSelect(cammino)}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-              selectedCammino === cammino
-                ? "bg-gradient-to-r from-orange-500 to-sky-500 text-white shadow-md"
-                : "bg-white border border-gray-200 text-gray-600 hover:border-sky-300"
-            }`}
-          >
-            {cammino.replace("Cammino ", "").replace("di ", "").replace("della ", "").replace("del ", "").replace("dell'", "")} ({camminoTappe[cammino]})
-          </button>
-        ))}
-      </div>
+      {/* Expandable content */}
+      {isExpanded && (
+        <div className="px-3 pb-3">
+          <div className="flex flex-wrap gap-2">
+            {/* All option */}
+            <button
+              onClick={() => handleSelect(null)}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                !selectedCammino
+                  ? "bg-gradient-to-r from-orange-500 to-sky-500 text-white shadow-md"
+                  : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"
+              }`}
+            >
+              Tutti ({businesses.length})
+            </button>
 
-      {/* Clear selection */}
-      {selectedCammino && (
-        <button
-          onClick={() => onSelect(null)}
-          className="mt-2 flex items-center gap-1 text-xs text-gray-500 hover:text-orange-500"
-        >
-          <X className="w-3 h-3" /> Mostra tutti
-        </button>
+            {/* Sentieri option */}
+            {sentieriCount > 0 && (
+              <button
+                onClick={() => handleSelect("__sentieri__")}
+                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                  selectedCammino === "__sentieri__"
+                    ? "bg-gradient-to-r from-orange-500 to-sky-500 text-white shadow-md"
+                    : "bg-white border border-gray-200 text-gray-600 hover:border-orange-300"
+                }`}
+              >
+                Sentieri ({sentieriCount})
+              </button>
+            )}
+
+            {/* Cammini options */}
+            {cammini.map((cammino) => (
+              <button
+                key={cammino}
+                onClick={() => handleSelect(cammino)}
+                className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                  selectedCammino === cammino
+                    ? "bg-gradient-to-r from-orange-500 to-sky-500 text-white shadow-md"
+                    : "bg-white border border-gray-200 text-gray-600 hover:border-sky-300"
+                }`}
+              >
+                {cammino.replace("Cammino ", "").replace("di ", "").replace("della ", "").replace("del ", "").replace("dell'", "")} ({camminoTappe[cammino]})
+              </button>
+            ))}
+          </div>
+
+          {/* Clear selection */}
+          {selectedCammino && (
+            <button
+              onClick={() => handleSelect(null)}
+              className="mt-2 flex items-center gap-1 text-xs text-gray-500 hover:text-orange-500"
+            >
+              <X className="w-3 h-3" /> Mostra tutti
+            </button>
+          )}
+        </div>
       )}
     </div>
   );
