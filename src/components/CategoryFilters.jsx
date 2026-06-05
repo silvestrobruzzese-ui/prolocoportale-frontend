@@ -1,6 +1,27 @@
 // Category filter buttons - horizontal scrollable bar with pop style
 import React from "react";
 
+// SVG Column Icon Component - Greek/Roman column for Beni Culturali
+const ColumnIcon = ({ size = 24, isActive = false }) => {
+  const color = isActive ? "#FFFFFF" : "#8B5CF6"; // Viola for Beni Culturali
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Capital - top scrolls */}
+      <path d="M4 6C4 5 5 4 6 4.5C6.5 4.7 6.5 5.5 6 6C5.5 6.5 5 6.5 5 7H19C19 6.5 18.5 6.5 18 6C17.5 5.5 17.5 4.7 18 4.5C19 4 20 5 20 6" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+      {/* Capital base */}
+      <rect x="5" y="7" width="14" height="2" rx="0.5" fill={color}/>
+      {/* Column shaft with fluting */}
+      <rect x="6" y="9" width="12" height="12" fill={color}/>
+      {/* Fluting lines */}
+      <line x1="8.5" y1="9" x2="8.5" y2="21" stroke={isActive ? "#8B5CF6" : "white"} strokeWidth="1"/>
+      <line x1="12" y1="9" x2="12" y2="21" stroke={isActive ? "#8B5CF6" : "white"} strokeWidth="1"/>
+      <line x1="15.5" y1="9" x2="15.5" y2="21" stroke={isActive ? "#8B5CF6" : "white"} strokeWidth="1"/>
+      {/* Base */}
+      <rect x="5" y="21" width="14" height="2" rx="0.5" fill={color}/>
+    </svg>
+  );
+};
+
 // SVG Hiker Icon Component - Stylized hiker matching reference image
 const HikerIcon = ({ size = 24, isActive = false }) => {
   const orangeColor = isActive ? "#FFFFFF" : "#E8945A"; // Coral/orange for body
@@ -34,7 +55,7 @@ const CATEGORIES = [
   { key: "hotel", value: "Hotel", icon: "🏨", color: "#FFD700" },
   { key: "bb", value: "B&B", icon: "B&B", color: "#22C55E" },
   { key: "sentieri", value: "Sentieri e Cammini", icon: "hiker", color: "#F97316", secondColor: "#38BDF8", isSvg: true },
-  { key: "beni_culturali", value: "Beni Culturali", icon: "🏛", color: "#8B5CF6" },
+  { key: "beni_culturali", value: "Beni Culturali", icon: "column", color: "#8B5CF6", isSvg: true },
   { key: "itinerari", value: "Itinerari", icon: "🥾", color: "#10B981" },
   { key: "monumenti", value: "Monumenti", icon: "⛪", color: "#A855F7" },
   { key: "musei", value: "Musei", icon: "🏛", color: "#EC4899" },
@@ -94,7 +115,7 @@ export default function CategoryFilters({ value, onChange }) {
             title={c.value}
           >
             {c.isSvg ? (
-              <HikerIcon isActive={isActive} size={28} />
+              c.icon === "column" ? <ColumnIcon isActive={isActive} size={28} /> : <HikerIcon isActive={isActive} size={28} />
             ) : (
               <span
                 className="drop-shadow-sm"
@@ -113,4 +134,4 @@ export default function CategoryFilters({ value, onChange }) {
   );
 }
 
-export { CATEGORIES, HikerIcon };
+export { CATEGORIES, HikerIcon, ColumnIcon };
