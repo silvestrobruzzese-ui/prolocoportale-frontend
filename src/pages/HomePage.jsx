@@ -1,13 +1,11 @@
 // HomePage - main map experience
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { MapPin, Search, Crosshair, User, Menu, LogOut, Heart, ShieldCheck, KeyRound, Navigation2, Maximize2, Minimize2 } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+import { MapPin, Search, Crosshair, Navigation2, Maximize2, Minimize2 } from "lucide-react";
 
 import MapView from "@/components/MapView";
 import CategoryFilters from "@/components/CategoryFilters";
-import BusinessList from "@/components/BusinessList";
 import BusinessDetail from "@/components/BusinessDetail";
-import AuthModal from "@/components/AuthModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import InstallBanner from "@/components/InstallBanner";
 import CamminoSelector from "@/components/CamminoSelector";
@@ -20,7 +18,6 @@ import { getWalkingRoute } from "@/lib/routing";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 
 // Default center: Calabria
@@ -384,41 +381,6 @@ export default function HomePage() {
           </div>
 
           <LanguageSwitcher />
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="glass rounded-full h-12 w-12 inline-flex items-center justify-center hover:bg-white" data-testid="user-menu-btn">
-                <Menu className="w-5 h-5" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="rounded-xl w-56 z-[1100]">
-              {user ? (
-                <>
-                  <DropdownMenuItem className="font-medium" disabled data-testid="user-menu-name">
-                    <User className="w-4 h-4 mr-2" /> {user.name || user.email}
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => toast.info(`${favorites.length} ${t("favorites")}`)} data-testid="user-menu-favorites">
-                    <Heart className="w-4 h-4 mr-2" /> {t("favorites")} ({favorites.length})
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={logout} data-testid="user-menu-logout">
-                    <LogOut className="w-4 h-4 mr-2" /> {t("logout")}
-                  </DropdownMenuItem>
-                </>
-              ) : (
-                <DropdownMenuItem onClick={() => setAuthOpen(true)} data-testid="user-menu-login">
-                  <User className="w-4 h-4 mr-2" /> {t("login")} / {t("register")}
-                </DropdownMenuItem>
-              )}
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild data-testid="user-menu-admin-link">
-                <Link to="/admin/login"><ShieldCheck className="w-4 h-4 mr-2" /> {t("sign_in_admin")}</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild data-testid="user-menu-proloco-link">
-                <Link to="/proloco/login"><KeyRound className="w-4 h-4 mr-2" /> {t("sign_in_proloco")}</Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </div>
 
         {/* Horizontal category filters */}
