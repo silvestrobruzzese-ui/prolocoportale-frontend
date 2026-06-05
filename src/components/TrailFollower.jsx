@@ -33,15 +33,33 @@ function trailPointIcon(type) {
   });
 }
 
-// Map component that follows user position
-function MapFollower({ userPosition, shouldFollow }) {
+// Map component that follows user position and detects user interaction
+function MapFollower({ userPosition, shouldFollow, onUserInteraction }) {
   const map = useMap();
 
+  // Follow user position when enabled
   useEffect(() => {
     if (shouldFollow && userPosition) {
       map.setView(userPosition, map.getZoom(), { animate: true });
     }
   }, [map, userPosition, shouldFollow]);
+
+  // Detect user interaction to stop auto-follow
+  useEffect(() => {
+    const handleInteraction = () => {
+      if (onUserInteraction) {
+        onUserInteraction();
+      }
+    };
+
+    map.on('dragstart', handleInteraction);
+    map.on('zoomstart', handleInteraction);
+
+    return () => {
+      map.off('dragstart', handleInteraction);
+      map.off('zoomstart', handleInteraction);
+    };
+  }, [map, onUserInteraction]);
 
   return null;
 }
@@ -289,7 +307,11 @@ export default function TrailFollower({ trail, onClose }) {
           </>
         )}
 
-        <MapFollower userPosition={userPosition} shouldFollow={followUser} />
+        <MapFollower
+          userPosition={userPosition}
+          shouldFollow={followUser}
+          onUserInteraction={() => setFollowUser(false)}
+        />
       </MapContainer>
 
       {/* Bottom info panel */}
