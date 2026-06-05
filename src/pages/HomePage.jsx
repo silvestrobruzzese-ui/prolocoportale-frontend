@@ -10,6 +10,7 @@ import BusinessDetail from "@/components/BusinessDetail";
 import AuthModal from "@/components/AuthModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import InstallBanner from "@/components/InstallBanner";
+import CamminoSelector from "@/components/CamminoSelector";
 
 import { useI18n } from "@/lib/i18n";
 import { useGeolocation } from "@/lib/useGeolocation";
@@ -46,6 +47,7 @@ export default function HomePage() {
   const [searchZoom, setSearchZoom] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [prolocoSlug, setProlocoSlug] = useState(null);
+  const [selectedCammino, setSelectedCammino] = useState(null);
 
   // Check if user came from a Pro Loco landing page (via URL param)
   useEffect(() => {
@@ -236,7 +238,35 @@ export default function HomePage() {
     }
   }, [hasPosition]);
 
-  const selected = useMemo(() => businesses.find((b) => b.business_id === selectedId), [businesses, selectedId]);
+  // Reset cammino selection when category changes
+  useEffect(() => {
+    setSelectedCammino(null);
+  }, [category]);
+
+  // Filter businesses by selected cammino
+  const filteredBusinesses = useMemo(() => {
+    if (!selectedCammino) return businesses;
+    if (selectedCammino === "__sentieri__") {
+      return businesses.filter((b) => b.trail_type === "sentiero" && !b.cammino_name);
+    }
+    return businesses.filter((b) => b.cammino_name === selectedCammino);
+  }, [businesses, selectedCammino]);
+
+  // Get all tappe of selected cammino for drawing line
+  const camminoTappe = useMemo(() => {
+    if (!selectedCammino || selectedCammino === "__sentieri__") return null;
+    const tappe = businesses
+      .filter((b) => b.cammino_name === selectedCammino)
+      .sort((a, b) => {
+        // Sort by tappa_number if available
+        const numA = parseInt(a.tappa_number) || 999;
+        const numB = parseInt(b.tappa_number) || 999;
+        return numA - numB;
+      });
+    return tappe.length > 1 ? tappe : null;
+  }, [businesses, selectedCammino]);
+
+  const selected = useMemo(() => filteredBusinesses.find((b) => b.business_id === selectedId), [filteredBusinesses, selectedId]);
   const isFav = useMemo(() => favorites.some((f) => f.business_id === selectedId), [favorites, selectedId]);
 
   const handleSelect = (id) => {
@@ -350,6 +380,15 @@ export default function HomePage() {
 
         {/* Horizontal category filters */}
         <CategoryFilters value={category} onChange={setCategory} />
+
+        {/* Cammino selector - only for Sentieri e Cammini category */}
+        {category === "Sentieri e Cammini" && businesses.length > 0 && (
+          <CamminoSelector
+            businesses={businesses}
+            selectedCammino={selectedCammino}
+            onSelect={setSelectedCammino}
+          />
+        )}
       </div>
       )}
 
@@ -395,11 +434,12 @@ export default function HomePage() {
             zoom={currentZoom}
             userPosition={position}
             hasUserPosition={hasPosition}
-            businesses={businesses}
+            businesses={filteredBusinesses}
             selectedBusinessId={selectedId}
             onSelect={handleSelect}
             recenterTrigger={recenterTrigger}
             routeTo={navigatingTo}
+            camminoTappe={camminoTappe}
           />
         </main>
       </div>
@@ -466,6 +506,8 @@ export default function HomePage() {
         onNavigate={handleNavigate}
         onToggleFavorite={handleToggleFavorite}
         isFavorite={isFav}
+        allBusinesses={businesses}
+        onSelectBusiness={handleSelect}
       />
 
       <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />

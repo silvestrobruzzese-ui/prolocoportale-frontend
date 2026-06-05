@@ -5,7 +5,7 @@ import { translateFields } from "@/lib/translate";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X, Loader2, Mountain, Route, Timer, TrendingUp, RotateCcw } from "lucide-react";
+import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X, Loader2, Mountain, Route, Timer, TrendingUp, RotateCcw, ChevronRight, List } from "lucide-react";
 
 function formatDistance(km) {
   if (km == null) return "—";
@@ -16,10 +16,23 @@ function formatDistance(km) {
 // Fields to translate
 const TRANSLATABLE_FIELDS = ["name", "description", "promotion_title", "promotion_description", "address", "city", "hours"];
 
-export default function BusinessDetail({ open, onClose, business, onNavigate, onToggleFavorite, isFavorite }) {
+export default function BusinessDetail({ open, onClose, business, onNavigate, onToggleFavorite, isFavorite, allBusinesses = [], onSelectBusiness }) {
   const { t, lang } = useI18n();
   const [translatedBusiness, setTranslatedBusiness] = useState(null);
   const [isTranslating, setIsTranslating] = useState(false);
+  const [showTappeList, setShowTappeList] = useState(false);
+
+  // Get other tappe of the same cammino
+  const camminoTappe = React.useMemo(() => {
+    if (!business?.cammino_name || !allBusinesses.length) return [];
+    return allBusinesses
+      .filter((b) => b.cammino_name === business.cammino_name)
+      .sort((a, b) => {
+        const numA = parseInt(a.tappa_number) || 999;
+        const numB = parseInt(b.tappa_number) || 999;
+        return numA - numB;
+      });
+  }, [business, allBusinesses]);
 
   // Translate business content when language changes or business changes
   useEffect(() => {
@@ -163,6 +176,46 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                 <div className="mt-3 text-xs text-sky-600 flex items-center gap-1">
                   <span className="w-3 h-1 bg-orange-500 rounded-full"></span>
                   Tracciato GPS disponibile sulla mappa
+                </div>
+              )}
+
+              {/* Button to show all tappe of the cammino */}
+              {camminoTappe.length > 1 && (
+                <button
+                  onClick={() => setShowTappeList(!showTappeList)}
+                  className="mt-3 w-full flex items-center justify-between px-3 py-2 rounded-lg bg-white/70 hover:bg-white text-sky-700 text-sm font-medium transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <List className="w-4 h-4" />
+                    Vedi tutte le {camminoTappe.length} tappe
+                  </span>
+                  <ChevronRight className={`w-4 h-4 transition-transform ${showTappeList ? "rotate-90" : ""}`} />
+                </button>
+              )}
+
+              {/* List of tappe */}
+              {showTappeList && camminoTappe.length > 0 && (
+                <div className="mt-2 max-h-48 overflow-y-auto rounded-lg border border-sky-100">
+                  {camminoTappe.map((tappa, index) => (
+                    <button
+                      key={tappa.business_id}
+                      onClick={() => {
+                        onSelectBusiness && onSelectBusiness(tappa.business_id);
+                        setShowTappeList(false);
+                      }}
+                      className={`w-full flex items-center gap-2 px-3 py-2 text-left text-sm hover:bg-sky-50 transition-colors ${
+                        tappa.business_id === business.business_id ? "bg-sky-100 font-medium" : "bg-white"
+                      } ${index > 0 ? "border-t border-sky-50" : ""}`}
+                    >
+                      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-r from-orange-500 to-sky-500 text-white text-xs flex items-center justify-center font-bold">
+                        {tappa.tappa_number || index + 1}
+                      </span>
+                      <span className="truncate">{tappa.name}</span>
+                      {tappa.tappa_type && tappa.tappa_type !== "tappa" && tappa.tappa_type !== "borgo" && (
+                        <Badge className="ml-auto bg-sky-100 text-sky-600 text-xs">{tappa.tappa_type}</Badge>
+                      )}
+                    </button>
+                  ))}
                 </div>
               )}
             </div>

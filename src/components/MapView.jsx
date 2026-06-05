@@ -95,6 +95,7 @@ export default function MapView({
   recenterTrigger,
   routeTo, // [lat, lng] or null
   prolocoTerritory, // polygon points
+  camminoTappe, // array of tappe for drawing connecting line
 }) {
   const mapRef = useRef(null);
 
@@ -115,6 +116,12 @@ export default function MapView({
     // GeoJSON is [lng, lat], Leaflet needs [lat, lng]
     return coords.map(c => [c[1], c[0]]);
   }, [selectedBiz]);
+
+  // Line connecting cammino tappe
+  const camminoLine = useMemo(() => {
+    if (!camminoTappe || camminoTappe.length < 2) return null;
+    return camminoTappe.map((t) => [t.lat, t.lng]);
+  }, [camminoTappe]);
 
   return (
     <MapContainer
@@ -181,6 +188,19 @@ export default function MapView({
             color: "#F97316", // Orange
             weight: 4,
             opacity: 0.9,
+          }}
+        />
+      )}
+
+      {/* Line connecting cammino tappe */}
+      {camminoLine && camminoLine.length > 1 && (
+        <Polyline
+          positions={camminoLine}
+          pathOptions={{
+            color: "#38BDF8", // Sky blue
+            weight: 3,
+            opacity: 0.8,
+            dashArray: "10 6",
           }}
         />
       )}
