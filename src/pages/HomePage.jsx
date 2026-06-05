@@ -343,9 +343,10 @@ export default function HomePage() {
       navUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
     }
 
-    window.open(navUrl, '_blank');
+    // Navigate in same tab - on mobile this opens Maps app directly
+    // When user returns, they'll be back on this page
+    window.location.href = navUrl;
     setDetailOpen(false);
-    toast.success(t("navigator_running"));
   };
 
   const handleToggleFavorite = async () => {
