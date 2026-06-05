@@ -482,8 +482,301 @@ Quando il turista arriva da una landing Pro Loco:
 
 ---
 
-*Ultimo aggiornamento: 3 Giugno 2026 - ore 23:15*
+---
+
+## Sessione 5 Giugno 2026 - Sentieri e Cammini + Mobile UX
+
+### Nuova Categoria: Sentieri e Cammini
+
+Aggiunta una nuova categoria dedicata ai percorsi escursionistici della Calabria, con supporto completo per tracciati GPS e navigazione in tempo reale.
+
+#### Tipi di Percorsi
+
+| Tipo | Descrizione | Esempio |
+|------|-------------|---------|
+| **Cammino** | Percorso multi-tappa (pellegrinaggio/trekking) | Cammino di San Francesco di Paola |
+| **Sentiero** | Percorso singolo (escursione giornaliera) | Anelli sull'Alaco |
+
+#### Struttura Dati Sentieri
+
+```javascript
+{
+  category: "Sentieri e Cammini",
+  trail_type: "cammino" | "sentiero",
+  cammino_name: "Nome del cammino",      // Solo per tappe di cammini
+  tappa_number: "1",                      // Numero tappa
+  tappa_type: "tappa" | "variante",       // Tipo tappa
+  difficulty: "facile" | "medio" | "difficile",
+  distance: "12.5 km",
+  duration: "4 ore",
+  elevation_gain: 450,                    // Dislivello positivo in metri
+  is_loop: true,                          // Percorso ad anello
+  geojson_data: {                         // Tracciato GPS
+    type: "Feature",
+    geometry: {
+      type: "LineString",
+      coordinates: [[lng, lat, ele], ...]
+    }
+  }
+}
+```
+
+### CamminoSelector - Menu a Due Livelli
+
+Nuovo componente per selezionare cammini e sentieri con menu a tendina organizzato.
+
+#### Struttura Menu
+
+```
+├── Tutti (mostra tutti i percorsi)
+├── Cammini ▼
+│   ├── San Francesco di Paola (15 tappe)
+│   ├── Magna Graecia (8 tappe)
+│   └── ...
+└── Sentieri ▼
+    ├── Tutti i sentieri
+    ├── Anelli sull'Alaco
+    ├── Archiforo
+    └── ...
+```
+
+#### Caratteristiche
+- [x] Menu collassabile per mobile
+- [x] Scroll touch-friendly nelle liste
+- [x] Selezione singola o tutti
+- [x] Indicatore percorso selezionato
+- [x] Pulsante X per deselezionare
+
+### TrailFollower - Navigazione Sentieri in Tempo Reale
+
+Nuovo componente full-screen per seguire un sentiero con GPS.
+
+#### Funzionalità
+- [x] **Mappa interattiva** con tracciato GPS evidenziato
+- [x] **Posizione utente** in tempo reale con freccia direzione
+- [x] **Marker Partenza/Arrivo** (P verde, A rosso)
+- [x] **Distanza alla partenza** calcolata in tempo reale
+- [x] **Auto-follow** che segue la posizione (disattivabile)
+- [x] **Zoom/Pan** libero quando auto-follow disattivato
+- [x] **Pulsante "Centra su di me"** per riattivare auto-follow
+- [x] **Avviso sicurezza** obbligatorio prima dell'uso
+
+#### Modal Avviso Sicurezza
+```
+⚠️ Avviso Importante
+
+Questa funzione è solo indicativa. Per escursioni in montagna:
+• Scarica il file GPX e usa un'app offline (Wikiloc, Komoot, OruxMaps)
+• Porta una mappa cartacea di backup
+• Controlla le previsioni meteo
+• Informa qualcuno del tuo percorso
+• Porta batteria di riserva per il telefono
+
+⚠️ In aree senza segnale, questa app non funzionerà!
+
+[Scarica GPX]  [Ho capito, continua]
+```
+
+### GPX Export
+
+Nuova funzionalità per scaricare tracciati GPS in formato GPX.
+
+#### File: `src/lib/gpxExport.js`
+
+| Funzione | Descrizione |
+|----------|-------------|
+| `geojsonToGpx()` | Converte GeoJSON in formato GPX |
+| `downloadGpx()` | Scarica file GPX (con Web Share API su mobile) |
+| `calculateTrackStats()` | Calcola distanza, dislivello, quota min/max |
+
+#### Formato GPX Generato
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="ProlocoPortale - Sentieri e Cammini">
+  <metadata>
+    <name>Nome Sentiero</name>
+    <desc>Descrizione</desc>
+    <author><name>ProlocoPortale</name></author>
+  </metadata>
+  <trk>
+    <trkseg>
+      <trkpt lat="38.9" lon="16.6"><ele>450</ele></trkpt>
+      ...
+    </trkseg>
+  </trk>
+</gpx>
+```
+
+### Modifiche BusinessDetail per Sentieri
+
+La scheda dettaglio mostra informazioni specifiche per i sentieri:
+
+#### Pannello Info Sentiero
+- Difficoltà con icona montagna
+- Distanza con icona percorso
+- Durata con icona timer
+- Dislivello con icona trend
+- Indicatore "Percorso ad anello"
+- Badge "Tracciato GPS disponibile"
+
+#### Lista Tappe Cammino
+- Pulsante "Vedi tutte le X tappe"
+- Lista scrollabile delle tappe
+- Navigazione tra tappe dello stesso cammino
+
+#### Pulsanti Azione Sentieri
+```
+[🧭 Naviga]  [❤️ Preferiti]
+[⬇️ Scarica GPX]  [🧭 Segui Sentiero]
+```
+
+#### Sezione Sconto Nascosta
+Per la categoria "Sentieri e Cammini" la sezione sconto/prossimità è nascosta perché non applicabile ai percorsi naturali.
+
+### Miglioramenti Mobile Touch
+
+Risolti problemi di touch su iOS Safari:
+
+#### Problemi Risolti
+- [x] Pulsanti non cliccabili su iPhone
+- [x] Modal bloccato su touch
+- [x] Scroll liste dropdown non funzionante
+- [x] Navigazione apriva nuova scheda
+
+#### Soluzioni Implementate
+
+| Problema | Soluzione |
+|----------|-----------|
+| Touch non rilevato | `onTouchEnd` + `onClick` handlers |
+| Ritardo 300ms iOS | `touchAction: "manipulation"` |
+| Eventi bloccati | `e.preventDefault()` + `e.stopPropagation()` |
+| Overlay blocca click | `pointerEvents: "auto"` esplicito |
+| Nuova scheda navigatore | `window.location.href` invece di `window.open` |
+| Scroll dropdown | `overflow-y-auto` + `WebkitOverflowScrolling: "touch"` |
+| Auto-follow bloccante | Detect drag/zoom per disattivare follow |
+
+### Nuovi File Creati
+
+| File | Descrizione |
+|------|-------------|
+| `src/components/TrailFollower.jsx` | Componente navigazione sentieri |
+| `src/components/CamminoSelector.jsx` | Selettore cammini/sentieri |
+| `src/lib/gpxExport.js` | Funzioni export GPX |
+
+### File Modificati
+
+| File | Modifiche |
+|------|-----------|
+| `BusinessDetail.jsx` | Pannello info sentiero, pulsanti GPX/Follow, nasconde sconto |
+| `HomePage.jsx` | Integrazione CamminoSelector, navigazione senza nuova scheda |
+| `MapView.jsx` | Visualizzazione tracciato GPS sulla mappa |
+
+### Script Backend
+
+| File | Descrizione |
+|------|-------------|
+| `fix_sentieri_tracks.py` | Associa manualmente tracciati GPS ai sentieri |
+
+### Categorie Aggiornate (16 totali)
+
+| Categoria | Colore | Icona |
+|-----------|--------|-------|
+| **Sentieri e Cammini** | Gradiente Arancio→Blu | 🥾 |
+| ... (altre 15 categorie invariate) |
+
+---
+
+## Struttura Completa del Portale
+
+### Architettura Frontend
+
+```
+src/
+├── components/
+│   ├── ui/                    # Componenti shadcn/ui
+│   ├── MapView.jsx            # Mappa Leaflet principale
+│   ├── CategoryFilters.jsx    # Barra categorie orizzontale
+│   ├── BusinessDetail.jsx     # Scheda dettaglio attività
+│   ├── CamminoSelector.jsx    # Selettore cammini/sentieri
+│   ├── TrailFollower.jsx      # Navigazione sentieri GPS
+│   ├── AuthModal.jsx          # Login/Registrazione utenti
+│   ├── LanguageSwitcher.jsx   # Cambio lingua (5 lingue)
+│   └── InstallBanner.jsx      # Banner installazione PWA
+├── pages/
+│   ├── HomePage.jsx           # Mappa turista (pagina principale)
+│   ├── ProlocoLandingPage.jsx # Landing personalizzata Pro Loco
+│   ├── AdminLogin.jsx         # Login Superadmin
+│   ├── AdminDashboard.jsx     # Dashboard Superadmin
+│   ├── PrologoLogin.jsx       # Login Pro Loco (PIN)
+│   └── PrologoDashboard.jsx   # Dashboard Pro Loco
+├── lib/
+│   ├── api.js                 # Configurazione Axios
+│   ├── auth.jsx               # Context autenticazione
+│   ├── i18n.jsx               # Traduzioni UI (IT/EN/FR/DE/ES)
+│   ├── translate.js           # LibreTranslate API
+│   ├── useGeolocation.js      # Hook geolocalizzazione
+│   ├── routing.js             # Calcolo percorsi OSRM
+│   └── gpxExport.js           # Export tracciati GPX
+└── index.css                  # Tema Pop/Vibrant + animazioni
+```
+
+### Flusso Utente Turista
+
+```
+1. Apertura App
+   ├── Da link generico → Schermata benvenuto default
+   └── Da link Pro Loco (/p/slug) → Landing personalizzata
+
+2. Mappa Principale
+   ├── Visualizza marker (100 più vicini)
+   ├── Filtra per categoria
+   ├── Cerca per nome/località
+   └── Seleziona Cammini/Sentieri
+
+3. Dettaglio Attività
+   ├── Info base (nome, indirizzo, orari)
+   ├── Sconto prossimità (se applicabile)
+   ├── Pulsante Naviga → Apre Maps nativo
+   └── Pulsante Preferiti → Richiede login
+
+4. Dettaglio Sentiero
+   ├── Info percorso (difficoltà, distanza, dislivello)
+   ├── Lista tappe (per cammini)
+   ├── Scarica GPX → Salva file
+   └── Segui Sentiero → TrailFollower
+
+5. TrailFollower
+   ├── Avviso sicurezza (obbligatorio)
+   ├── Mappa con tracciato + posizione
+   ├── Auto-follow o navigazione libera
+   └── Chiudi → Torna a dettaglio
+```
+
+### API Backend Principali
+
+| Endpoint | Metodo | Descrizione |
+|----------|--------|-------------|
+| `/api/businesses` | GET | Lista attività (filtri: category, lat, lng, limit) |
+| `/api/businesses/{id}` | GET | Dettaglio singola attività |
+| `/api/proloco/by-slug/{slug}` | GET | Dati Pro Loco per landing |
+| `/api/auth/login` | POST | Login utente |
+| `/api/auth/register` | POST | Registrazione utente |
+| `/api/favorites` | GET/POST/DELETE | Gestione preferiti |
+
+### Collezioni MongoDB
+
+| Collezione | Record | Descrizione |
+|------------|--------|-------------|
+| `businesses` | ~18.500+ | Attività, monumenti, sentieri |
+| `prolocos` | 120 | Pro Loco con slug e immagini |
+| `users` | - | Utenti e superadmin |
+| `images` | - | Immagini copertina Pro Loco |
+
+---
+
+*Ultimo aggiornamento: 5 Giugno 2026 - ore 15:30*
 *Stato: PRODUZIONE ONLINE - Cloudflare Pages + Railway + MongoDB Atlas*
 *Security: HARDENING COMPLETATO*
 *Analytics: CLOUDFLARE WEB ANALYTICS ATTIVO*
 *Landing Page: PERSONALIZZATE PER OGNI PRO LOCO*
+*Sentieri e Cammini: FUNZIONALITÀ COMPLETA CON GPS*
