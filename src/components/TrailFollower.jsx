@@ -170,26 +170,22 @@ export default function TrailFollower({ trail, onClose }) {
                 In aree senza segnale, questa app non funzionerà!
               </p>
             </div>
-            <div className="flex gap-2" style={{ touchAction: "manipulation" }}>
-              <button
-                type="button"
-                onClick={(e) => { e.preventDefault(); handleDownloadGpx(); }}
-                onTouchEnd={(e) => { e.preventDefault(); handleDownloadGpx(); }}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-gray-300 bg-white text-gray-700 font-medium text-sm active:bg-gray-100"
-                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+            <div className="flex gap-2 relative z-10">
+              <a
+                href="#"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDownloadGpx(); }}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-gray-300 bg-white text-gray-700 font-medium text-sm active:bg-gray-100 no-underline cursor-pointer select-none"
               >
                 <Download className="w-4 h-4" />
                 Scarica GPX
-              </button>
-              <button
-                type="button"
-                onClick={(e) => { e.preventDefault(); setShowWarning(false); }}
-                onTouchEnd={(e) => { e.preventDefault(); setShowWarning(false); }}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-orange-500 text-white font-medium text-sm active:bg-orange-700"
-                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+              </a>
+              <a
+                href="#"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowWarning(false); }}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-orange-500 text-white font-medium text-sm active:bg-orange-700 no-underline cursor-pointer select-none"
               >
                 Ho capito, continua
-              </button>
+              </a>
             </div>
           </div>
         </div>
