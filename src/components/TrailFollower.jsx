@@ -149,8 +149,16 @@ export default function TrailFollower({ trail, onClose }) {
     <div className="fixed inset-0 z-[2000] bg-black">
       {/* Safety Warning Modal */}
       {showWarning && (
-        <div className="absolute inset-0 z-[2100] bg-black/80 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+        <div
+          className="absolute inset-0 z-[2100] bg-black/80 flex items-center justify-center p-4"
+          style={{ pointerEvents: "auto" }}
+          onClick={(e) => e.target === e.currentTarget && setShowWarning(false)}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-md w-full p-6"
+            style={{ pointerEvents: "auto" }}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center gap-3 text-amber-600 mb-4">
               <AlertTriangle className="w-8 h-8" />
               <h2 className="text-xl font-bold">Avviso Importante</h2>
@@ -170,18 +178,22 @@ export default function TrailFollower({ trail, onClose }) {
                 In aree senza segnale, questa app non funzionerà!
               </p>
             </div>
-            <div className="flex gap-2 relative z-10">
+            <div className="flex gap-2 relative z-10" style={{ pointerEvents: "auto" }}>
               <a
-                href="#"
+                href="#scarica"
+                role="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDownloadGpx(); }}
+                style={{ pointerEvents: "auto" }}
                 className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-gray-300 bg-white text-gray-700 font-medium text-sm active:bg-gray-100 no-underline cursor-pointer select-none"
               >
                 <Download className="w-4 h-4" />
                 Scarica GPX
               </a>
               <a
-                href="#"
+                href="#continua"
+                role="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowWarning(false); }}
+                style={{ pointerEvents: "auto" }}
                 className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-orange-500 text-white font-medium text-sm active:bg-orange-700 no-underline cursor-pointer select-none"
               >
                 Ho capito, continua
