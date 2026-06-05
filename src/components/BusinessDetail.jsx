@@ -311,18 +311,36 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
 
           {/* Trail-specific buttons for GPS tracks */}
           {hasGpsTrack && (
-            <div className="grid grid-cols-2 gap-2 pt-2">
+            <div className="grid grid-cols-2 gap-2 pt-2" style={{ touchAction: "manipulation" }}>
               <button
                 type="button"
-                onClick={() => downloadGpx(business.geojson_data, business.name, business.description || "")}
-                className="flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-sky-300 text-sky-700 hover:bg-sky-50 active:bg-sky-100 font-medium text-sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  downloadGpx(business.geojson_data, business.name, business.description || "");
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  downloadGpx(business.geojson_data, business.name, business.description || "");
+                }}
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-sky-300 text-sky-700 bg-white active:bg-sky-100 font-medium text-sm cursor-pointer select-none"
+                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               >
                 <Download className="w-4 h-4" /> Scarica GPX
               </button>
               <button
                 type="button"
-                onClick={() => setShowTrailFollower(true)}
-                className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-sky-500 hover:from-orange-600 hover:to-sky-600 active:from-orange-700 active:to-sky-700 text-white font-medium text-sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowTrailFollower(true);
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  setShowTrailFollower(true);
+                }}
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-orange-500 to-sky-500 active:from-orange-700 active:to-sky-700 text-white font-medium text-sm cursor-pointer select-none"
+                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               >
                 <Compass className="w-4 h-4" /> Segui Sentiero
               </button>
