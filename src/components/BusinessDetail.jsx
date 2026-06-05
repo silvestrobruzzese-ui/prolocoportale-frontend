@@ -98,7 +98,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
             {isTranslating && (
               <Loader2 className="w-4 h-4 animate-spin text-[var(--text-secondary)]" />
             )}
-            {eff > 0 && (
+            {eff > 0 && business.category !== "Sentieri e Cammini" && (
               <div className={`px-3 py-1.5 rounded-full text-white font-bold text-sm ${inProx ? "bg-[var(--primary)]" : "bg-[var(--secondary)]"}`}
                 data-testid="proximity-discount-badge"
               >
@@ -227,26 +227,28 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
             </div>
           )}
 
-          {/* Proximity panel */}
-          <div className={`rounded-2xl p-4 border ${inProx ? "border-[var(--primary)] bg-[var(--proximity)]" : "border-[var(--border)] bg-white"}`}>
-            <div className="flex items-center justify-between">
-              <div className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-semibold">
-                {t("effective_discount")}
+          {/* Proximity panel - hidden for trails */}
+          {business.category !== "Sentieri e Cammini" && (
+            <div className={`rounded-2xl p-4 border ${inProx ? "border-[var(--primary)] bg-[var(--proximity)]" : "border-[var(--border)] bg-white"}`}>
+              <div className="flex items-center justify-between">
+                <div className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-semibold">
+                  {t("effective_discount")}
+                </div>
+                <div className="text-xs text-[var(--text-secondary)]">
+                  {t("distance")}: <span className="font-semibold text-[var(--text-primary)]">{formatDistance(business.distance_km)}</span>
+                </div>
               </div>
-              <div className="text-xs text-[var(--text-secondary)]">
-                {t("distance")}: <span className="font-semibold text-[var(--text-primary)]">{formatDistance(business.distance_km)}</span>
+              <div className="mt-2 flex items-end gap-2">
+                <div className="text-4xl font-display font-bold text-[var(--primary)]">{Math.round(eff)}%</div>
+                <div className="text-sm text-[var(--text-secondary)] pb-1">
+                  {t("base_discount")} {base}% {bonus > 0 && `+ ${t("proximity_discount")} ${bonus}%`}
+                </div>
+              </div>
+              <div className={`mt-2 text-sm font-medium ${inProx ? "text-[var(--primary)]" : "text-[var(--text-secondary)]"}`}>
+                {inProx ? `✓ ${t("within_radius")}` : t("outside_radius")}
               </div>
             </div>
-            <div className="mt-2 flex items-end gap-2">
-              <div className="text-4xl font-display font-bold text-[var(--primary)]">{Math.round(eff)}%</div>
-              <div className="text-sm text-[var(--text-secondary)] pb-1">
-                {t("base_discount")} {base}% {bonus > 0 && `+ ${t("proximity_discount")} ${bonus}%`}
-              </div>
-            </div>
-            <div className={`mt-2 text-sm font-medium ${inProx ? "text-[var(--primary)]" : "text-[var(--text-secondary)]"}`}>
-              {inProx ? `✓ ${t("within_radius")}` : t("outside_radius")}
-            </div>
-          </div>
+          )}
 
           {biz.promotion_title && (
             <div className="rounded-2xl p-4 bg-[var(--warning)]/30 border border-[var(--warning)]">
