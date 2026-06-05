@@ -337,6 +337,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                 }}
                 onTouchEnd={(e) => {
                   e.preventDefault();
+                  alert("Touch rilevato! Apro TrailFollower...");
                   setShowTrailFollower(true);
                 }}
                 className="flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-orange-500 to-sky-500 active:from-orange-700 active:to-sky-700 text-white font-medium text-sm cursor-pointer select-none"
