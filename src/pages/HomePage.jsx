@@ -26,7 +26,7 @@ const CALABRIA_ZOOM = 8;
 
 export default function HomePage() {
   const { t } = useI18n();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { position, hasPosition, status, request } = useGeolocation(true);
   const [searchParams] = useSearchParams();
 
