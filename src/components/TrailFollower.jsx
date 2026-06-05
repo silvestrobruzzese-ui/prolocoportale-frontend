@@ -4,7 +4,6 @@ import { MapContainer, TileLayer, Polyline, Marker, Circle, useMap } from "react
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { X, AlertTriangle, Navigation, MapPin, Locate, Download } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { downloadGpx, calculateTrackStats } from "@/lib/gpxExport";
 
 // User position icon (blue dot with direction)
@@ -171,21 +170,26 @@ export default function TrailFollower({ trail, onClose }) {
                 In aree senza segnale, questa app non funzionerà!
               </p>
             </div>
-            <div className="flex gap-2">
-              <Button
-                onClick={handleDownloadGpx}
-                variant="outline"
-                className="flex-1 rounded-full"
+            <div className="flex gap-2" style={{ touchAction: "manipulation" }}>
+              <button
+                type="button"
+                onClick={(e) => { e.preventDefault(); handleDownloadGpx(); }}
+                onTouchEnd={(e) => { e.preventDefault(); handleDownloadGpx(); }}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-gray-300 bg-white text-gray-700 font-medium text-sm active:bg-gray-100"
+                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               >
-                <Download className="w-4 h-4 mr-2" />
+                <Download className="w-4 h-4" />
                 Scarica GPX
-              </Button>
-              <Button
-                onClick={() => setShowWarning(false)}
-                className="flex-1 rounded-full bg-orange-500 hover:bg-orange-600"
+              </button>
+              <button
+                type="button"
+                onClick={(e) => { e.preventDefault(); setShowWarning(false); }}
+                onTouchEnd={(e) => { e.preventDefault(); setShowWarning(false); }}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-orange-500 text-white font-medium text-sm active:bg-orange-700"
+                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               >
                 Ho capito, continua
-              </Button>
+              </button>
             </div>
           </div>
         </div>
@@ -196,8 +200,11 @@ export default function TrailFollower({ trail, onClose }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
-              onClick={onClose}
+              type="button"
+              onClick={(e) => { e.preventDefault(); onClose(); }}
+              onTouchEnd={(e) => { e.preventDefault(); onClose(); }}
               className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white"
+              style={{ touchAction: "manipulation" }}
             >
               <X className="w-5 h-5" />
             </button>
@@ -211,8 +218,11 @@ export default function TrailFollower({ trail, onClose }) {
             </div>
           </div>
           <button
-            onClick={handleDownloadGpx}
+            type="button"
+            onClick={(e) => { e.preventDefault(); handleDownloadGpx(); }}
+            onTouchEnd={(e) => { e.preventDefault(); handleDownloadGpx(); }}
             className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white"
+            style={{ touchAction: "manipulation" }}
           >
             <Download className="w-5 h-5" />
           </button>
@@ -297,10 +307,13 @@ export default function TrailFollower({ trail, onClose }) {
           </div>
 
           <button
-            onClick={centerOnUser}
+            type="button"
+            onClick={(e) => { e.preventDefault(); centerOnUser(); }}
+            onTouchEnd={(e) => { e.preventDefault(); centerOnUser(); }}
             className={`w-12 h-12 rounded-full flex items-center justify-center ${
               followUser ? "bg-blue-500" : "bg-white/20"
             }`}
+            style={{ touchAction: "manipulation" }}
           >
             <Locate className="w-6 h-6 text-white" />
           </button>
