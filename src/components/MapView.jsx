@@ -98,6 +98,7 @@ export default function MapView({
   prolocoTerritory, // polygon points
   camminoTappe, // array of tappe for drawing connecting line
   camminoRoute, // actual walking route coordinates from OSRM
+  showAllTracks, // show all sentieri tracks at once
 }) {
   const mapRef = useRef(null);
 
@@ -109,15 +110,27 @@ export default function MapView({
   const routeLine = useMemo(() => {
     if (!hasUserPosition || !routeTo) return null;
     return [userPosition, routeTo];
-  }, [hasUserPosition, userPosition, routeTo]);
+  }, [hasUserPosition, routeTo]);
 
-  // Extract trail track from geojson_data if available
+  // Extract trail track from geojson_data if available (for selected business)
   const trailTrack = useMemo(() => {
     if (!selectedBiz?.geojson_data?.geometry?.coordinates) return null;
     const coords = selectedBiz.geojson_data.geometry.coordinates;
     // GeoJSON is [lng, lat], Leaflet needs [lat, lng]
     return coords.map(c => [c[1], c[0]]);
   }, [selectedBiz]);
+
+  // All sentieri tracks when showAllTracks is true
+  const allSentieriTracks = useMemo(() => {
+    if (!showAllTracks) return [];
+    return businesses
+      .filter((b) => b.geojson_data?.geometry?.coordinates)
+      .map((b) => ({
+        id: b.business_id,
+        coords: b.geojson_data.geometry.coordinates.map(c => [c[1], c[0]]),
+        name: b.name,
+      }));
+  }, [businesses, showAllTracks]);
 
   // Line connecting cammino tappe
   const camminoLine = useMemo(() => {
@@ -182,14 +195,27 @@ export default function MapView({
         />
       )}
 
-      {/* Trail track for Sentieri e Cammini */}
+      {/* All sentieri tracks when showAllTracks is enabled */}
+      {allSentieriTracks.map((track) => (
+        <Polyline
+          key={track.id}
+          positions={track.coords}
+          pathOptions={{
+            color: "#F97316", // Orange
+            weight: 3,
+            opacity: 0.7,
+          }}
+        />
+      ))}
+
+      {/* Single trail track for selected business */}
       {trailTrack && trailTrack.length > 1 && (
         <Polyline
           positions={trailTrack}
           pathOptions={{
             color: "#F97316", // Orange
-            weight: 4,
-            opacity: 0.9,
+            weight: 5,
+            opacity: 1,
           }}
         />
       )}

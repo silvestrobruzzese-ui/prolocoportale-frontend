@@ -469,6 +469,7 @@ export default function HomePage() {
             routeTo={navigatingTo}
             camminoTappe={camminoTappe}
             camminoRoute={camminoRoute}
+            showAllTracks={selectedCammino === "__sentieri__"}
           />
         </main>
       </div>
