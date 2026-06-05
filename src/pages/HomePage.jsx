@@ -287,13 +287,27 @@ export default function HomePage() {
     return tappe.length > 1 ? tappe : null;
   }, [businesses, selectedCammino]);
 
-  // Fetch walking route when cammino tappe change
+  // Get cammino route - prefer pre-generated from database, fallback to OSRM
   useEffect(() => {
     if (!camminoTappe || camminoTappe.length < 2) {
       setCamminoRoute(null);
       return;
     }
 
+    // First, check if we have a pre-generated route in the database
+    // The route is stored in the first tappa (with is_cammino_start: true)
+    const startTappa = camminoTappe.find(t => t.is_cammino_start && t.geojson_data);
+
+    if (startTappa?.geojson_data?.geometry?.coordinates) {
+      // Use pre-generated route - convert from GeoJSON [lng, lat] to Leaflet [lat, lng]
+      const coords = startTappa.geojson_data.geometry.coordinates;
+      const route = coords.map(c => [c[1], c[0]]);
+      setCamminoRoute(route);
+      setIsLoadingRoute(false);
+      return;
+    }
+
+    // Fallback: calculate route on-the-fly using OSRM
     setIsLoadingRoute(true);
     getWalkingRoute(camminoTappe)
       .then((route) => {
@@ -316,8 +330,13 @@ export default function HomePage() {
   };
 
   const handleRecenter = () => {
-    if (hasPosition) setRecenterTrigger((n) => n + 1);
-    else request();
+    if (hasPosition) {
+      setSearchedCenter(null);  // Resetta la località cercata
+      setSearchZoom(null);       // Resetta lo zoom
+      setRecenterTrigger((n) => n + 1);
+    } else {
+      request();
+    }
   };
 
   const handleNavigate = (b) => {
