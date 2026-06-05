@@ -110,7 +110,7 @@ export default function MapView({
   const routeLine = useMemo(() => {
     if (!hasUserPosition || !routeTo) return null;
     return [userPosition, routeTo];
-  }, [hasUserPosition, routeTo]);
+  }, [hasUserPosition, userPosition, routeTo]);
 
   // Extract trail track from geojson_data if available (for selected business)
   const trailTrack = useMemo(() => {
