@@ -166,14 +166,22 @@ export default function MapView({
         />
       )}
 
-      {businesses.map((b) => (
-        <Marker
-          key={b.business_id}
-          position={[b.lat, b.lng]}
-          icon={pinIcon(b, b.in_proximity)}
-          eventHandlers={{ click: () => onSelect && onSelect(b.business_id) }}
-        />
-      ))}
+      {businesses.map((b) => {
+        // For sentieri with GPS track, position marker at start of trail
+        let markerPosition = [b.lat, b.lng];
+        if (b.geojson_data?.geometry?.coordinates?.length > 0) {
+          const firstCoord = b.geojson_data.geometry.coordinates[0];
+          markerPosition = [firstCoord[1], firstCoord[0]]; // GeoJSON is [lng, lat]
+        }
+        return (
+          <Marker
+            key={b.business_id}
+            position={markerPosition}
+            icon={pinIcon(b, b.in_proximity)}
+            eventHandlers={{ click: () => onSelect && onSelect(b.business_id) }}
+          />
+        );
+      })}
 
       {selectedBiz && (
         <Circle
