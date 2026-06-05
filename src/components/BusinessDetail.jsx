@@ -5,7 +5,7 @@ import { translateFields } from "@/lib/translate";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X, Loader2 } from "lucide-react";
+import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X, Loader2, Mountain, Route, Timer, TrendingUp, RotateCcw } from "lucide-react";
 
 function formatDistance(km) {
   if (km == null) return "—";
@@ -103,6 +103,71 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
         </SheetHeader>
 
         <div className="p-5 space-y-4">
+          {/* Trail info panel - only for Sentieri e Cammini */}
+          {business.category === "Sentieri e Cammini" && (business.difficulty || business.distance || business.duration || business.cammino_name) && (
+            <div className="rounded-2xl p-4 bg-gradient-to-r from-orange-50 to-sky-50 border border-orange-200">
+              {business.cammino_name && (
+                <div className="flex items-center gap-2 mb-3">
+                  <Route className="w-4 h-4 text-sky-600" />
+                  <span className="text-sm font-semibold text-sky-700">{business.cammino_name}</span>
+                  {business.tappa_number && (
+                    <Badge className="bg-sky-100 text-sky-700 text-xs">Tappa {business.tappa_number}</Badge>
+                  )}
+                </div>
+              )}
+              <div className="grid grid-cols-2 gap-3">
+                {business.difficulty && (
+                  <div className="flex items-center gap-2">
+                    <Mountain className="w-4 h-4 text-orange-500" />
+                    <div>
+                      <div className="text-xs text-orange-600 uppercase tracking-wide">Difficoltà</div>
+                      <div className="text-sm font-medium text-orange-800 capitalize">{business.difficulty}</div>
+                    </div>
+                  </div>
+                )}
+                {business.distance && (
+                  <div className="flex items-center gap-2">
+                    <Route className="w-4 h-4 text-sky-500" />
+                    <div>
+                      <div className="text-xs text-sky-600 uppercase tracking-wide">Distanza</div>
+                      <div className="text-sm font-medium text-sky-800">{business.distance}</div>
+                    </div>
+                  </div>
+                )}
+                {business.duration && (
+                  <div className="flex items-center gap-2">
+                    <Timer className="w-4 h-4 text-orange-500" />
+                    <div>
+                      <div className="text-xs text-orange-600 uppercase tracking-wide">Durata</div>
+                      <div className="text-sm font-medium text-orange-800">{business.duration}</div>
+                    </div>
+                  </div>
+                )}
+                {business.elevation_gain && (
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-sky-500" />
+                    <div>
+                      <div className="text-xs text-sky-600 uppercase tracking-wide">Dislivello</div>
+                      <div className="text-sm font-medium text-sky-800">{business.elevation_gain} m</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              {business.is_loop && (
+                <div className="mt-3 flex items-center gap-2 text-orange-600">
+                  <RotateCcw className="w-4 h-4" />
+                  <span className="text-sm font-medium">Percorso ad anello</span>
+                </div>
+              )}
+              {business.geojson_data && (
+                <div className="mt-3 text-xs text-sky-600 flex items-center gap-1">
+                  <span className="w-3 h-1 bg-orange-500 rounded-full"></span>
+                  Tracciato GPS disponibile sulla mappa
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Proximity panel */}
           <div className={`rounded-2xl p-4 border ${inProx ? "border-[var(--primary)] bg-[var(--proximity)]" : "border-[var(--border)] bg-white"}`}>
             <div className="flex items-center justify-between">
