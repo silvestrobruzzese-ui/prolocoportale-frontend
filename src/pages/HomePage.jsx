@@ -251,18 +251,25 @@ export default function HomePage() {
     setSelectedCammino(null);
   }, [category]);
 
-  // Filter businesses by selected cammino
+  // Filter businesses by selected cammino/sentiero
   const filteredBusinesses = useMemo(() => {
     if (!selectedCammino) return businesses;
     if (selectedCammino === "__sentieri__") {
+      // All sentieri
       return businesses.filter((b) => b.trail_type === "sentiero" && !b.cammino_name);
     }
+    if (selectedCammino.startsWith("__sentiero__")) {
+      // Single sentiero
+      const sentieroId = selectedCammino.replace("__sentiero__", "");
+      return businesses.filter((b) => b.business_id === sentieroId);
+    }
+    // Cammino name
     return businesses.filter((b) => b.cammino_name === selectedCammino);
   }, [businesses, selectedCammino]);
 
   // Get all tappe of selected cammino for drawing line
   const camminoTappe = useMemo(() => {
-    if (!selectedCammino || selectedCammino === "__sentieri__") return null;
+    if (!selectedCammino || selectedCammino.startsWith("__")) return null;
     const tappe = businesses
       .filter((b) => b.cammino_name === selectedCammino)
       .sort((a, b) => {
