@@ -9,6 +9,7 @@ import BusinessDetail from "@/components/BusinessDetail";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import InstallBanner from "@/components/InstallBanner";
 import CamminoSelector from "@/components/CamminoSelector";
+import AuthModal from "@/components/AuthModal";
 
 import { useI18n } from "@/lib/i18n";
 import { useGeolocation } from "@/lib/useGeolocation";
