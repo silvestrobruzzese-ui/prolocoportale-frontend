@@ -78,6 +78,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
   const eff = business.effective_discount != null ? Number(business.effective_discount) : base;
 
   return (
+    <>
     <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
       <SheetContent
         side="right"
@@ -328,14 +329,15 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
           )}
         </div>
       </SheetContent>
-
-      {/* Trail Follower Modal */}
-      {showTrailFollower && hasGpsTrack && (
-        <TrailFollower
-          trail={business}
-          onClose={() => setShowTrailFollower(false)}
-        />
-      )}
     </Sheet>
+
+    {/* Trail Follower Modal - outside Sheet for proper z-index */}
+    {showTrailFollower && hasGpsTrack && (
+      <TrailFollower
+        trail={business}
+        onClose={() => setShowTrailFollower(false)}
+      />
+    )}
+    </>
   );
 }
