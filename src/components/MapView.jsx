@@ -71,14 +71,16 @@ function pinIcon(business, inProximity) {
 
   // Use SVG hiker icon for Sentieri e Cammini, logo for Bancomat, emoji for others
   let iconContent;
+  let markerStyle = `background:${color}`;
   if (isSentieriCammini) {
     iconContent = hikerSvgWhite;
   } else if (isBancomat) {
-    iconContent = `<img src="/bcc-logo.png" alt="BCC" style="width:32px;height:32px;object-fit:contain;filter:brightness(0) invert(1);" />`;
+    iconContent = `<img src="/bcc-logo.png" alt="BCC" style="width:32px;height:32px;object-fit:contain;" />`;
+    markerStyle = `background:white;border:3px solid ${color}`;
   } else {
     iconContent = `<span>${emoji}</span>`;
   }
-  const html = `<div class="proxi-pin ${proximityClass}" style="background:${color}"><span class="marker-icon">${iconContent}</span></div>`;
+  const html = `<div class="proxi-pin ${proximityClass}" style="${markerStyle}"><span class="marker-icon">${iconContent}</span></div>`;
   return L.divIcon({ html, className: "proxi-marker-icon", iconSize: [40, 40], iconAnchor: [20, 40] });
 }
 

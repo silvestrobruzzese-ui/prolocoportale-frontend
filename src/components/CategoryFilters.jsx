@@ -122,9 +122,6 @@ export default function CategoryFilters({ value, onChange }) {
                 src={c.icon}
                 alt={c.value}
                 className="w-10 h-10 object-contain"
-                style={{
-                  filter: isActive ? "brightness(0) invert(1)" : "none",
-                }}
               />
             ) : (
               <span
