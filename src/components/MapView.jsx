@@ -74,7 +74,7 @@ function pinIcon(business, inProximity) {
   if (isSentieriCammini) {
     iconContent = hikerSvgWhite;
   } else if (isBancomat) {
-    iconContent = `<img src="/bcc-logo.png" alt="BCC" style="width:24px;height:24px;object-fit:contain;filter:brightness(0) invert(1);" />`;
+    iconContent = `<img src="/bcc-logo.png" alt="BCC" style="width:32px;height:32px;object-fit:contain;filter:brightness(0) invert(1);" />`;
   } else {
     iconContent = `<span>${emoji}</span>`;
   }
