@@ -67,9 +67,17 @@ function pinIcon(business, inProximity) {
   const emoji = categoryEmoji[business.category] || categoryEmoji.Other;
   const proximityClass = inProximity ? "in-proximity" : "";
   const isSentieriCammini = business.category === "Sentieri e Cammini";
+  const isBancomat = business.category === "Bancomat";
 
-  // Use SVG hiker icon for Sentieri e Cammini, emoji for others
-  const iconContent = isSentieriCammini ? hikerSvgWhite : `<span>${emoji}</span>`;
+  // Use SVG hiker icon for Sentieri e Cammini, logo for Bancomat, emoji for others
+  let iconContent;
+  if (isSentieriCammini) {
+    iconContent = hikerSvgWhite;
+  } else if (isBancomat) {
+    iconContent = `<img src="/bcc-logo.png" alt="BCC" style="width:24px;height:24px;object-fit:contain;filter:brightness(0) invert(1);" />`;
+  } else {
+    iconContent = `<span>${emoji}</span>`;
+  }
   const html = `<div class="proxi-pin ${proximityClass}" style="background:${color}"><span class="marker-icon">${iconContent}</span></div>`;
   return L.divIcon({ html, className: "proxi-marker-icon", iconSize: [40, 40], iconAnchor: [20, 40] });
 }

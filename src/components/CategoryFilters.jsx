@@ -65,7 +65,7 @@ const CATEGORIES = [
   { key: "supermercati", value: "Supermercati", icon: "🛒", color: "#3B82F6" },
   { key: "shop", value: "Shop", icon: "🛍", color: "#14B8A6" },
   { key: "pharmacy", value: "Pharmacy", icon: "💊", color: "#22C55E" },
-  { key: "bancomat", value: "Bancomat", icon: "🏧", color: "#00843D" },
+  { key: "bancomat", value: "Bancomat", icon: "/bcc-logo.png", color: "#00843D", isImage: true },
   { key: "other", value: "Other", icon: "📍", color: "#6366F1" },
 ];
 
@@ -117,6 +117,15 @@ export default function CategoryFilters({ value, onChange }) {
           >
             {c.isSvg ? (
               c.icon === "column" ? <ColumnIcon isActive={isActive} size={28} /> : <HikerIcon isActive={isActive} size={28} />
+            ) : c.isImage ? (
+              <img
+                src={c.icon}
+                alt={c.value}
+                className="w-8 h-8 object-contain"
+                style={{
+                  filter: isActive ? "brightness(0) invert(1)" : "none",
+                }}
+              />
             ) : (
               <span
                 className="drop-shadow-sm"
