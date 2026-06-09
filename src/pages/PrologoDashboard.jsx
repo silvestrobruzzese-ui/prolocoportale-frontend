@@ -32,6 +32,7 @@ const categoryColors = {
   Archeologia: "#FF8C00",
   Discoteche: "#E040FB",
   Supermercati: "#3498DB",
+  Bancomat: "#00843D",
   Other: "#6C757D",
 };
 
@@ -49,6 +50,7 @@ const categoryEmoji = {
   Archeologia: "🏺",
   Discoteche: "🎵",
   Supermercati: "🛒",
+  Bancomat: "🏧",
   Other: "📍",
 };
 
@@ -172,7 +174,7 @@ function PrologoBusinessForm({ initial, onSave, onCancel }) {
           <Select value={form.category} onValueChange={(v) => set("category", v)}>
             <SelectTrigger data-testid="prl-business-category"><SelectValue /></SelectTrigger>
             <SelectContent>
-              {["Restaurant", "Pizzerie", "Hotel", "B&B", "Monumenti", "Musei", "Spiagge", "Archeologia", "Discoteche", "Supermercati", "Shop", "Pharmacy", "Other"].map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+              {["Restaurant", "Pizzerie", "Hotel", "B&B", "Monumenti", "Musei", "Spiagge", "Archeologia", "Discoteche", "Supermercati", "Shop", "Pharmacy", "Bancomat", "Other"].map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>

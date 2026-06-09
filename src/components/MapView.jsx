@@ -24,6 +24,7 @@ const categoryColors = {
   "Beni Culturali": "#8B5CF6", // Viola
   Itinerari: "#10B981",   // Smeraldo
   "Sentieri e Cammini": "linear-gradient(135deg, #F97316 0%, #38BDF8 100%)", // Orange + Sky Blue gradient
+  Bancomat: "#00843D",    // Verde BCC
   Other: "#6366F1",       // Indaco
 };
 
@@ -44,6 +45,7 @@ const categoryEmoji = {
   "Beni Culturali": "🏛",
   Itinerari: "🥾",
   "Sentieri e Cammini": "🏔",
+  Bancomat: "🏧",
   Other: "📍",
 };
 

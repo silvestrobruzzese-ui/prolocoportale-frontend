@@ -1,4 +1,4 @@
-const CACHE_NAME = 'proximap-v3';
+const CACHE_NAME = 'proximap-v4';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -31,12 +31,26 @@ self.addEventListener('activate', (event) => {
 });
 
 // Fetch strategy: Network first, fallback to cache
+// Only cache same-origin requests, skip API calls and cross-origin requests
 self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+
+  // Skip cross-origin requests (map tiles, external APIs, etc.)
+  if (url.origin !== location.origin) {
+    return;
+  }
+
+  // Skip API requests
+  if (url.pathname.startsWith('/api')) {
+    return;
+  }
+
+  // Only handle navigation and static assets
   event.respondWith(
     fetch(event.request)
       .then((response) => {
         // Clone and cache successful responses
-        if (response.status === 200) {
+        if (response && response.status === 200) {
           const responseClone = response.clone();
           caches.open(CACHE_NAME)
             .then((cache) => cache.put(event.request, responseClone));

@@ -25,7 +25,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
   const [showTappeList, setShowTappeList] = useState(false);
   const [showTrailFollower, setShowTrailFollower] = useState(false);
 
-  // Check if business has GPS track
+  // Check if business has GPS track (for individual sentieri)
   const hasGpsTrack = business?.geojson_data?.geometry?.coordinates?.length > 0;
 
   // Get other tappe of the same cammino
@@ -39,6 +39,15 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
         return numA - numB;
       });
   }, [business, allBusinesses]);
+
+  // Find cammino start tappa with GPS track (for cammini)
+  const camminoStart = React.useMemo(() => {
+    if (!business?.cammino_name || !camminoTappe.length) return null;
+    return camminoTappe.find(t => t.is_cammino_start && t.geojson_data?.geometry?.coordinates?.length > 0);
+  }, [business, camminoTappe]);
+
+  // Has cammino GPS track (from start tappa)
+  const hasCamminoTrack = !!camminoStart;
 
   // Translate business content when language changes or business changes
   useEffect(() => {
@@ -185,6 +194,12 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                   Tracciato GPS disponibile sulla mappa
                 </div>
               )}
+              {!business.geojson_data && hasCamminoTrack && (
+                <div className="mt-3 text-xs text-sky-600 flex items-center gap-1">
+                  <span className="w-3 h-1 bg-orange-500 rounded-full"></span>
+                  Tracciato GPS del cammino completo disponibile
+                </div>
+              )}
 
               {/* Button to show all tappe of the cammino */}
               {camminoTappe.length > 1 && (
@@ -309,7 +324,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
             </Button>
           </div>
 
-          {/* Trail-specific buttons for GPS tracks */}
+          {/* Trail-specific buttons for GPS tracks (individual sentieri) */}
           {hasGpsTrack && (
             <div className="grid grid-cols-2 gap-2 pt-2" style={{ touchAction: "manipulation" }}>
               <button
@@ -346,6 +361,44 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
               </button>
             </div>
           )}
+
+          {/* Cammino-specific buttons for GPS tracks (when viewing any tappa) */}
+          {!hasGpsTrack && hasCamminoTrack && (
+            <div className="grid grid-cols-2 gap-2 pt-2" style={{ touchAction: "manipulation" }}>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  downloadGpx(camminoStart.geojson_data, business.cammino_name, `Percorso completo - ${camminoTappe.length} tappe`);
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  downloadGpx(camminoStart.geojson_data, business.cammino_name, `Percorso completo - ${camminoTappe.length} tappe`);
+                }}
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-sky-300 text-sky-700 bg-white active:bg-sky-100 font-medium text-sm cursor-pointer select-none"
+                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+              >
+                <Download className="w-4 h-4" /> Scarica GPX
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowTrailFollower(true);
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  setShowTrailFollower(true);
+                }}
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-orange-500 to-sky-500 active:from-orange-700 active:to-sky-700 text-white font-medium text-sm cursor-pointer select-none"
+                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+              >
+                <Compass className="w-4 h-4" /> Segui Cammino
+              </button>
+            </div>
+          )}
         </div>
       </SheetContent>
     </Sheet>
@@ -354,6 +407,18 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
     {showTrailFollower && hasGpsTrack && (
       <TrailFollower
         trail={business}
+        onClose={() => setShowTrailFollower(false)}
+      />
+    )}
+
+    {/* Trail Follower Modal for Cammini - uses the start tappa with GPS track */}
+    {showTrailFollower && !hasGpsTrack && hasCamminoTrack && (
+      <TrailFollower
+        trail={{
+          ...camminoStart,
+          name: business.cammino_name,
+          description: `Percorso completo - ${camminoTappe.length} tappe`
+        }}
         onClose={() => setShowTrailFollower(false)}
       />
     )}
