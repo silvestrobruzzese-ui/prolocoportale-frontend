@@ -966,6 +966,8 @@ Riorganizzazione degli elementi UI sulla mappa per una migliore esperienza utent
 | **Menu lingue dropdown** | Z-index aumentato per apparire in primo piano |
 | **Banner sponsor** | Spostato a sinistra, stessa altezza del mirino |
 | **Bordo banner sponsor** | Sfumato con effetto glow (non più bordo netto) |
+| **Banner sponsor trasparenza** | Semitrasparente al 15% |
+| **Puntini indicatore sponsor** | Rimossi |
 
 ### File Modificati
 
