@@ -19,5 +19,12 @@
     "name": "Pro Loco Soverato",
     "url": "",
     "showName": false
+  },
+  {
+    "id": "miro",
+    "logo": "/sponsor/miro.png",
+    "name": "Mirò",
+    "url": "",
+    "showName": false
   }
 ]
