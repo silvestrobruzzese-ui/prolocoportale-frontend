@@ -1,9 +1,16 @@
 [
   {
-    "id": "esempio1",
-    "logo": "/sponsor/esempio-sponsor.png",
-    "name": "Sponsor Esempio",
-    "url": "https://esempio.it",
+    "id": "bcc-banca",
+    "logo": "/sponsor/bcc-banca.png",
+    "name": "BCC Banca",
+    "url": "",
+    "showName": false
+  },
+  {
+    "id": "mb-consulting",
+    "logo": "/sponsor/mb-consulting.png",
+    "name": "MB Consulting",
+    "url": "",
     "showName": false
   }
 ]
