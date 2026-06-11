@@ -12,5 +12,12 @@
     "name": "MB Consulting",
     "url": "",
     "showName": false
+  },
+  {
+    "id": "proloco-soverato",
+    "logo": "/sponsor/proloco-soverato.png",
+    "name": "Pro Loco Soverato",
+    "url": "",
+    "showName": false
   }
 ]
