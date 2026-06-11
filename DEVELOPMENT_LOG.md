@@ -886,12 +886,99 @@ Aggiunto un banner scorrevole in basso per mostrare i loghi degli sponsor.
 | `public/sponsor/sponsors.json` | Configurazione sponsor |
 | `public/sponsor/` | Cartella per i loghi |
 
+#### Dimensioni Banner
+
+| Elemento | Dimensioni |
+|----------|------------|
+| **Banner** | 280-360px × 70px |
+| **Loghi** | 65px altezza, auto larghezza |
+| **Padding** | px-2 (minimo per massimizzare spazio logo) |
+
+#### Sponsor Attivi
+
+| Sponsor | Logo |
+|---------|------|
+| BCC Banca | `bcc-banca.png` |
+| MB Consulting | `mb-consulting.png` |
+| Pro Loco Soverato | `proloco-soverato.png` |
+
+#### Visibilità Banner
+
+Il banner sponsor si nasconde automaticamente quando:
+- Si apre una scheda dettaglio (attività/sentiero/cammino)
+- Si apre il modal di login
+- È visibile la schermata di benvenuto
+- È visibile il prompt di localizzazione
+
+#### Cartella Sponsor Sorgente
+
+I loghi originali vanno caricati in:
+```
+/Users/gianni/Desktop/ProlocoPortale-main/sponsor/
+```
+Da lì vengono copiati in `frontend/public/sponsor/` e aggiunti a `sponsors.json`.
+
 ---
 
-*Ultimo aggiornamento: 11 Giugno 2026*
+## Sessione 11 Giugno 2026 (sera) - Fix TrailFollower
+
+### Problema Risolto
+
+Il pulsante X per chiudere il navigatore sentieri (TrailFollower) non funzionava su dispositivi mobile iOS.
+
+### Causa
+
+La mappa Leaflet catturava gli eventi touch, impedendo al pulsante di ricevere il click.
+
+### Soluzione
+
+| Modifica | Descrizione |
+|----------|-------------|
+| `pointerEvents: "none"` | Applicato al container header |
+| `pointerEvents: "auto"` | Applicato ai pulsanti interattivi |
+| `onTouchStart` | Aggiunto con `stopPropagation()` |
+| `e.stopPropagation()` | Aggiunto a tutti gli handler |
+| Stile pulsante | Aumentato contrasto (`bg-white/30`) e dimensione icona |
+
+### File Modificato
+
+| File | Modifica |
+|------|----------|
+| `src/components/TrailFollower.jsx` | Fix gestione touch su iOS |
+
+---
+
+## Categorie Totali: 19
+
+| # | Categoria | Colore | Icona |
+|---|-----------|--------|-------|
+| 1 | Restaurant | #E63946 | 🍽 |
+| 2 | Pizzerie | #FF6B35 | 🍕 |
+| 3 | Hotel | #FBBF24 | 🏨 |
+| 4 | B&B | #22C55E | B&B |
+| 5 | Sentieri e Cammini | Gradiente | SVG Hiker |
+| 6 | Beni Culturali | #8B5CF6 | SVG Column |
+| 7 | Itinerari | #10B981 | 🥾 |
+| 8 | Monumenti | #A855F7 | ⛪ |
+| 9 | Musei | #EC4899 | 🏛 |
+| 10 | Spiagge | #06B6D4 | 🏖 |
+| 11 | **Bandiera Blu** | #0077B6 | Logo |
+| 12 | **Bandiera Verde** | #2E7D32 | Logo |
+| 13 | Archeologia | #F59E0B | 🏺 |
+| 14 | Discoteche | #D946EF | 🎵 |
+| 15 | Supermercati | #3B82F6 | 🛒 |
+| 16 | Shop | #14B8A6 | 🛍 |
+| 17 | Pharmacy | #22C55E | 💊 |
+| 18 | Bancomat | #00843D | Logo BCC |
+| 19 | Other | #6366F1 | 📍 |
+
+---
+
+*Ultimo aggiornamento: 11 Giugno 2026 - ore 11:30*
 *Stato: PRODUZIONE ONLINE - Cloudflare Pages + Railway + MongoDB Atlas*
 *Security: HARDENING COMPLETATO*
 *Analytics: CLOUDFLARE WEB ANALYTICS ATTIVO*
 *Landing Page: PERSONALIZZATE PER OGNI PRO LOCO*
 *Sentieri e Cammini: FUNZIONALITÀ COMPLETA CON GPS*
 *Bandiere Blu/Verde: 50 SPIAGGE CERTIFICATE*
+*Banner Sponsor: 3 SPONSOR IN ROTAZIONE*
