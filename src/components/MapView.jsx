@@ -18,6 +18,8 @@ const categoryColors = {
   Monumenti: "#A855F7",   // Viola
   Musei: "#EC4899",       // Rosa/Magenta
   Spiagge: "#06B6D4",     // Ciano
+  "Bandiera Blu": "#0077B6",   // Blu oceano
+  "Bandiera Verde": "#2E7D32", // Verde pediatrico
   Archeologia: "#F59E0B", // Ambra
   Discoteche: "#D946EF",  // Fucsia
   Supermercati: "#3B82F6", // Blu
@@ -39,6 +41,8 @@ const categoryEmoji = {
   Monumenti: "⛪",
   Musei: "🏛",
   Spiagge: "🏖",
+  "Bandiera Blu": "🏳️",
+  "Bandiera Verde": "🏳️",
   Archeologia: "🏺",
   Discoteche: "🎵",
   Supermercati: "🛒",
@@ -62,20 +66,27 @@ const hikerSvgWhite = `<svg width="20" height="20" viewBox="0 0 24 24" fill="non
   <path d="M10 12L13 17L15 21" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>`;
 
+// Map of categories that use image logos
+const categoryLogos = {
+  Bancomat: "/bcc-logo.png",
+  "Bandiera Blu": "/bandiera-blu-logo.jpg",
+  "Bandiera Verde": "/bandiera-verde-logo.jpg",
+};
+
 function pinIcon(business, inProximity) {
   const color = categoryColors[business.category] || categoryColors.Other;
   const emoji = categoryEmoji[business.category] || categoryEmoji.Other;
   const proximityClass = inProximity ? "in-proximity" : "";
   const isSentieriCammini = business.category === "Sentieri e Cammini";
-  const isBancomat = business.category === "Bancomat";
+  const logoUrl = categoryLogos[business.category];
 
-  // Use SVG hiker icon for Sentieri e Cammini, logo for Bancomat, emoji for others
+  // Use SVG hiker icon for Sentieri e Cammini, logo for image categories, emoji for others
   let iconContent;
   let markerStyle = `background:${color}`;
   if (isSentieriCammini) {
     iconContent = hikerSvgWhite;
-  } else if (isBancomat) {
-    iconContent = `<img src="/bcc-logo.png" alt="BCC" style="width:32px;height:32px;object-fit:contain;" />`;
+  } else if (logoUrl) {
+    iconContent = `<img src="${logoUrl}" alt="${business.category}" style="width:32px;height:32px;object-fit:contain;border-radius:4px;" />`;
     markerStyle = `background:white;border:3px solid ${color}`;
   } else {
     iconContent = `<span>${emoji}</span>`;

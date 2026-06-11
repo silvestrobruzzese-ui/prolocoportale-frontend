@@ -64,7 +64,7 @@ Non committare mai credenziali in file pubblici.
 
 ---
 
-## Categorie Disponibili (15 totali) - Colori Pop
+## Categorie Disponibili (18 totali) - Colori Pop
 
 | Categoria | Colore | Icona |
 |-----------|--------|-------|
@@ -72,16 +72,20 @@ Non committare mai credenziali in file pubblici.
 | Pizzerie | #FF6B35 (Arancione) | 🍕 |
 | Hotel | #FBBF24 (Giallo oro) | 🏨 |
 | B&B | #22C55E (Verde brillante) | **B&B** (testo) |
-| Beni Culturali | #8B5CF6 (Viola) | 🏛 |
+| Sentieri e Cammini | Gradiente #F97316→#38BDF8 | 🥾 (SVG Hiker) |
+| Beni Culturali | #8B5CF6 (Viola) | 🏛 (SVG Column) |
 | Itinerari | #10B981 (Smeraldo) | 🥾 |
 | Monumenti | #A855F7 (Viola) | ⛪ |
 | Musei | #EC4899 (Rosa/Magenta) | 🏛 |
 | Spiagge | #06B6D4 (Ciano) | 🏖 |
+| **Bandiera Blu** | #0077B6 (Blu oceano) | Logo (immagine) |
+| **Bandiera Verde** | #2E7D32 (Verde pediatrico) | Logo (immagine) |
 | Archeologia | #F59E0B (Ambra) | 🏺 |
 | Discoteche | #D946EF (Fucsia) | 🎵 |
 | Supermercati | #3B82F6 (Blu) | 🛒 |
 | Shop | #14B8A6 (Teal) | 🛍 |
 | Pharmacy | #22C55E (Verde) | 💊 |
+| Bancomat | #00843D (Verde BCC) | Logo BCC (immagine) |
 | Other | #6366F1 (Indaco) | 📍 |
 
 ---
@@ -774,9 +778,59 @@ src/
 
 ---
 
-*Ultimo aggiornamento: 5 Giugno 2026 - ore 15:30*
+---
+
+## Sessione 11 Giugno 2026 - Bandiera Blu e Bandiera Verde
+
+### Nuove Categorie Aggiunte
+
+Aggiunte due nuove categorie per le spiagge premiate in Calabria:
+
+| Categoria | Descrizione | Record | Colore |
+|-----------|-------------|--------|--------|
+| **Bandiera Blu** | Spiagge con certificazione FEE | 28 | #0077B6 (Blu oceano) |
+| **Bandiera Verde** | Spiagge raccomandate dai pediatri | 22 | #2E7D32 (Verde) |
+
+### File Modificati
+
+| File | Modifiche |
+|------|-----------|
+| `frontend/src/components/CategoryFilters.jsx` | Aggiunte categorie con `isImage: true` |
+| `frontend/src/components/MapView.jsx` | Aggiunto `categoryLogos` map per gestire loghi |
+| `frontend/public/bandiera-blu-logo.jpg` | Logo Bandiera Blu |
+| `frontend/public/bandiera-verde-logo.jpg` | Logo Bandiera Verde |
+
+### File Backend Creati
+
+| File | Descrizione |
+|------|-------------|
+| `backend/import_bandiere.py` | Script importazione dati Bandiere |
+| `database/bandiera blu/bandiera_blu_calabria.csv` | 28 spiagge Bandiera Blu |
+| `database/bandiera verde/bandiera_verde_calabria.csv` | 22 spiagge Bandiera Verde |
+
+### Esecuzione Import Produzione
+
+Per importare in produzione (MongoDB Atlas), impostare la variabile `MONGO_URL` nel file `.env` con la connection string di Atlas, poi eseguire:
+
+```bash
+cd backend
+source venv/bin/activate
+python import_bandiere.py
+```
+
+### Posizione Categorie
+
+Le nuove categorie sono posizionate **dopo Spiagge** nella barra filtri:
+```
+... → Spiagge → Bandiera Blu → Bandiera Verde → Archeologia → ...
+```
+
+---
+
+*Ultimo aggiornamento: 11 Giugno 2026*
 *Stato: PRODUZIONE ONLINE - Cloudflare Pages + Railway + MongoDB Atlas*
 *Security: HARDENING COMPLETATO*
 *Analytics: CLOUDFLARE WEB ANALYTICS ATTIVO*
 *Landing Page: PERSONALIZZATE PER OGNI PRO LOCO*
 *Sentieri e Cammini: FUNZIONALITÀ COMPLETA CON GPS*
+*Bandiere Blu/Verde: 50 SPIAGGE CERTIFICATE*
