@@ -222,17 +222,18 @@ export default function TrailFollower({ trail, onClose }) {
       )}
 
       {/* Header */}
-      <div className="absolute top-0 left-0 right-0 z-[2050] bg-gradient-to-b from-black/70 to-transparent p-4 pt-12 sm:pt-4">
+      <div className="absolute top-0 left-0 right-0 z-[2050] bg-gradient-to-b from-black/70 to-transparent p-4 pt-12 sm:pt-4" style={{ pointerEvents: "none" }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={(e) => { e.preventDefault(); onClose(); }}
-              onTouchEnd={(e) => { e.preventDefault(); onClose(); }}
-              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white"
-              style={{ touchAction: "manipulation" }}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }}
+              onTouchStart={(e) => { e.stopPropagation(); }}
+              onTouchEnd={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }}
+              className="w-10 h-10 rounded-full bg-white/30 backdrop-blur flex items-center justify-center text-white active:bg-white/50"
+              style={{ touchAction: "manipulation", pointerEvents: "auto", WebkitTapHighlightColor: "transparent" }}
             >
-              <X className="w-5 h-5" />
+              <X className="w-6 h-6" />
             </button>
             <div className="text-white">
               <h1 className="font-bold text-lg leading-tight">{trail.name}</h1>
@@ -245,10 +246,11 @@ export default function TrailFollower({ trail, onClose }) {
           </div>
           <button
             type="button"
-            onClick={(e) => { e.preventDefault(); handleDownloadGpx(); }}
-            onTouchEnd={(e) => { e.preventDefault(); handleDownloadGpx(); }}
-            className="w-10 h-10 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white"
-            style={{ touchAction: "manipulation" }}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleDownloadGpx(); }}
+            onTouchStart={(e) => { e.stopPropagation(); }}
+            onTouchEnd={(e) => { e.preventDefault(); e.stopPropagation(); handleDownloadGpx(); }}
+            className="w-10 h-10 rounded-full bg-white/30 backdrop-blur flex items-center justify-center text-white active:bg-white/50"
+            style={{ touchAction: "manipulation", pointerEvents: "auto", WebkitTapHighlightColor: "transparent" }}
           >
             <Download className="w-5 h-5" />
           </button>
