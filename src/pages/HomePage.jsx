@@ -423,7 +423,7 @@ export default function HomePage() {
       <SponsorBanner />
 
       {/* Recenter / locate / fullscreen fab */}
-      <div className="absolute right-3 sm:right-4 bottom-20 z-[1000] flex flex-col gap-2">
+      <div className="absolute right-3 sm:right-4 bottom-28 z-[1000] flex flex-col gap-2">
         <button
           onClick={toggleFullscreen}
           className="glass rounded-full w-12 h-12 inline-flex items-center justify-center hover:bg-white"

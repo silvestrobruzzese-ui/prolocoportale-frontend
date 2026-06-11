@@ -58,7 +58,7 @@ export default function SponsorBanner() {
   };
 
   return (
-    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-[999]">
+    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[999]">
       <div
         onClick={handleClick}
         className={`
