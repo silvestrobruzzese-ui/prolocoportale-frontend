@@ -7,7 +7,7 @@
 
 ## STATO ATTUALE: PRODUZIONE ONLINE
 
-**Ultimo aggiornamento: 11 Giugno 2026 - ore 20:30**
+**Ultimo aggiornamento: 11 Giugno 2026 - ore 21:30**
 
 L'applicazione è completamente funzionante online su dispositivi mobili e desktop.
 
@@ -61,10 +61,249 @@ Non committare mai credenziali in file pubblici.
   - `businesses` - ~18.121 attività (inclusi Beni Culturali e Itinerari)
   - `prolocos` - 120 Pro Loco
   - `users` - utenti e superadmin
+  - `images` - immagini caricate (riferimenti S3)
 
 ---
 
-## Categorie Disponibili (18 totali) - Colori Pop
+## Struttura Cartelle Progetto
+
+### Frontend (`/frontend/`)
+
+```
+frontend/
+├── public/
+│   ├── sponsor/              # Logo sponsor
+│   ├── welcome-hero.png      # Immagine benvenuto
+│   ├── bcc-logo.png          # Logo Bancomat
+│   ├── bandiera-blu-logo.jpg
+│   └── bandiera-verde-logo.jpg
+├── src/
+│   ├── components/
+│   │   ├── ui/               # Componenti shadcn/ui (30+ file)
+│   │   ├── MapView.jsx       # Mappa Leaflet con marker
+│   │   ├── BusinessDetail.jsx # Pannello dettaglio attività
+│   │   ├── CategoryFilters.jsx # Filtri categoria orizzontali
+│   │   ├── CamminoSelector.jsx # Selettore cammini/sentieri
+│   │   ├── LanguageSwitcher.jsx # Cambio lingua
+│   │   ├── SponsorBanner.jsx  # Banner sponsor
+│   │   ├── TrailFollower.jsx  # Navigatore sentieri GPS
+│   │   ├── AuthModal.jsx      # Login/registrazione
+│   │   └── InstallBanner.jsx  # Prompt PWA
+│   ├── pages/
+│   │   ├── HomePage.jsx       # Pagina principale mappa
+│   │   ├── AdminDashboard.jsx # Dashboard superadmin
+│   │   ├── PrologoDashboard.jsx # Dashboard Pro Loco
+│   │   ├── ProlocoLandingPage.jsx # Landing Pro Loco
+│   │   ├── AdminLogin.jsx
+│   │   └── PrologoLogin.jsx
+│   ├── lib/
+│   │   ├── api.js            # Client API Axios
+│   │   ├── auth.jsx          # Context autenticazione
+│   │   ├── i18n.jsx          # Internazionalizzazione (5 lingue)
+│   │   ├── useGeolocation.js # Hook geolocalizzazione
+│   │   ├── routing.js        # Calcolo percorsi
+│   │   ├── gpxExport.js      # Export GPX
+│   │   └── translate.js      # Traduzione dinamica
+│   ├── App.js                # Root + routing
+│   └── index.css             # Stili globali + Tailwind
+├── package.json
+├── craco.config.js
+└── tailwind.config.js
+```
+
+### Backend (`/backend/`)
+
+```
+backend/
+├── server.py                 # API FastAPI (1159 righe, 50+ endpoint)
+├── requirements.txt          # Dipendenze Python
+├── Procfile                  # Config Railway
+├── .env                      # Variabili ambiente
+├── .python-version           # Versione Python (3.11.9)
+├── mise.toml                 # Config mise
+├── import_sentieri_cammini.py # Import sentieri
+├── import_bandiere.py        # Import Bandiera Blu/Verde
+├── import_bancomat.py        # Import Bancomat
+├── import_new_categories.py  # Import categorie
+├── generate_cammini_routes.py # Generazione percorsi
+└── fix_sentieri_tracks.py    # Fix dati
+```
+
+### Database (`/database/`)
+
+```
+database/
+├── sentieri e cammini/       # File GPX tracce
+├── bandiera blu/             # Dati spiagge certificate
+├── bandiera verde/           # Dati spiagge pediatriche
+├── businesses.csv            # Export attività
+└── prolocos.csv              # Export Pro Loco
+```
+
+---
+
+## Flusso Funzionamento App
+
+### 1. Flusso Utente (HomePage)
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    UTENTE APRE APP                       │
+└─────────────────────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────┐
+│              SCHERMATA BENVENUTO                         │
+│         (welcome-hero.png + pulsante "Esplora")         │
+└─────────────────────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────┐
+│              RICHIESTA GEOLOCALIZZAZIONE                 │
+│          (opzionale - può saltare)                       │
+└─────────────────────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────┐
+│                    MAPPA INTERATTIVA                     │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │  Barra ricerca + Lingua              [🔍] [🌐]  │    │
+│  ├─────────────────────────────────────────────────┤    │
+│  │  [🍽][🍕][🏨][B&B][🥾][🏛]... Categorie         │    │
+│  ├─────────────────────────────────────────────────┤    │
+│  │                                                  │    │
+│  │              MAPPA LEAFLET                       │    │
+│  │         (marker colorati per categoria)          │    │
+│  │                 📍 📍 📍                         │    │
+│  │                                                  │    │
+│  ├─────────────────────────────────────────────────┤    │
+│  │  [Sponsor]                      [⊕][🎯]         │    │
+│  └─────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────┘
+                           │
+            Utente clicca su categoria
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────┐
+│              API: GET /api/businesses                    │
+│         ?category=Restaurant&lat=38.9&lng=16.6          │
+└─────────────────────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────┐
+│            MARKER APPAIONO SULLA MAPPA                   │
+│         (max 100 più vicini per performance)            │
+└─────────────────────────────────────────────────────────┘
+                           │
+            Utente clicca su marker
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────┐
+│              PANNELLO DETTAGLIO ATTIVITÀ                 │
+│  ┌─────────────────────────────────────────────────┐    │
+│  │  Nome Attività                          [❤️][✕]  │    │
+│  │  📍 Indirizzo, Città                            │    │
+│  │  📞 Telefono  🌐 Sito web                       │    │
+│  │  🕐 Orari apertura                              │    │
+│  │  ────────────────────────────────────────────   │    │
+│  │  🎁 PROMOZIONE: Sconto Turista 10%              │    │
+│  │  ────────────────────────────────────────────   │    │
+│  │  Descrizione attività...                        │    │
+│  │                                                  │    │
+│  │  [🧭 NAVIGA]                                    │    │
+│  └─────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────┘
+                           │
+            Utente clicca "Naviga"
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────┐
+│         APRE APP NAVIGAZIONE ESTERNA                     │
+│    (Google Maps su Android / Apple Maps su iOS)         │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 2. Flusso Admin (Superadmin)
+
+```
+Admin Login (/admin/login)
+        │
+        ▼
+Dashboard Admin (/admin)
+        │
+        ├── Tab "Pro Loco" ──► CRUD Pro Loco (create, edit, delete)
+        │                      Rigenera PIN
+        │                      Assegna territorio
+        │
+        ├── Tab "Attività" ──► CRUD tutte le attività
+        │                      Import bulk (XLSX/CSV)
+        │                      Filtri per Pro Loco
+        │
+        └── Tab "Utenti" ───► Gestione utenti
+```
+
+### 3. Flusso Pro Loco Manager
+
+```
+Pro Loco Login (/proloco/login)
+        │ (autenticazione con PIN)
+        ▼
+Dashboard Pro Loco (/proloco)
+        │
+        ├── Mappa territorio ──► Visualizza confini assegnati
+        │
+        ├── Attività ──────────► CRUD attività nel territorio
+        │                        Import bulk
+        │
+        └── Branding ──────────► Logo, colori, descrizione
+```
+
+---
+
+## API Endpoints Principali
+
+### Autenticazione
+| Metodo | Endpoint | Descrizione |
+|--------|----------|-------------|
+| POST | `/api/auth/register` | Registrazione utente |
+| POST | `/api/auth/login` | Login utente |
+| POST | `/api/admin/login` | Login superadmin |
+| POST | `/api/proloco/login` | Login Pro Loco (PIN) |
+
+### Attività (Businesses)
+| Metodo | Endpoint | Descrizione |
+|--------|----------|-------------|
+| GET | `/api/businesses` | Lista attività (filtri: category, lat, lng, q, limit) |
+| GET | `/api/businesses/{id}` | Dettaglio singola attività |
+| GET | `/api/businesses/categories` | Lista categorie disponibili |
+
+### Admin
+| Metodo | Endpoint | Descrizione |
+|--------|----------|-------------|
+| GET | `/api/admin/prolocos` | Lista tutte le Pro Loco |
+| POST | `/api/admin/prolocos` | Crea Pro Loco |
+| PATCH | `/api/admin/prolocos/{id}` | Modifica Pro Loco |
+| DELETE | `/api/admin/prolocos/{id}` | Elimina Pro Loco |
+| POST | `/api/admin/import` | Import bulk attività |
+
+### Pro Loco
+| Metodo | Endpoint | Descrizione |
+|--------|----------|-------------|
+| GET | `/api/proloco/me` | Info Pro Loco corrente |
+| GET | `/api/proloco/businesses` | Attività del territorio |
+| POST | `/api/proloco/businesses` | Crea attività |
+| PATCH | `/api/proloco/branding` | Aggiorna branding |
+
+### Preferiti
+| Metodo | Endpoint | Descrizione |
+|--------|----------|-------------|
+| GET | `/api/favorites` | Lista preferiti utente |
+| POST | `/api/favorites` | Aggiungi preferito |
+| DELETE | `/api/favorites/{id}` | Rimuovi preferito |
+
+---
+
+## Categorie Disponibili (19 totali) - Colori Pop
 
 | Categoria | Colore | Icona |
 |-----------|--------|-------|
