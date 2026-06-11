@@ -827,6 +827,67 @@ Le nuove categorie sono posizionate **dopo Spiagge** nella barra filtri:
 
 ---
 
+---
+
+## Sessione 11 Giugno 2026 (pomeriggio) - Banner Sponsor
+
+### Nuova Funzionalità: Carousel Sponsor
+
+Aggiunto un banner scorrevole in basso per mostrare i loghi degli sponsor.
+
+#### Caratteristiche
+- **Posizione**: Centro-basso della schermata, sopra la barra browser
+- **Stile**: Ovale con effetto glass (blur)
+- **Rotazione**: Ogni logo visibile per 3 secondi
+- **Loop infinito**: I loghi si ripetono continuamente
+- **Fade transition**: Transizione fluida tra i loghi
+- **Indicatori**: Pallini per mostrare lo sponsor corrente
+- **Click**: Apre il sito dello sponsor in una nuova scheda
+
+#### Come Aggiungere Sponsor
+
+1. Aggiungi il logo nella cartella `public/sponsor/`
+2. Modifica `public/sponsor/sponsors.json`:
+
+```json
+[
+  {
+    "id": "sponsor1",
+    "logo": "/sponsor/logo-sponsor1.png",
+    "name": "Nome Sponsor",
+    "url": "https://sitosponsor.it",
+    "showName": false
+  },
+  {
+    "id": "sponsor2",
+    "logo": "/sponsor/logo-sponsor2.png",
+    "name": "Altro Sponsor",
+    "url": "https://altrosponsor.it",
+    "showName": false
+  }
+]
+```
+
+#### Campi JSON Sponsor
+
+| Campo | Tipo | Descrizione |
+|-------|------|-------------|
+| `id` | string | Identificativo univoco |
+| `logo` | string | Percorso logo (da public/) |
+| `name` | string | Nome sponsor |
+| `url` | string | Sito web (opzionale) |
+| `showName` | boolean | Mostra nome accanto al logo |
+
+#### File Creati
+
+| File | Descrizione |
+|------|-------------|
+| `src/components/SponsorBanner.jsx` | Componente carousel sponsor |
+| `public/sponsor/sponsors.json` | Configurazione sponsor |
+| `public/sponsor/` | Cartella per i loghi |
+
+---
+
 *Ultimo aggiornamento: 11 Giugno 2026*
 *Stato: PRODUZIONE ONLINE - Cloudflare Pages + Railway + MongoDB Atlas*
 *Security: HARDENING COMPLETATO*

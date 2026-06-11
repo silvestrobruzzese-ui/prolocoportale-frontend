@@ -10,6 +10,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import InstallBanner from "@/components/InstallBanner";
 import CamminoSelector from "@/components/CamminoSelector";
 import AuthModal from "@/components/AuthModal";
+import SponsorBanner from "@/components/SponsorBanner";
 
 import { useI18n } from "@/lib/i18n";
 import { useGeolocation } from "@/lib/useGeolocation";
@@ -418,8 +419,11 @@ export default function HomePage() {
       </div>
       )}
 
+      {/* Sponsor banner at bottom */}
+      <SponsorBanner />
+
       {/* Recenter / locate / fullscreen fab */}
-      <div className="absolute right-3 sm:right-4 bottom-8 z-[1000] flex flex-col gap-2">
+      <div className="absolute right-3 sm:right-4 bottom-20 z-[1000] flex flex-col gap-2">
         <button
           onClick={toggleFullscreen}
           className="glass rounded-full w-12 h-12 inline-flex items-center justify-center hover:bg-white"

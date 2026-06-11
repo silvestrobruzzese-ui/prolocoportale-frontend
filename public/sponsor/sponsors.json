@@ -1,0 +1,9 @@
+[
+  {
+    "id": "esempio1",
+    "logo": "/sponsor/esempio-sponsor.png",
+    "name": "Sponsor Esempio",
+    "url": "https://esempio.it",
+    "showName": false
+  }
+]
