@@ -70,10 +70,9 @@ export default function SponsorBanner() {
         style={{
           opacity: isVisible ? 1 : 0,
           transition: "opacity 0.3s ease-in-out, transform 0.3s ease",
-          background: "linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
-          boxShadow: "0 8px 32px rgba(102, 126, 234, 0.15), 0 0 40px 10px rgba(255, 255, 255, 0.5)",
+          background: "rgba(255, 255, 255, 0.15)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
           border: "none",
         }}
       >
