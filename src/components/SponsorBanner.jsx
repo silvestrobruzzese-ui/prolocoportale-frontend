@@ -58,11 +58,11 @@ export default function SponsorBanner() {
   };
 
   return (
-    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-[999]">
+    <div className="absolute bottom-28 left-3 z-[999]">
       <div
         onClick={handleClick}
         className={`
-          glass rounded-full px-2 flex items-center justify-center
+          rounded-full px-2 flex items-center justify-center
           min-w-[280px] max-w-[360px] h-[70px]
           cursor-pointer hover:scale-105 transition-all duration-300
           ${currentSponsor.url ? "hover:shadow-lg" : "cursor-default"}
@@ -70,6 +70,11 @@ export default function SponsorBanner() {
         style={{
           opacity: isVisible ? 1 : 0,
           transition: "opacity 0.3s ease-in-out, transform 0.3s ease",
+          background: "linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          boxShadow: "0 8px 32px rgba(102, 126, 234, 0.15), 0 0 40px 10px rgba(255, 255, 255, 0.5)",
+          border: "none",
         }}
       >
         <img

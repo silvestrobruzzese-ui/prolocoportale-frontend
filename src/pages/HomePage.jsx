@@ -388,8 +388,8 @@ export default function HomePage() {
     <div className="relative h-screen w-screen overflow-hidden bg-[var(--bg)]">
       {/* Floating top bar - hidden when detail is open */}
       {!detailOpen && (
-      <div className="absolute top-0 inset-x-0 z-[1000] mt-12 sm:mt-0">
-        <div className="p-3 sm:p-4 flex items-center gap-2">
+      <div className="absolute top-0 inset-x-0 z-[1000]">
+        <div className="p-2 sm:p-3 flex items-center gap-2">
           <div className="glass rounded-full h-12 flex items-center px-4 gap-2 flex-1 max-w-2xl" data-testid="search-bar">
             <Search className="w-4 h-4 text-[var(--text-secondary)]" />
             <Input
@@ -404,8 +404,12 @@ export default function HomePage() {
 
           <LanguageSwitcher />
         </div>
+      </div>
+      )}
 
-        {/* Horizontal category filters */}
+      {/* Category filters - top left where zoom controls were */}
+      {!detailOpen && (
+      <div className="absolute top-16 left-0 right-0 z-[1000]">
         <CategoryFilters value={category} onChange={setCategory} />
 
         {/* Cammino selector - only for Sentieri e Cammini category */}

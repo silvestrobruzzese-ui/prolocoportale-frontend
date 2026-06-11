@@ -166,6 +166,7 @@ export default function MapView({
       center={center}
       zoom={zoom}
       scrollWheelZoom={true}
+      zoomControl={false}
       className="w-full h-full"
       ref={mapRef}
       data-testid="map-container"

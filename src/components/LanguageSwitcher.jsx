@@ -19,7 +19,7 @@ export default function LanguageSwitcher() {
           <span className="sm:hidden">{current.flag}</span>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="rounded-xl">
+      <DropdownMenuContent align="end" className="rounded-xl z-[1100]">
         {LANGUAGES.map((l) => (
           <DropdownMenuItem
             key={l.code}
