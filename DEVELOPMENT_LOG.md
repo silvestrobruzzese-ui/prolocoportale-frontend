@@ -901,6 +901,7 @@ Aggiunto un banner scorrevole in basso per mostrare i loghi degli sponsor.
 | BCC Banca | `bcc-banca.png` |
 | MB Consulting | `mb-consulting.png` |
 | Pro Loco Soverato | `proloco-soverato.png` |
+| Mirò | `miro.png` |
 
 #### Visibilità Banner
 
@@ -981,4 +982,4 @@ La mappa Leaflet catturava gli eventi touch, impedendo al pulsante di ricevere i
 *Landing Page: PERSONALIZZATE PER OGNI PRO LOCO*
 *Sentieri e Cammini: FUNZIONALITÀ COMPLETA CON GPS*
 *Bandiere Blu/Verde: 50 SPIAGGE CERTIFICATE*
-*Banner Sponsor: 3 SPONSOR IN ROTAZIONE*
+*Banner Sponsor: 4 SPONSOR IN ROTAZIONE*
