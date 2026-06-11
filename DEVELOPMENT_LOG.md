@@ -7,7 +7,7 @@
 
 ## STATO ATTUALE: PRODUZIONE ONLINE
 
-**Ultimo aggiornamento: 3 Giugno 2026 - ore 02:15**
+**Ultimo aggiornamento: 11 Giugno 2026 - ore 20:30**
 
 L'applicazione è completamente funzionante online su dispositivi mobili e desktop.
 
@@ -946,6 +946,44 @@ La mappa Leaflet catturava gli eventi touch, impedendo al pulsante di ricevere i
 | File | Modifica |
 |------|----------|
 | `src/components/TrailFollower.jsx` | Fix gestione touch su iOS |
+
+---
+
+## Sessione 11 Giugno 2026 (notte) - Riorganizzazione Layout UI
+
+### Modifiche Richieste
+
+Riorganizzazione degli elementi UI sulla mappa per una migliore esperienza utente.
+
+### Modifiche Implementate
+
+| Elemento | Modifica |
+|----------|----------|
+| **Controlli zoom (+/-)** | Rimossi dalla mappa |
+| **Barra ricerca** | Spostata più in alto |
+| **Tasto lingue** | Spostato più in alto |
+| **Icone categorie** | Spostate in alto a sinistra (dove c'erano i tasti zoom) |
+| **Menu lingue dropdown** | Z-index aumentato per apparire in primo piano |
+| **Banner sponsor** | Spostato a sinistra, stessa altezza del mirino |
+| **Bordo banner sponsor** | Sfumato con effetto glow (non più bordo netto) |
+
+### File Modificati
+
+| File | Modifica |
+|------|----------|
+| `src/components/MapView.jsx` | Aggiunto `zoomControl={false}` |
+| `src/pages/HomePage.jsx` | Riposizionati elementi UI |
+| `src/components/LanguageSwitcher.jsx` | Aggiunto `z-[1100]` al dropdown |
+| `src/components/SponsorBanner.jsx` | Spostato a sinistra, bordo sfumato |
+
+### Fix Backend Railway
+
+Durante la sessione, risolto anche un problema di deploy su Railway:
+
+| Problema | Soluzione |
+|----------|-----------|
+| Python 3.13.14 non esistente | Creato `.python-version` con `3.11.9` |
+| Attestazioni GitHub mancanti | Creato `mise.toml` con `python.github_attestations = false` |
 
 ---
 
