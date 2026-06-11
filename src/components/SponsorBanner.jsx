@@ -62,8 +62,8 @@ export default function SponsorBanner() {
       <div
         onClick={handleClick}
         className={`
-          glass rounded-full px-3 py-1 flex items-center justify-center
-          min-w-[280px] max-w-[360px] h-[70px]
+          glass rounded-full px-4 py-1 flex items-center justify-center
+          h-[50px]
           cursor-pointer hover:scale-105 transition-all duration-300
           ${currentSponsor.url ? "hover:shadow-lg" : "cursor-default"}
         `}
@@ -75,7 +75,7 @@ export default function SponsorBanner() {
         <img
           src={currentSponsor.logo}
           alt={currentSponsor.name}
-          className="h-[62px] max-w-[340px] object-contain"
+          className="h-[42px] w-auto object-contain"
           onError={(e) => {
             e.target.style.display = "none";
           }}
