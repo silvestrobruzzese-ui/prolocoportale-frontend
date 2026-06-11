@@ -419,8 +419,8 @@ export default function HomePage() {
       </div>
       )}
 
-      {/* Sponsor banner at bottom - hidden when detail is open */}
-      {!detailOpen && <SponsorBanner />}
+      {/* Sponsor banner at bottom - hidden when any panel/modal is open */}
+      {!detailOpen && !authOpen && !showWelcome && !showLocationPrompt && <SponsorBanner />}
 
       {/* Recenter / locate / fullscreen fab */}
       <div className="absolute right-3 sm:right-4 bottom-28 z-[1000] flex flex-col gap-2">
