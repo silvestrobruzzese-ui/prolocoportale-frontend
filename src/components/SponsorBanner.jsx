@@ -91,19 +91,6 @@ export default function SponsorBanner() {
         )}
       </div>
 
-      {/* Sponsor indicator dots */}
-      {sponsors.length > 1 && (
-        <div className="flex justify-center gap-1 mt-1">
-          {sponsors.map((_, idx) => (
-            <div
-              key={idx}
-              className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                idx === currentIndex ? "bg-[var(--primary)] w-3" : "bg-gray-300"
-              }`}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 }
