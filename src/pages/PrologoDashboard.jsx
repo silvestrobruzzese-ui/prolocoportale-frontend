@@ -138,15 +138,30 @@ function PrologoBusinessForm({ initial, onSave, onCancel }) {
     }
     setLoading(true);
     try {
-      const query = `${form.address}, ${form.cap} ${form.city}, Italia`;
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`);
-      const data = await res.json();
-      if (!data || data.length === 0) {
+      // Try progressively less specific queries for better results in small towns
+      const queries = [
+        `${form.address}, ${form.cap} ${form.city}, Italia`,
+        `${form.address}, ${form.city}, Italia`,
+        `${form.cap} ${form.city}, Italia`,
+        `${form.city}, Calabria, Italia`,
+      ];
+
+      let result = null;
+      for (const query of queries) {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`);
+        const data = await res.json();
+        if (data && data.length > 0) {
+          result = data[0];
+          break;
+        }
+      }
+
+      if (!result) {
         toast.error(t("geocode_error"));
         setLoading(false);
         return;
       }
-      const { lat, lon } = data[0];
+      const { lat, lon } = result;
       onSave({
         ...form,
         lat: parseFloat(lat),
