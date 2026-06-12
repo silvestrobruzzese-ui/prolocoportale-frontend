@@ -241,9 +241,11 @@ function PrologoBusinessForm({ initial, onSave, onCancel }) {
           <Input value={form.city} onChange={(e) => set("city", e.target.value)} placeholder="Soverato" required />
         </div>
       </div>
-      <div className="text-xs text-[var(--text-secondary)] bg-[var(--bg)] rounded-lg p-3 flex items-start gap-2">
-        <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-[var(--secondary-hover)]" />
-        <span>{t("auto_geocode")}</span>
+      <div className="text-xs bg-amber-50 border border-amber-200 text-amber-800 rounded-lg p-3 flex items-start gap-2">
+        <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
+        <div>
+          <span className="font-medium">Posizione automatica.</span> Dopo il salvataggio, vai nella tab <strong>Mappa</strong> per verificare e correggere la posizione trascinando il marker.
+        </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div>
