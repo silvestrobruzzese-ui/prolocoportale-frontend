@@ -21,7 +21,12 @@ export default function AdminLogin() {
     setLoading(true);
     try {
       const { data } = await api.post("/admin/login", { email, password });
-      if (data?.access_token) localStorage.setItem("pm_admin_token", data.access_token);
+      if (data?.access_token) {
+        // Clear other tokens to ensure admin token takes precedence
+        localStorage.removeItem("pm_user_token");
+        localStorage.removeItem("pm_proloco_token");
+        localStorage.setItem("pm_admin_token", data.access_token);
+      }
       toast.success("Welcome");
       navigate("/admin");
     } catch (err) {

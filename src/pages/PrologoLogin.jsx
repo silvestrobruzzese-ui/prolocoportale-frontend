@@ -20,7 +20,12 @@ export default function PrologoLogin() {
     setLoading(true);
     try {
       const { data } = await api.post("/proloco/login", { pin: pin.toUpperCase() });
-      if (data?.access_token) localStorage.setItem("pm_proloco_token", data.access_token);
+      if (data?.access_token) {
+        // Clear other tokens to ensure proloco token takes precedence
+        localStorage.removeItem("pm_user_token");
+        localStorage.removeItem("pm_admin_token");
+        localStorage.setItem("pm_proloco_token", data.access_token);
+      }
       toast.success(`Welcome ${data?.name || ""}`);
       navigate("/proloco");
     } catch (err) {
