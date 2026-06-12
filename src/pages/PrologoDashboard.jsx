@@ -21,19 +21,24 @@ import { toast } from "sonner";
 const categoryColors = {
   Restaurant: "#E63946",
   Pizzerie: "#FF6B35",
-  Cafe: "#8B4513",
-  Shop: "#2A9D8F",
-  Hotel: "#FFD700",
-  "B&B": "#228B22",
-  Pharmacy: "#4CAF50",
-  Monumenti: "#8B4513",
-  Musei: "#9C27B0",
-  Spiagge: "#00CED1",
-  Archeologia: "#FF8C00",
-  Discoteche: "#E040FB",
-  Supermercati: "#3498DB",
+  Cafe: "#A855F7",
+  Shop: "#14B8A6",
+  Hotel: "#FBBF24",
+  "B&B": "#22C55E",
+  Pharmacy: "#22C55E",
+  Monumenti: "#A855F7",
+  Musei: "#EC4899",
+  Spiagge: "#06B6D4",
+  "Bandiera Blu": "#0077B6",
+  "Bandiera Verde": "#2E7D32",
+  Archeologia: "#F59E0B",
+  Discoteche: "#D946EF",
+  Supermercati: "#3B82F6",
+  "Beni Culturali": "#8B5CF6",
+  Itinerari: "#10B981",
+  "Sentieri e Cammini": "#F97316",
   Bancomat: "#00843D",
-  Other: "#6C757D",
+  Other: "#6366F1",
 };
 
 const categoryEmoji = {
@@ -42,27 +47,51 @@ const categoryEmoji = {
   Cafe: "☕",
   Shop: "🛍",
   Hotel: "🏨",
-  "B&B": "🛏",
+  "B&B": "B&B",
   Pharmacy: "💊",
   Monumenti: "⛪",
   Musei: "🏛",
   Spiagge: "🏖",
+  "Bandiera Blu": "🏳️",
+  "Bandiera Verde": "🏳️",
   Archeologia: "🏺",
   Discoteche: "🎵",
   Supermercati: "🛒",
+  "Beni Culturali": "🏛",
+  Itinerari: "🥾",
+  "Sentieri e Cammini": "🏔",
   Bancomat: "🏧",
   Other: "📍",
 };
 
-// Draggable marker icon with category color and emoji
+// Map of categories that use image logos (same as MapView)
+const categoryLogos = {
+  Bancomat: "/bcc-logo.png",
+  "Bandiera Blu": "/bandiera-blu-logo.jpg",
+  "Bandiera Verde": "/bandiera-verde-logo.jpg",
+};
+
+// Draggable marker icon with category color and emoji (same style as MapView)
 function createMarkerIcon(category) {
   const color = categoryColors[category] || categoryColors.Other;
   const emoji = categoryEmoji[category] || categoryEmoji.Other;
+  const logoUrl = categoryLogos[category];
+
+  let iconContent;
+  let markerStyle = `background:${color};cursor:move;`;
+
+  if (logoUrl) {
+    iconContent = `<img src="${logoUrl}" alt="${category}" style="width:28px;height:28px;object-fit:contain;border-radius:4px;" />`;
+    markerStyle = `background:white;border:3px solid ${color};cursor:move;`;
+  } else {
+    iconContent = `<span>${emoji}</span>`;
+  }
+
   return L.divIcon({
-    html: `<div class="proxi-pin" style="background:${color};cursor:move;"><span>${emoji}</span></div>`,
+    html: `<div class="proxi-pin" style="${markerStyle}"><span class="marker-icon">${iconContent}</span></div>`,
     className: "proxi-marker-icon",
-    iconSize: [36, 36],
-    iconAnchor: [18, 36],
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
   });
 }
 
