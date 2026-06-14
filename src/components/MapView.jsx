@@ -20,6 +20,7 @@ const categoryColors = {
   Spiagge: "#06B6D4",     // Ciano
   "Bandiera Blu": "#0077B6",   // Blu oceano
   "Bandiera Verde": "#2E7D32", // Verde pediatrico
+  "Sea Park": "#1A6B8A",       // Blu petrolio parchi marini
   Archeologia: "#F59E0B", // Ambra
   Discoteche: "#D946EF",  // Fucsia
   Supermercati: "#3B82F6", // Blu
@@ -43,6 +44,7 @@ const categoryEmoji = {
   Spiagge: "🏖",
   "Bandiera Blu": "🏳️",
   "Bandiera Verde": "🏳️",
+  "Sea Park": "🐬",
   Archeologia: "🏺",
   Discoteche: "🎵",
   Supermercati: "🛒",
@@ -71,6 +73,7 @@ const categoryLogos = {
   Bancomat: "/bcc-logo.png",
   "Bandiera Blu": "/bandiera-blu-logo.jpg",
   "Bandiera Verde": "/bandiera-verde-logo.jpg",
+  "Sea Park": "/sea-park-logo.png",
 };
 
 function pinIcon(business, inProximity) {

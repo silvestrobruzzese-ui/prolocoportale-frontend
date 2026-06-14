@@ -62,6 +62,7 @@ const CATEGORIES = [
   { key: "spiagge", value: "Spiagge", icon: "🏖", color: "#06B6D4" },
   { key: "bandiera_blu", value: "Bandiera Blu", icon: "/bandiera-blu-logo.jpg", color: "#0077B6", isImage: true },
   { key: "bandiera_verde", value: "Bandiera Verde", icon: "/bandiera-verde-logo.jpg", color: "#2E7D32", isImage: true },
+  { key: "sea_park", value: "Sea Park", icon: "/sea-park-logo.png", color: "#1A6B8A", isImage: true },
   { key: "archeologia", value: "Archeologia", icon: "🏺", color: "#F59E0B" },
   { key: "discoteche", value: "Discoteche", icon: "🎵", color: "#D946EF" },
   { key: "supermercati", value: "Supermercati", icon: "🛒", color: "#3B82F6" },
