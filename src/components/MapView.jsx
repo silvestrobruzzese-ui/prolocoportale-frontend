@@ -152,13 +152,21 @@ export default function MapView({
     return coords.map(c => [c[1], c[0]]);
   }, [selectedBiz]);
 
-  // Extract polygon area from geojson_data if available (for Sea Parks)
-  const areaPolygon = useMemo(() => {
-    if (!selectedBiz?.geojson_data?.geometry?.coordinates) return null;
-    if (selectedBiz.geojson_data.geometry.type !== "Polygon") return null;
-    const coords = selectedBiz.geojson_data.geometry.coordinates[0]; // Outer ring
-    // GeoJSON is [lng, lat], Leaflet needs [lat, lng]
-    return coords.map(c => [c[1], c[0]]);
+  // Extract polygon area(s) from geojson_data if available (for Sea Parks)
+  const areaPolygons = useMemo(() => {
+    if (!selectedBiz?.geojson_data?.geometry?.coordinates) return [];
+    const geomType = selectedBiz.geojson_data.geometry.type;
+
+    if (geomType === "Polygon") {
+      const coords = selectedBiz.geojson_data.geometry.coordinates[0];
+      return [coords.map(c => [c[1], c[0]])];
+    } else if (geomType === "MultiPolygon") {
+      // MultiPolygon: array of polygons
+      return selectedBiz.geojson_data.geometry.coordinates.map(polygon =>
+        polygon[0].map(c => [c[1], c[0]])
+      );
+    }
+    return [];
   }, [selectedBiz]);
 
   // All sentieri tracks when showAllTracks is true
@@ -271,10 +279,11 @@ export default function MapView({
         />
       )}
 
-      {/* Sea Park marine area polygon */}
-      {areaPolygon && areaPolygon.length > 2 && (
+      {/* Sea Park marine area polygon(s) */}
+      {areaPolygons.map((polygon, idx) => (
         <Polygon
-          positions={areaPolygon}
+          key={`area-${idx}`}
+          positions={polygon}
           pathOptions={{
             color: "#1A6B8A", // Sea Park petrol blue
             weight: 3,
@@ -282,7 +291,7 @@ export default function MapView({
             fillOpacity: 0.2,
           }}
         />
-      )}
+      ))}
 
       {/* Walking route for cammino (actual path from OSRM) */}
       {camminoRoute && camminoRoute.length > 1 && (
