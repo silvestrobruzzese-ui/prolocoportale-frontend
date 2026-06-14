@@ -1,6 +1,8 @@
 // craco.config.js
 const path = require("path");
-require("dotenv").config();
+// Load correct .env file based on NODE_ENV
+const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env";
+require("dotenv").config({ path: path.resolve(__dirname, envFile) });
 
 
 // Environment variable overrides
