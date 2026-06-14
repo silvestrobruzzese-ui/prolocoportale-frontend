@@ -146,7 +146,17 @@ export default function MapView({
   // Extract trail track from geojson_data if available (for selected business)
   const trailTrack = useMemo(() => {
     if (!selectedBiz?.geojson_data?.geometry?.coordinates) return null;
+    if (selectedBiz.geojson_data.geometry.type !== "LineString") return null;
     const coords = selectedBiz.geojson_data.geometry.coordinates;
+    // GeoJSON is [lng, lat], Leaflet needs [lat, lng]
+    return coords.map(c => [c[1], c[0]]);
+  }, [selectedBiz]);
+
+  // Extract polygon area from geojson_data if available (for Sea Parks)
+  const areaPolygon = useMemo(() => {
+    if (!selectedBiz?.geojson_data?.geometry?.coordinates) return null;
+    if (selectedBiz.geojson_data.geometry.type !== "Polygon") return null;
+    const coords = selectedBiz.geojson_data.geometry.coordinates[0]; // Outer ring
     // GeoJSON is [lng, lat], Leaflet needs [lat, lng]
     return coords.map(c => [c[1], c[0]]);
   }, [selectedBiz]);
@@ -201,10 +211,11 @@ export default function MapView({
       {businesses.map((b) => {
         // For sentieri with GPS track, position marker at start of trail
         let markerPosition = [b.lat, b.lng];
-        if (b.geojson_data?.geometry?.coordinates?.length > 0) {
+        if (b.geojson_data?.geometry?.type === "LineString" && b.geojson_data?.geometry?.coordinates?.length > 0) {
           const firstCoord = b.geojson_data.geometry.coordinates[0];
           markerPosition = [firstCoord[1], firstCoord[0]]; // GeoJSON is [lng, lat]
         }
+        // For Sea Parks with polygon, marker stays at original lat/lng (center of park)
         return (
           <Marker
             key={b.business_id}
@@ -256,6 +267,19 @@ export default function MapView({
             color: "#F97316", // Orange
             weight: 5,
             opacity: 1,
+          }}
+        />
+      )}
+
+      {/* Sea Park marine area polygon */}
+      {areaPolygon && areaPolygon.length > 2 && (
+        <Polygon
+          positions={areaPolygon}
+          pathOptions={{
+            color: "#1A6B8A", // Sea Park petrol blue
+            weight: 3,
+            fillColor: "#1A6B8A",
+            fillOpacity: 0.2,
           }}
         />
       )}
