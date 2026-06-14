@@ -62,7 +62,7 @@ const CATEGORIES = [
   { key: "spiagge", value: "Spiagge", icon: "🏖", color: "#06B6D4" },
   { key: "bandiera_blu", value: "Bandiera Blu", icon: "/bandiera-blu-logo.jpg", color: "#0077B6", isImage: true },
   { key: "bandiera_verde", value: "Bandiera Verde", icon: "/bandiera-verde-logo.jpg", color: "#2E7D32", isImage: true },
-  { key: "sea_park", value: "Sea Park", icon: "Sea Parks", color: "#1A6B8A" },
+  { key: "sea_park", value: "Sea Park", icon: "Sea\nParks", color: "#1A6B8A", isMultiline: true },
   { key: "archeologia", value: "Archeologia", icon: "🏺", color: "#F59E0B" },
   { key: "discoteche", value: "Discoteche", icon: "🎵", color: "#D946EF" },
   { key: "supermercati", value: "Supermercati", icon: "🛒", color: "#3B82F6" },
@@ -78,7 +78,7 @@ export default function CategoryFilters({ value, onChange }) {
       {CATEGORIES.map((c, index) => {
         const isActive = c.value === value;
         const isTextIcon = !c.isSvg && !c.isImage && c.icon.length > 2; // "B&B", "Sea Parks" are text, not emoji
-        const isLongText = c.icon.length > 4; // "Sea Parks" needs smaller font
+        const isMultilineText = c.isMultiline; // "Sea\nParks" on two lines
         const hasDualColor = c.secondColor;
 
         // Style for dual-color gradient border (Sentieri e Cammini)
@@ -107,7 +107,7 @@ export default function CategoryFilters({ value, onChange }) {
             onClick={() => onChange(isActive ? null : c.value)}
             className={`category-btn flex-shrink-0 w-14 h-14 rounded-full inline-flex items-center justify-center ${
               isActive ? "active" : ""
-            } ${isLongText ? "text-[9px] font-bold leading-tight" : isTextIcon ? "text-sm font-bold" : "text-2xl"}`}
+            } ${isMultilineText ? "text-[10px] font-bold leading-tight" : isTextIcon ? "text-sm font-bold" : "text-2xl"}`}
             style={{
               backgroundColor: !hasDualColor ? (isActive ? c.color : "white") : undefined,
               borderColor: !hasDualColor ? c.color : undefined,
@@ -129,10 +129,11 @@ export default function CategoryFilters({ value, onChange }) {
               />
             ) : (
               <span
-                className="drop-shadow-sm"
+                className={`drop-shadow-sm ${c.isMultiline ? "text-center" : ""}`}
                 style={{
                   filter: isActive ? "brightness(0) invert(1) drop-shadow(0 2px 4px rgba(0,0,0,0.3))" : "drop-shadow(0 1px 2px rgba(0,0,0,0.1))",
                   fontFamily: '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Twemoji Mozilla", sans-serif',
+                  whiteSpace: c.isMultiline ? "pre-line" : undefined,
                 }}
               >
                 {c.icon}
