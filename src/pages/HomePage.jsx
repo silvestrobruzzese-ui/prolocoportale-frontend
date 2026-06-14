@@ -330,6 +330,14 @@ export default function HomePage() {
   const handleSelect = (id) => {
     setSelectedId(id);
     setDetailOpen(true);
+
+    // Center map on selected business (especially useful for Sea Parks spread across Calabria)
+    const biz = filteredBusinesses.find((b) => b.business_id === id);
+    if (biz) {
+      setSearchedCenter([biz.lat, biz.lng]);
+      setSearchZoom(14);
+      setRecenterTrigger((n) => n + 1);
+    }
   };
 
   const handleRecenter = () => {
