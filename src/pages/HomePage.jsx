@@ -191,12 +191,14 @@ export default function HomePage() {
       return;
     }
     try {
-      // For "Sentieri e Cammini", fetch ALL without location filter (they're few)
+      // For "Sentieri e Cammini" and "Sea Park", fetch ALL without location filter (they're few)
       const isSentieriCammini = category === "Sentieri e Cammini";
-      const params = { category, limit: isSentieriCammini ? 500 : 100 };
+      const isSeaPark = category === "Sea Park";
+      const fetchAll = isSentieriCammini || isSeaPark;
+      const params = { category, limit: fetchAll ? 500 : 100 };
 
       // Only add location params for other categories
-      if (!isSentieriCammini) {
+      if (!fetchAll) {
         if (searchedCenter) {
           params.lat = searchedCenter[0];
           params.lng = searchedCenter[1];

@@ -62,7 +62,7 @@ const CATEGORIES = [
   { key: "spiagge", value: "Spiagge", icon: "🏖", color: "#06B6D4" },
   { key: "bandiera_blu", value: "Bandiera Blu", icon: "/bandiera-blu-logo.jpg", color: "#0077B6", isImage: true },
   { key: "bandiera_verde", value: "Bandiera Verde", icon: "/bandiera-verde-logo.jpg", color: "#2E7D32", isImage: true },
-  { key: "sea_park", value: "Sea Park", icon: "/sea-park-logo.png", color: "#1A6B8A", isImage: true },
+  { key: "sea_park", value: "Sea Park", icon: "Sea Parks", color: "#1A6B8A" },
   { key: "archeologia", value: "Archeologia", icon: "🏺", color: "#F59E0B" },
   { key: "discoteche", value: "Discoteche", icon: "🎵", color: "#D946EF" },
   { key: "supermercati", value: "Supermercati", icon: "🛒", color: "#3B82F6" },
@@ -77,7 +77,8 @@ export default function CategoryFilters({ value, onChange }) {
     <div className="flex gap-3 overflow-x-auto no-scrollbar px-4 py-3">
       {CATEGORIES.map((c, index) => {
         const isActive = c.value === value;
-        const isTextIcon = !c.isSvg && c.icon.length > 2; // "B&B" is text, not emoji
+        const isTextIcon = !c.isSvg && !c.isImage && c.icon.length > 2; // "B&B", "Sea Parks" are text, not emoji
+        const isLongText = c.icon.length > 4; // "Sea Parks" needs smaller font
         const hasDualColor = c.secondColor;
 
         // Style for dual-color gradient border (Sentieri e Cammini)
@@ -106,7 +107,7 @@ export default function CategoryFilters({ value, onChange }) {
             onClick={() => onChange(isActive ? null : c.value)}
             className={`category-btn flex-shrink-0 w-14 h-14 rounded-full inline-flex items-center justify-center ${
               isActive ? "active" : ""
-            } ${isTextIcon ? "text-sm font-bold" : "text-2xl"}`}
+            } ${isLongText ? "text-[9px] font-bold leading-tight" : isTextIcon ? "text-sm font-bold" : "text-2xl"}`}
             style={{
               backgroundColor: !hasDualColor ? (isActive ? c.color : "white") : undefined,
               borderColor: !hasDualColor ? c.color : undefined,

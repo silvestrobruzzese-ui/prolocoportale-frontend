@@ -81,7 +81,12 @@ function pinIcon(business, inProximity) {
   const emoji = categoryEmoji[business.category] || categoryEmoji.Other;
   const proximityClass = inProximity ? "in-proximity" : "";
   const isSentieriCammini = business.category === "Sentieri e Cammini";
+  const isSeaPark = business.category === "Sea Park";
   const logoUrl = categoryLogos[business.category];
+
+  // Sea Park gets larger markers
+  const markerSize = isSeaPark ? 56 : 40;
+  const logoSize = isSeaPark ? 48 : 32;
 
   // Use SVG hiker icon for Sentieri e Cammini, logo for image categories, emoji for others
   let iconContent;
@@ -89,13 +94,13 @@ function pinIcon(business, inProximity) {
   if (isSentieriCammini) {
     iconContent = hikerSvgWhite;
   } else if (logoUrl) {
-    iconContent = `<img src="${logoUrl}" alt="${business.category}" style="width:32px;height:32px;object-fit:contain;border-radius:4px;" />`;
+    iconContent = `<img src="${logoUrl}" alt="${business.category}" style="width:${logoSize}px;height:${logoSize}px;object-fit:contain;border-radius:4px;" />`;
     markerStyle = `background:white;border:3px solid ${color}`;
   } else {
     iconContent = `<span>${emoji}</span>`;
   }
-  const html = `<div class="proxi-pin ${proximityClass}" style="${markerStyle}"><span class="marker-icon">${iconContent}</span></div>`;
-  return L.divIcon({ html, className: "proxi-marker-icon", iconSize: [40, 40], iconAnchor: [20, 40] });
+  const html = `<div class="proxi-pin ${proximityClass}" style="${markerStyle};width:${markerSize}px;height:${markerSize}px;"><span class="marker-icon">${iconContent}</span></div>`;
+  return L.divIcon({ html, className: "proxi-marker-icon", iconSize: [markerSize, markerSize], iconAnchor: [markerSize/2, markerSize] });
 }
 
 function userIcon() {
