@@ -332,11 +332,14 @@ export default function HomePage() {
     setDetailOpen(true);
 
     // Center map on selected business (especially useful for Sea Parks spread across Calabria)
+    // Use setTimeout to allow the selection state to update first, then recenter
     const biz = filteredBusinesses.find((b) => b.business_id === id);
     if (biz) {
-      setSearchedCenter([biz.lat, biz.lng]);
-      setSearchZoom(14);
-      setRecenterTrigger((n) => n + 1);
+      setTimeout(() => {
+        setSearchedCenter([biz.lat, biz.lng]);
+        setSearchZoom(biz.category === "Sea Park" ? 13 : 14);
+        setRecenterTrigger((n) => n + 1);
+      }, 50);
     }
   };
 
