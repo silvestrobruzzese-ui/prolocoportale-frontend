@@ -93,6 +93,8 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
         side="right"
         className="w-full sm:max-w-md p-0 overflow-y-auto rounded-t-3xl sm:rounded-l-3xl sm:rounded-t-none"
         data-testid="business-detail-sheet"
+        onInteractOutside={(e) => e.preventDefault()}
+        onPointerDownOutside={(e) => e.preventDefault()}
       >
         {/* Close button - prominent at top */}
         <div className="p-4 pb-2 flex items-center justify-between border-b border-[var(--border)]">
