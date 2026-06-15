@@ -88,7 +88,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
 
   return (
     <>
-    <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
+    <Sheet open={open} modal={false}>
       <SheetContent
         side="right"
         className="w-full sm:max-w-md p-0 overflow-y-auto rounded-t-3xl sm:rounded-l-3xl sm:rounded-t-none"
