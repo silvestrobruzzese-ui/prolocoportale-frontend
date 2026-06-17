@@ -112,7 +112,7 @@ function userIcon() {
 function MapRecenter({ center, zoom, trigger }) {
   const map = useMap();
   useEffect(() => {
-    if (center) map.setView(center, zoom || map.getZoom() || 17, { animate: true });
+    if (center) map.setView(center, zoom || map.getZoom() || 18, { animate: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trigger]);
   return null;
@@ -120,7 +120,7 @@ function MapRecenter({ center, zoom, trigger }) {
 
 export default function MapView({
   center,
-  zoom = 17,
+  zoom = 18,
   userPosition,
   hasUserPosition,
   businesses,
