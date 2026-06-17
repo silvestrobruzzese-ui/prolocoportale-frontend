@@ -1254,7 +1254,79 @@ Durante la sessione, risolto anche un problema di deploy su Railway:
 
 ---
 
-*Ultimo aggiornamento: 11 Giugno 2026 - ore 11:30*
+## Sessione 17 Giugno 2026 - Paywall e Nuove Route
+
+### Problema
+
+Troppe persone avevano accesso al link pubblico della webapp. Necessità di limitare l'accesso solo agli utenti paganti.
+
+### Soluzione Implementata
+
+Spostata la webapp su un nuovo percorso `/portale`, mantenendo le route admin e proloco invariate. Il vecchio link ora mostra un messaggio di paywall.
+
+### Nuove Route
+
+| URL | Cosa Mostra | Accesso |
+|-----|-------------|---------|
+| `/` | Pagina "Servizio a Pagamento" | Pubblico |
+| `/portale` | HomePage (webapp completa) | Solo link condiviso |
+| `/p/:slug` | Landing Pro Loco | Pubblico |
+| `/admin` | Dashboard Superadmin | Autenticato |
+| `/admin/login` | Login Superadmin | Pubblico |
+| `/proloco` | Dashboard Pro Loco | Autenticato |
+| `/proloco/login` | Login Pro Loco | Pubblico |
+
+### File Creati
+
+| File | Descrizione |
+|------|-------------|
+| `src/pages/PaywallPage.js` | Pagina con messaggio "Servizio a Pagamento" |
+
+### File Modificati
+
+| File | Modifica |
+|------|----------|
+| `src/App.js` | Aggiunto import PaywallPage, modificate route |
+
+### Codice PaywallPage
+
+```jsx
+export default function PaywallPage() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md">
+        <h1 className="text-2xl font-bold text-gray-800 mb-4">
+          Servizio a Pagamento
+        </h1>
+        <p className="text-gray-600 mb-6">
+          L'accesso a ProlocoPortale è riservato agli utenti abbonati.
+        </p>
+        <p className="text-gray-500 text-sm">
+          Per informazioni contattaci.
+        </p>
+      </div>
+    </div>
+  );
+}
+```
+
+### URL di Produzione Aggiornati
+
+| Funzione | Vecchio URL | Nuovo URL |
+|----------|-------------|-----------|
+| **Webapp Turisti** | `prolocoportale-frontend.pages.dev/` | `prolocoportale-frontend.pages.dev/portale` |
+| **Superadmin** | `prolocoportale-frontend.pages.dev/admin` | Invariato |
+| **Pro Loco** | `prolocoportale-frontend.pages.dev/proloco/login` | Invariato |
+
+### Strategia Commerciale
+
+1. Chi ha il vecchio link `/` vede messaggio paywall
+2. Solo chi paga riceve il nuovo link `/portale`
+3. Gli admin e Pro Loco continuano ad accedere normalmente
+
+---
+
+*Ultimo aggiornamento: 17 Giugno 2026 - ore 22:00*
 *Stato: PRODUZIONE ONLINE - Cloudflare Pages + Railway + MongoDB Atlas*
 *Security: HARDENING COMPLETATO*
 *Analytics: CLOUDFLARE WEB ANALYTICS ATTIVO*
@@ -1262,3 +1334,4 @@ Durante la sessione, risolto anche un problema di deploy su Railway:
 *Sentieri e Cammini: FUNZIONALITÀ COMPLETA CON GPS*
 *Bandiere Blu/Verde: 50 SPIAGGE CERTIFICATE*
 *Banner Sponsor: 4 SPONSOR IN ROTAZIONE*
+*Paywall: ATTIVO SU ROOT PATH*
