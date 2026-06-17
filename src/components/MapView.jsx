@@ -10,6 +10,7 @@ const PRIMARY = "#FF6B35";
 const categoryColors = {
   Restaurant: "#E63946",  // Rosso vivace
   Pizzerie: "#FF6B35",    // Arancione pizza
+  "Bar e Pub": "#8B4513", // Marrone birra
   Cafe: "#A855F7",        // Viola
   Shop: "#14B8A6",        // Teal
   Hotel: "#FBBF24",       // Giallo oro
@@ -34,6 +35,7 @@ const categoryColors = {
 const categoryEmoji = {
   Restaurant: "🍽",
   Pizzerie: "🍕",
+  "Bar e Pub": "🍺",
   Cafe: "☕",
   Shop: "🛍",
   Hotel: "🏨",

@@ -52,6 +52,7 @@ const HikerIcon = ({ size = 24, isActive = false }) => {
 const CATEGORIES = [
   { key: "restaurant", value: "Restaurant", icon: "🍽", color: "#E63946" },
   { key: "pizzerie", value: "Pizzerie", icon: "🍕", color: "#FF6B35" },
+  { key: "bar_pub", value: "Bar e Pub", icon: "🍺", color: "#8B4513" },
   { key: "hotel", value: "Hotel", icon: "🏨", color: "#FFD700" },
   { key: "bb", value: "B&B", icon: "B&B", color: "#22C55E" },
   { key: "sentieri", value: "Sentieri e Cammini", icon: "hiker", color: "#F97316", secondColor: "#38BDF8", isSvg: true },
