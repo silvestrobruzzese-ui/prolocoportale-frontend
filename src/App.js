@@ -13,11 +13,13 @@ import AdminDashboard from "@/pages/AdminDashboard";
 import PrologoLogin from "@/pages/PrologoLogin";
 import PrologoDashboard from "@/pages/PrologoDashboard";
 import ProlocoLandingPage from "@/pages/ProlocoLandingPage";
+import PaywallPage from "@/pages/PaywallPage";
 
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
+      <Route path="/" element={<PaywallPage />} />
+      <Route path="/portale" element={<HomePage />} />
       <Route path="/p/:slug" element={<ProlocoLandingPage />} />
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route path="/admin" element={<AdminDashboard />} />
