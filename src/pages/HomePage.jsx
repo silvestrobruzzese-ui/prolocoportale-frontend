@@ -132,7 +132,7 @@ export default function HomePage() {
 
   // Use searched location first, then user position, then default Calabria
   const mapCenter = searchedCenter || (hasPosition ? position : CALABRIA_CENTER);
-  const currentZoom = searchZoom || (hasPosition ? 14 : CALABRIA_ZOOM);
+  const currentZoom = searchZoom || (hasPosition ? 16 : CALABRIA_ZOOM);
 
   // Geocode location using Nominatim (OpenStreetMap)
   const geocodeLocation = useCallback(async (searchQuery) => {
