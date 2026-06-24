@@ -75,6 +75,118 @@ function PrologoForm({ initial, onSave, onCancel }) {
   );
 }
 
+function CittaPaeseForm({ initial, onSave, onCancel }) {
+  const { t } = useI18n();
+  const [form, setForm] = useState(() => initial || {
+    nome: "", provincia: "CS", tipo: "Paese", comune: "",
+    popolazione: "", region: "Calabria", country: "IT",
+    via: "", cap: "",
+    referente_nome: "", referente_cognome: "",
+    email: "", phone: "",
+  });
+  const setField = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Validate required fields
+    if (!form.referente_nome.trim() || !form.referente_cognome.trim()) {
+      toast.error("Nome e Cognome del referente sono obbligatori");
+      return;
+    }
+    onSave({
+      ...form,
+      popolazione: form.popolazione ? parseInt(form.popolazione) : null,
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3">
+      <div>
+        <Label>Nome Città/Paese *</Label>
+        <Input value={form.nome} onChange={(e) => setField("nome", e.target.value)} required placeholder="Es. Soverato" data-testid="citta-paese-form-nome" />
+      </div>
+      <div className="grid grid-cols-3 gap-3">
+        <div>
+          <Label>Provincia *</Label>
+          <Select value={form.provincia} onValueChange={(v) => setField("provincia", v)}>
+            <SelectTrigger data-testid="citta-paese-form-provincia"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="CS">CS - Cosenza</SelectItem>
+              <SelectItem value="RC">RC - Reggio Calabria</SelectItem>
+              <SelectItem value="CZ">CZ - Catanzaro</SelectItem>
+              <SelectItem value="KR">KR - Crotone</SelectItem>
+              <SelectItem value="VV">VV - Vibo Valentia</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label>Tipo</Label>
+          <Select value={form.tipo} onValueChange={(v) => setField("tipo", v)}>
+            <SelectTrigger data-testid="citta-paese-form-tipo"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Città">Città</SelectItem>
+              <SelectItem value="Paese">Paese</SelectItem>
+              <SelectItem value="Frazione">Frazione</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label>Popolazione</Label>
+          <Input type="number" value={form.popolazione} onChange={(e) => setField("popolazione", e.target.value)} placeholder="Es. 10000" data-testid="citta-paese-form-popolazione" />
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label>Comune *</Label>
+          <Input value={form.comune} onChange={(e) => setField("comune", e.target.value)} required placeholder="Es. Soverato" data-testid="citta-paese-form-comune" />
+        </div>
+        <div>
+          <Label>{t("cap")}</Label>
+          <Input value={form.cap} onChange={(e) => setField("cap", e.target.value)} maxLength={10} placeholder="88068" data-testid="citta-paese-form-cap" />
+        </div>
+      </div>
+      <div>
+        <Label>Via e numero civico</Label>
+        <Input value={form.via} onChange={(e) => setField("via", e.target.value)} placeholder="Via Roma, 12" data-testid="citta-paese-form-via" />
+      </div>
+
+      {/* Sezione Referente */}
+      <div className="border-t border-[var(--border)] pt-3 mt-3">
+        <div className="text-sm font-semibold text-[var(--text-secondary)] mb-2">Persona di Riferimento *</div>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <Label>Nome *</Label>
+            <Input value={form.referente_nome} onChange={(e) => setField("referente_nome", e.target.value)} required placeholder="Mario" data-testid="citta-paese-form-referente-nome" />
+          </div>
+          <div>
+            <Label>Cognome *</Label>
+            <Input value={form.referente_cognome} onChange={(e) => setField("referente_cognome", e.target.value)} required placeholder="Rossi" data-testid="citta-paese-form-referente-cognome" />
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <Label>{t("email_field")} *</Label>
+          <Input type="email" value={form.email} onChange={(e) => setField("email", e.target.value)} required data-testid="citta-paese-form-email" />
+        </div>
+        <div>
+          <Label>{t("phone_field")} *</Label>
+          <Input value={form.phone} onChange={(e) => setField("phone", e.target.value)} required placeholder="+39 ..." data-testid="citta-paese-form-phone" />
+        </div>
+      </div>
+      <div className="text-xs text-[var(--text-secondary)] bg-[var(--bg)] rounded-lg p-3 flex items-start gap-2">
+        <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-[var(--secondary-hover)]" />
+        <span>{t("auto_geocode")}</span>
+      </div>
+      <DialogFooter>
+        <Button type="button" variant="outline" onClick={onCancel} data-testid="citta-paese-form-cancel">{t("cancel")}</Button>
+        <Button type="submit" className="bg-[var(--primary)] hover:bg-[var(--primary-hover)]" data-testid="citta-paese-form-save">{t("save")}</Button>
+      </DialogFooter>
+    </form>
+  );
+}
+
 function BusinessForm({ initial, onSave, onCancel, prolocos }) {
   const { t } = useI18n();
   const [form, setForm] = useState(() => initial || {
@@ -246,12 +358,31 @@ export default function AdminDashboard() {
   const [editingBusiness, setEditingBusiness] = useState(null);
   const [showBusinessModal, setShowBusinessModal] = useState(false);
   const [importTarget, setImportTarget] = useState(null);
-  const [pinModal, setPinModal] = useState(null); // { proloco } shown after create
+  const [pinModal, setPinModal] = useState(null); // { proloco } or { cittaPaese } shown after create
   const [searchProloco, setSearchProloco] = useState("");
   const [searchBusiness, setSearchBusiness] = useState("");
   const [filterProloco, setFilterProloco] = useState("");
 
+  // Città e Paesi state
+  const [cittaPaesi, setCittaPaesi] = useState([]);
+  const [editingCittaPaese, setEditingCittaPaese] = useState(null);
+  const [showCittaPaeseModal, setShowCittaPaeseModal] = useState(false);
+  const [searchCittaPaese, setSearchCittaPaese] = useState("");
+
   // Filtered lists
+  const filteredCittaPaesi = cittaPaesi.filter((c) => {
+    if (!searchCittaPaese) return true;
+    const q = searchCittaPaese.toLowerCase();
+    return (
+      c.nome?.toLowerCase().includes(q) ||
+      c.comune?.toLowerCase().includes(q) ||
+      c.provincia?.toLowerCase().includes(q) ||
+      c.pin?.toLowerCase().includes(q) ||
+      c.referente_nome?.toLowerCase().includes(q) ||
+      c.referente_cognome?.toLowerCase().includes(q)
+    );
+  });
+
   const filteredProlocos = prolocos.filter((p) => {
     if (!searchProloco) return true;
     const q = searchProloco.toLowerCase();
@@ -278,12 +409,14 @@ export default function AdminDashboard() {
 
   const fetchAll = useCallback(async () => {
     try {
-      const [{ data: p }, { data: b }] = await Promise.all([
+      const [{ data: p }, { data: b }, { data: cp }] = await Promise.all([
         api.get("/admin/prolocos"),
         api.get("/admin/businesses"),
+        api.get("/admin/citta-paesi"),
       ]);
       setProlocos(p);
       setBusinesses(b);
+      setCittaPaesi(cp);
     } catch (err) {
       if (err.response?.status === 401 || err.response?.status === 403) {
         navigate("/admin/login");
@@ -340,6 +473,47 @@ export default function AdminDashboard() {
     }
   };
 
+  // Città e Paesi CRUD
+  const saveCittaPaese = async (data) => {
+    try {
+      if (editingCittaPaese) {
+        await api.patch(`/admin/citta-paesi/${editingCittaPaese.citta_paese_id}`, data);
+        toast.success("Aggiornato");
+        setShowCittaPaeseModal(false);
+        setEditingCittaPaese(null);
+      } else {
+        const { data: created } = await api.post(`/admin/citta-paesi`, data);
+        setShowCittaPaeseModal(false);
+        setEditingCittaPaese(null);
+        setPinModal({ cittaPaese: created });
+      }
+      fetchAll();
+    } catch (err) {
+      toast.error(formatApiError(err.response?.data?.detail) || err.message);
+    }
+  };
+
+  const deleteCittaPaese = async (id) => {
+    if (!window.confirm("Eliminare questa città/paese?")) return;
+    try {
+      await api.delete(`/admin/citta-paesi/${id}`);
+      toast.success("Eliminato");
+      fetchAll();
+    } catch (err) {
+      toast.error(formatApiError(err.response?.data?.detail) || err.message);
+    }
+  };
+
+  const regenCittaPaesePin = async (id) => {
+    try {
+      const { data } = await api.post(`/admin/citta-paesi/${id}/regen-pin`);
+      toast.success(`Nuovo PIN: ${data.pin}`);
+      fetchAll();
+    } catch (err) {
+      toast.error(formatApiError(err.response?.data?.detail) || err.message);
+    }
+  };
+
   const saveBusiness = async (data) => {
     try {
       const { proloco_id, ...rest } = data;
@@ -383,6 +557,21 @@ export default function AdminDashboard() {
     }
   };
 
+  const onImportCittaPaesi = async (file) => {
+    const fd = new FormData();
+    fd.append("file", file);
+    try {
+      const { data } = await api.post(`/admin/import-citta-paesi`, fd, { headers: { "Content-Type": "multipart/form-data" } });
+      toast.success(`Importati: ${data.inserted}, Saltati: ${data.skipped}, Duplicati: ${data.duplicates}`);
+      if (data.errors && data.errors.length > 0) {
+        console.warn("Errori importazione:", data.errors);
+      }
+      await fetchAll();
+    } catch (err) {
+      toast.error(formatApiError(err.response?.data?.detail) || err.message);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[var(--bg)]">
       <header className="bg-white border-b border-[var(--border)] px-6 py-4 flex items-center justify-between">
@@ -393,12 +582,128 @@ export default function AdminDashboard() {
         <Button variant="outline" onClick={logout} className="rounded-full" data-testid="admin-logout-btn"><LogOut className="w-4 h-4 mr-2" />{t("logout")}</Button>
       </header>
       <main className="p-6">
-        <Tabs defaultValue="prolocos">
+        <Tabs defaultValue="citta-paesi">
           <TabsList className="bg-white rounded-full p-1 mb-6">
+            <TabsTrigger value="citta-paesi" className="rounded-full px-6" data-testid="admin-tab-citta-paesi">Città e Paesi</TabsTrigger>
             <TabsTrigger value="prolocos" className="rounded-full px-6" data-testid="admin-tab-prolocos">{t("prolocos")}</TabsTrigger>
             <TabsTrigger value="businesses" className="rounded-full px-6" data-testid="admin-tab-businesses">{t("businesses")}</TabsTrigger>
             <TabsTrigger value="import" className="rounded-full px-6" data-testid="admin-tab-import">{t("import_xlsx")}</TabsTrigger>
           </TabsList>
+
+          {/* Città e Paesi Tab */}
+          <TabsContent value="citta-paesi">
+            <div className="bg-white rounded-2xl border border-[var(--border)] p-4">
+              <div className="flex items-center justify-between mb-4 gap-4">
+                <h2 className="font-display text-xl font-semibold">Città e Paesi ({filteredCittaPaesi.length}/{cittaPaesi.length})</h2>
+                <div className="flex items-center gap-2 flex-1 max-w-md">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)]" />
+                    <Input
+                      placeholder="Cerca Pro Loco, città o paese..."
+                      value={searchCittaPaese}
+                      onChange={(e) => setSearchCittaPaese(e.target.value)}
+                      className="pl-9 rounded-full"
+                      data-testid="search-citta-paese"
+                    />
+                  </div>
+                  <Button onClick={() => { setEditingCittaPaese(null); setShowCittaPaeseModal(true); }} className="rounded-full bg-[var(--primary)] hover:bg-[var(--primary-hover)]" data-testid="add-citta-paese-btn">
+                    <Plus className="w-4 h-4 mr-2" /> Aggiungi Città o Paese
+                  </Button>
+                </div>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nome</TableHead>
+                    <TableHead>Comune</TableHead>
+                    <TableHead>Referente</TableHead>
+                    <TableHead>PIN</TableHead>
+                    <TableHead>Link</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredCittaPaesi.length === 0 && (
+                    <TableRow><TableCell colSpan={6} className="text-center text-[var(--text-secondary)] py-8">{searchCittaPaese ? "Nessun risultato" : "Nessuna città o paese ancora"}</TableCell></TableRow>
+                  )}
+                  {filteredCittaPaesi.map((c) => {
+                    const cittaPaeseLink = c.slug ? `${window.location.origin}/c/${c.slug}` : null;
+                    return (
+                    <TableRow key={c.citta_paese_id} data-testid={`citta-paese-row-${c.citta_paese_id}`}>
+                      <TableCell className="font-medium">
+                        {c.nome}
+                        <div className="text-xs text-[var(--text-secondary)] font-normal">{c.provincia} • {c.tipo}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="text-sm">{c.comune || "—"}</div>
+                        <div className="text-xs text-[var(--text-secondary)]">{c.popolazione ? `${c.popolazione.toLocaleString()} ab.` : ""}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="text-sm font-medium">{c.referente_nome} {c.referente_cognome}</div>
+                        <div className="text-xs text-[var(--text-secondary)]">{c.email || "—"}</div>
+                        <div className="text-xs text-[var(--text-secondary)]">{c.phone || ""}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          <code className="bg-[var(--bg)] px-2 py-1 rounded font-mono text-sm" data-testid={`citta-paese-pin-${c.citta_paese_id}`}>{c.pin}</code>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-7 w-7 p-0"
+                            onClick={() => {
+                              navigator.clipboard.writeText(c.pin);
+                              toast.success("PIN copiato");
+                            }}
+                            title="Copia PIN"
+                            data-testid={`citta-paese-copy-pin-${c.citta_paese_id}`}
+                          >
+                            <Copy className="w-3.5 h-3.5" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {cittaPaeseLink ? (
+                          <div className="flex items-center gap-1">
+                            <code className="bg-[var(--bg)] px-2 py-1 rounded text-xs font-mono text-[var(--primary)] max-w-[150px] truncate" title={cittaPaeseLink}>
+                              /c/{c.slug}
+                            </code>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 w-7 p-0"
+                              onClick={() => {
+                                navigator.clipboard.writeText(cittaPaeseLink);
+                                toast.success("Link copiato!");
+                              }}
+                              title="Copia link"
+                            >
+                              <Copy className="w-3.5 h-3.5" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-7 w-7 p-0"
+                              onClick={() => window.open(cittaPaeseLink, '_blank')}
+                              title="Apri link"
+                            >
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </Button>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-[var(--text-secondary)]">—</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button size="sm" variant="ghost" onClick={() => regenCittaPaesePin(c.citta_paese_id)} title="Rigenera PIN" data-testid={`citta-paese-regen-${c.citta_paese_id}`}><RefreshCw className="w-4 h-4" /></Button>
+                        <Button size="sm" variant="ghost" onClick={() => { setEditingCittaPaese(c); setShowCittaPaeseModal(true); }} data-testid={`citta-paese-edit-${c.citta_paese_id}`}><Edit3 className="w-4 h-4" /></Button>
+                        <Button size="sm" variant="ghost" onClick={() => deleteCittaPaese(c.citta_paese_id)} data-testid={`citta-paese-delete-${c.citta_paese_id}`}><Trash2 className="w-4 h-4 text-[var(--danger)]" /></Button>
+                      </TableCell>
+                    </TableRow>
+                  );})}
+                </TableBody>
+              </Table>
+            </div>
+          </TabsContent>
 
           <TabsContent value="prolocos">
             <div className="bg-white rounded-2xl border border-[var(--border)] p-4">
@@ -408,7 +713,7 @@ export default function AdminDashboard() {
                   <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)]" />
                     <Input
-                      placeholder="Cerca Pro Loco..."
+                      placeholder="Cerca Pro Loco, città o paese..."
                       value={searchProloco}
                       onChange={(e) => setSearchProloco(e.target.value)}
                       className="pl-9 rounded-full"
@@ -575,28 +880,53 @@ export default function AdminDashboard() {
           </TabsContent>
 
           <TabsContent value="import">
-            <div className="bg-white rounded-2xl border border-[var(--border)] p-6 max-w-2xl">
-              <h2 className="font-display text-xl font-semibold mb-2"><Upload className="inline w-5 h-5 mr-2" />{t("import_xlsx")}</h2>
-              <p className="text-sm text-[var(--text-secondary)] mb-4">{t("import_tip")}</p>
-              <div className="space-y-3">
-                <div>
-                  <Label>Assign to Proloco (optional)</Label>
-                  <Select value={importTarget || "_all"} onValueChange={(v) => setImportTarget(v)}>
-                    <SelectTrigger data-testid="import-target-select"><SelectValue placeholder="—" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="_all">— No Proloco —</SelectItem>
-                      {prolocos.map((p) => <SelectItem key={p.proloco_id} value={p.proloco_id}>{p.name}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Import Attività */}
+              <div className="bg-white rounded-2xl border border-[var(--border)] p-6">
+                <h2 className="font-display text-xl font-semibold mb-2"><Upload className="inline w-5 h-5 mr-2" />Importa Attività</h2>
+                <p className="text-sm text-[var(--text-secondary)] mb-4">{t("import_tip")}</p>
+                <div className="space-y-3">
+                  <div>
+                    <Label>Assegna a Proloco (opzionale)</Label>
+                    <Select value={importTarget || "_all"} onValueChange={(v) => setImportTarget(v)}>
+                      <SelectTrigger data-testid="import-target-select"><SelectValue placeholder="—" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="_all">— Nessuna Proloco —</SelectItem>
+                        {prolocos.map((p) => <SelectItem key={p.proloco_id} value={p.proloco_id}>{p.name}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label>File (.xlsx, .xls, .csv)</Label>
+                    <Input
+                      type="file"
+                      accept=".xlsx,.xls,.csv"
+                      onChange={(e) => e.target.files?.[0] && onImport(e.target.files[0])}
+                      data-testid="admin-import-input"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <Label>File (.xlsx, .xls, .csv)</Label>
-                  <Input
-                    type="file"
-                    accept=".xlsx,.xls,.csv"
-                    onChange={(e) => e.target.files?.[0] && onImport(e.target.files[0])}
-                    data-testid="admin-import-input"
-                  />
+              </div>
+
+              {/* Import Città e Paesi */}
+              <div className="bg-white rounded-2xl border border-[var(--border)] p-6">
+                <h2 className="font-display text-xl font-semibold mb-2"><Upload className="inline w-5 h-5 mr-2" />Importa Città e Paesi</h2>
+                <p className="text-sm text-[var(--text-secondary)] mb-4">
+                  Importa da CSV con colonne: Nome, Prov., Tipo, Comune, Popolazione, Lat, Lon
+                </p>
+                <div className="space-y-3">
+                  <div className="text-xs text-[var(--warning)] bg-[var(--warning)]/10 border border-[var(--warning)]/30 rounded-lg p-3">
+                    <strong>Nota:</strong> I campi "Referente" saranno impostati a "Da inserire" e dovranno essere aggiornati manualmente dopo l'importazione.
+                  </div>
+                  <div>
+                    <Label>File (.xlsx, .xls, .csv)</Label>
+                    <Input
+                      type="file"
+                      accept=".xlsx,.xls,.csv"
+                      onChange={(e) => e.target.files?.[0] && onImportCittaPaesi(e.target.files[0])}
+                      data-testid="admin-import-citta-paesi-input"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -624,15 +954,36 @@ export default function AdminDashboard() {
         </DialogContent>
       </Dialog>
 
+      {/* Modal Città/Paese */}
+      <Dialog open={showCittaPaeseModal} onOpenChange={setShowCittaPaeseModal}>
+        <DialogContent className="rounded-3xl max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{editingCittaPaese ? "Modifica Città/Paese" : "Aggiungi Città o Paese"}</DialogTitle>
+            <DialogDescription className="sr-only">Città o Paese</DialogDescription>
+          </DialogHeader>
+          <CittaPaeseForm initial={editingCittaPaese} onSave={saveCittaPaese} onCancel={() => setShowCittaPaeseModal(false)} />
+        </DialogContent>
+      </Dialog>
+
+      {/* PIN Modal - gestisce sia Proloco che Città/Paese */}
       <Dialog open={!!pinModal} onOpenChange={(v) => !v && setPinModal(null)}>
         <DialogContent className="rounded-3xl max-w-md p-0 overflow-hidden" data-testid="pin-modal">
           <div className="bg-[var(--secondary)] text-white p-6">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-6 h-6" />
-              <div className="text-sm uppercase tracking-widest font-semibold">Proloco</div>
+              <div className="text-sm uppercase tracking-widest font-semibold">
+                {pinModal?.proloco ? "Proloco" : "Città/Paese"}
+              </div>
             </div>
-            <h2 className="font-display text-2xl font-bold mt-1">{pinModal?.proloco?.name}</h2>
-            <div className="text-white/85 text-xs mt-1">{pinModal?.proloco?.comune} • {pinModal?.proloco?.region}</div>
+            <h2 className="font-display text-2xl font-bold mt-1">
+              {pinModal?.proloco?.name || pinModal?.cittaPaese?.nome}
+            </h2>
+            <div className="text-white/85 text-xs mt-1">
+              {pinModal?.proloco
+                ? `${pinModal.proloco.comune} • ${pinModal.proloco.region}`
+                : `${pinModal?.cittaPaese?.comune} • ${pinModal?.cittaPaese?.provincia}`
+              }
+            </div>
           </div>
           <div className="p-6 space-y-4">
             <div>
@@ -645,14 +996,15 @@ export default function AdminDashboard() {
                   className="flex-1 bg-[var(--bg)] border border-[var(--border)] rounded-2xl px-4 py-4 font-mono text-3xl font-bold tracking-[0.3em] text-center text-[var(--primary)]"
                   data-testid="generated-pin-value"
                 >
-                  {pinModal?.proloco?.pin}
+                  {pinModal?.proloco?.pin || pinModal?.cittaPaese?.pin}
                 </code>
                 <Button
                   variant="outline"
                   className="rounded-2xl h-[60px] w-[60px] p-0"
                   onClick={() => {
-                    if (pinModal?.proloco?.pin) {
-                      navigator.clipboard.writeText(pinModal.proloco.pin);
+                    const pin = pinModal?.proloco?.pin || pinModal?.cittaPaese?.pin;
+                    if (pin) {
+                      navigator.clipboard.writeText(pin);
                       toast.success(t("pin_copied"));
                     }
                   }}
@@ -665,6 +1017,7 @@ export default function AdminDashboard() {
             <p className="text-sm text-[var(--text-secondary)] bg-[var(--warning)]/20 border border-[var(--warning)] rounded-xl p-3">
               {t("pin_info")}
             </p>
+            {/* Link per Proloco */}
             {pinModal?.proloco?.slug && (
               <div>
                 <div className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-semibold mb-2">
@@ -688,9 +1041,42 @@ export default function AdminDashboard() {
                 </div>
               </div>
             )}
-            {pinModal?.proloco?.center && (
+            {/* Link per Città/Paese */}
+            {pinModal?.cittaPaese?.slug && (
+              <div>
+                <div className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-semibold mb-2">
+                  <Link2 className="w-3.5 h-3.5 inline mr-1" />
+                  Link pubblico
+                </div>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 bg-[var(--bg)] border border-[var(--border)] rounded-lg px-3 py-2 text-sm font-mono text-[var(--primary)] truncate">
+                    {window.location.origin}/c/{pinModal.cittaPaese.slug}
+                  </code>
+                  <Button
+                    variant="outline"
+                    className="rounded-lg h-10 w-10 p-0"
+                    onClick={() => {
+                      navigator.clipboard.writeText(`${window.location.origin}/c/${pinModal.cittaPaese.slug}`);
+                      toast.success("Link copiato!");
+                    }}
+                  >
+                    <Copy className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+            {/* Referente per Città/Paese */}
+            {pinModal?.cittaPaese && (
+              <div className="text-xs text-[var(--text-secondary)]">
+                <span className="font-semibold">Referente:</span> {pinModal.cittaPaese.referente_nome} {pinModal.cittaPaese.referente_cognome}
+              </div>
+            )}
+            {/* Coordinate */}
+            {(pinModal?.proloco?.center || pinModal?.cittaPaese?.center) && (
               <div className="text-xs text-[var(--text-secondary)] flex items-center gap-1">
-                <MapPin className="w-3 h-3" /> {pinModal.proloco.center[0].toFixed(4)}, {pinModal.proloco.center[1].toFixed(4)}
+                <MapPin className="w-3 h-3" />
+                {(pinModal?.proloco?.center || pinModal?.cittaPaese?.center)[0].toFixed(4)},
+                {(pinModal?.proloco?.center || pinModal?.cittaPaese?.center)[1].toFixed(4)}
               </div>
             )}
             <Button
