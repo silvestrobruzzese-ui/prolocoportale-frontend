@@ -39,7 +39,7 @@ export function useGeolocation(autoAsk = false) {
   }, []);
 
   useEffect(() => {
-    if (autoAsk && localStorage.getItem("pm_geo_granted") === "1") request();
+    if (autoAsk) request();
   }, [autoAsk, request]);
 
   return { position: position || DEFAULT_CENTER, hasPosition: !!position, error, status, request, watch, DEFAULT_CENTER };

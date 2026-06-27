@@ -41,7 +41,6 @@ export default function HomePage() {
   const [authOpen, setAuthOpen] = useState(false);
   const [recenterTrigger, setRecenterTrigger] = useState(0);
   const [navigatingTo, setNavigatingTo] = useState(null);
-  const [showLocationPrompt, setShowLocationPrompt] = useState(true);
   // Hide welcome screen if coming from a landing page (citta or proloco param in URL)
   const [showWelcome, setShowWelcome] = useState(() => {
     const params = new URLSearchParams(window.location.search);
@@ -261,7 +260,6 @@ export default function HomePage() {
 
   useEffect(() => {
     if (hasPosition) {
-      setShowLocationPrompt(false);
       // Centra la mappa sulla posizione utente quando viene ottenuta
       setRecenterTrigger((n) => n + 1);
     }
@@ -446,7 +444,7 @@ export default function HomePage() {
       )}
 
       {/* Sponsor banner at bottom - hidden when any panel/modal is open */}
-      {!detailOpen && !authOpen && !showWelcome && !showLocationPrompt && <SponsorBanner />}
+      {!detailOpen && !authOpen && !showWelcome && <SponsorBanner />}
 
       {/* Map attribution - bottom of screen */}
       <div
@@ -530,36 +528,6 @@ export default function HomePage() {
               <p className="text-[#1e3a5f]/70 text-sm text-center max-w-xs">
                 {t("welcome_desc") || "Scopri le attività, i prodotti e le tradizioni del territorio"}
               </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Location prompt overlay */}
-      {!showWelcome && showLocationPrompt && !hasPosition && status !== "asking" && (
-        <div className="absolute inset-0 z-[1100] flex items-end sm:items-center justify-center bg-black/30 p-4">
-          <div className="relative bg-white rounded-3xl max-w-md w-full overflow-hidden slide-up grain">
-            <div className="bg-[var(--primary)] p-6 text-white">
-              <div className="text-3xl">📍</div>
-              <h2 className="font-display text-2xl font-bold mt-2">{t("enable_location")}</h2>
-              <p className="text-white/85 mt-1 text-sm">{t("enable_location_desc")}</p>
-            </div>
-            <div className="p-5 flex flex-col gap-2">
-              <Button
-                onClick={() => { request(); setShowLocationPrompt(false); }}
-                className="rounded-full bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white"
-                data-testid="enable-location-btn"
-              >
-                <MapPin className="w-4 h-4 mr-2" /> {t("share_location")}
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={() => setShowLocationPrompt(false)}
-                className="rounded-full"
-                data-testid="skip-location-btn"
-              >
-                {t("skip_location")}
-              </Button>
             </div>
           </div>
         </div>
