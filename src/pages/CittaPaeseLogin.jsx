@@ -1,4 +1,4 @@
-// Proloco PIN login page
+// Città/Paese PIN login page
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api, { formatApiError } from "@/lib/api";
@@ -6,10 +6,10 @@ import { useI18n } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { KeyRound, ArrowLeft } from "lucide-react";
+import { Building2, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
-export default function PrologoLogin() {
+export default function CittaPaeseLogin() {
   const { t } = useI18n();
   const navigate = useNavigate();
   const [pin, setPin] = useState("");
@@ -19,32 +19,14 @@ export default function PrologoLogin() {
     e.preventDefault();
     setLoading(true);
     try {
-      // Prova prima login come Proloco, poi come Città/Paese
-      let data = null;
-      let role = null;
-
-      try {
-        const res = await api.post("/proloco/login", { pin: pin.toUpperCase() });
-        data = res.data;
-        role = "proloco";
-      } catch (err) {
-        // Se fallisce con 401, prova come Città/Paese
-        if (err.response?.status === 401) {
-          const res = await api.post("/citta-paese/login", { pin: pin.toUpperCase() });
-          data = res.data;
-          role = "citta_paese";
-        } else {
-          throw err;
-        }
-      }
-
+      const { data } = await api.post("/citta-paese/login", { pin: pin.toUpperCase() });
       if (data?.access_token) {
-        // Clear other tokens to ensure proloco token takes precedence
+        // Clear other tokens to ensure citta_paese token takes precedence
         localStorage.removeItem("pm_user_token");
         localStorage.removeItem("pm_admin_token");
         localStorage.setItem("pm_proloco_token", data.access_token);
       }
-      toast.success(`Welcome ${data?.name || data?.nome || ""}`);
+      toast.success(`Benvenuto ${data?.nome || ""}`);
       navigate("/proloco");
     } catch (err) {
       toast.error(formatApiError(err.response?.data?.detail) || err.message);
@@ -56,19 +38,19 @@ export default function PrologoLogin() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--bg)] p-4">
       <div className="absolute top-4 left-4">
-        <Link to="/" className="inline-flex items-center gap-1 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]" data-testid="proloco-login-back">
+        <Link to="/" className="inline-flex items-center gap-1 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)]" data-testid="citta-login-back">
           <ArrowLeft className="w-4 h-4" /> {t("home")}
         </Link>
       </div>
       <div className="bg-white rounded-3xl shadow-xl max-w-md w-full overflow-hidden">
-        <div className="bg-[var(--secondary)] text-white p-6">
-          <KeyRound className="w-8 h-8" />
-          <h1 className="font-display text-2xl font-bold mt-2">{t("sign_in_proloco")}</h1>
-          <p className="text-white/85 text-sm mt-1">{t("pin_login_hint")}</p>
+        <div className="bg-[#1e3a5f] text-white p-6">
+          <Building2 className="w-8 h-8" />
+          <h1 className="font-display text-2xl font-bold mt-2">Accesso Città e Paesi</h1>
+          <p className="text-white/85 text-sm mt-1">Inserisci il PIN alfanumerico fornito dal superadmin</p>
         </div>
         <form onSubmit={submit} className="p-6 space-y-3">
           <div>
-            <Label htmlFor="pin">{t("pin")}</Label>
+            <Label htmlFor="pin">PIN alfanumerico</Label>
             <Input
               id="pin"
               value={pin}
@@ -77,16 +59,16 @@ export default function PrologoLogin() {
               maxLength={16}
               placeholder="XXXXXXXX"
               className="font-mono text-lg tracking-widest uppercase"
-              data-testid="proloco-pin-input"
+              data-testid="citta-pin-input"
             />
           </div>
-          <Button type="submit" disabled={loading || !pin} className="w-full rounded-full bg-[var(--primary)] hover:bg-[var(--primary-hover)]" data-testid="proloco-login-submit">
-            {loading ? "…" : t("submit")}
+          <Button type="submit" disabled={loading || !pin} className="w-full rounded-full bg-[#1e3a5f] hover:bg-[#2d4a6f]" data-testid="citta-login-submit">
+            {loading ? "..." : "Conferma"}
           </Button>
         </form>
         <div className="px-6 pb-6">
           <p className="text-xs text-center text-[var(--text-secondary)]">
-            Sei una Città o Paese? <Link to="/citta/login" className="text-[#1e3a5f] hover:underline">Accedi qui</Link>
+            Sei una Pro Loco? <Link to="/proloco/login" className="text-[var(--primary)] hover:underline">Accedi qui</Link>
           </p>
         </div>
       </div>
