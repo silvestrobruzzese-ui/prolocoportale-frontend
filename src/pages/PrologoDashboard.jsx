@@ -311,9 +311,9 @@ export default function PrologoDashboard() {
   const [showBrandingModal, setShowBrandingModal] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
 
-  // Get the personalized link for this Pro Loco
+  // Get the personalized link for this Pro Loco or Città/Paese
   const personalizedLink = proloco?.slug
-    ? `${window.location.origin}/p/${proloco.slug}`
+    ? `${window.location.origin}/${proloco.citta_paese_id ? 'c' : 'p'}/${proloco.slug}`
     : null;
 
   // Filtered businesses for list (sorted alphabetically)
@@ -478,9 +478,9 @@ export default function PrologoDashboard() {
       <header className="bg-white border-b border-[var(--border)] px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-xs uppercase tracking-widest text-[var(--secondary-hover)] font-semibold">Proloco</div>
-            <h1 className="font-display text-2xl font-bold">{proloco?.name || t("proloco_panel")}</h1>
-            {proloco && <div className="text-xs text-[var(--text-secondary)]">{proloco.region} • {proloco.country} • {(proloco.territory_polygon || []).length} pts</div>}
+            <div className="text-xs uppercase tracking-widest text-[var(--secondary-hover)] font-semibold">{proloco?.citta_paese_id ? "Città/Paese" : "Proloco"}</div>
+            <h1 className="font-display text-2xl font-bold">{proloco?.name || proloco?.nome || t("proloco_panel")}</h1>
+            {proloco && <div className="text-xs text-[var(--text-secondary)]">{proloco.region || proloco.provincia || ""} • {proloco.country || "IT"} • {(proloco.territory_polygon || []).length} pts</div>}
           </div>
           <div className="flex items-center gap-2">
             <Button variant="outline" onClick={() => setShowBrandingModal(true)} className="rounded-full" data-testid="proloco-branding-btn">

@@ -19,14 +19,32 @@ export default function PrologoLogin() {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await api.post("/proloco/login", { pin: pin.toUpperCase() });
+      // Prova prima login come Proloco, poi come Città/Paese
+      let data = null;
+      let role = null;
+
+      try {
+        const res = await api.post("/proloco/login", { pin: pin.toUpperCase() });
+        data = res.data;
+        role = "proloco";
+      } catch (err) {
+        // Se fallisce con 401, prova come Città/Paese
+        if (err.response?.status === 401) {
+          const res = await api.post("/citta-paese/login", { pin: pin.toUpperCase() });
+          data = res.data;
+          role = "citta_paese";
+        } else {
+          throw err;
+        }
+      }
+
       if (data?.access_token) {
         // Clear other tokens to ensure proloco token takes precedence
         localStorage.removeItem("pm_user_token");
         localStorage.removeItem("pm_admin_token");
         localStorage.setItem("pm_proloco_token", data.access_token);
       }
-      toast.success(`Welcome ${data?.name || ""}`);
+      toast.success(`Welcome ${data?.name || data?.nome || ""}`);
       navigate("/proloco");
     } catch (err) {
       toast.error(formatApiError(err.response?.data?.detail) || err.message);
