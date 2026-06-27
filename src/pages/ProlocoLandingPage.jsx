@@ -30,7 +30,7 @@ export default function ProlocoLandingPage() {
 
   const handleExplore = () => {
     // Navigate to homepage with Pro Loco slug in URL
-    navigate(`/?proloco=${proloco.slug}`);
+    navigate(`/portale?proloco=${proloco.slug}`);
   };
 
   if (loading) {
@@ -45,7 +45,7 @@ export default function ProlocoLandingPage() {
     return (
       <div className="min-h-screen bg-[#F9F6F1] flex flex-col items-center justify-center p-4">
         <div className="text-[#1e3a5f] text-xl mb-4">{error}</div>
-        <Button onClick={() => navigate("/")} className="rounded-full">
+        <Button onClick={() => navigate("/portale")} className="rounded-full">
           Vai alla mappa
         </Button>
       </div>

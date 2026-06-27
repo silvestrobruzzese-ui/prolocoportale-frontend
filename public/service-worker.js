@@ -1,4 +1,4 @@
-const CACHE_NAME = 'proximap-v4';
+const CACHE_NAME = 'proximap-v5';
 const urlsToCache = [
   '/',
   '/index.html',

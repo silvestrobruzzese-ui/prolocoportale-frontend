@@ -45,7 +45,7 @@ export default function CittaPaeseLandingPage() {
     return (
       <div className="min-h-screen bg-[#F9F6F1] flex flex-col items-center justify-center p-4">
         <div className="text-[#1e3a5f] text-xl mb-4">{error}</div>
-        <Button onClick={() => navigate("/")} className="rounded-full">
+        <Button onClick={() => navigate("/portale")} className="rounded-full">
           Vai alla mappa
         </Button>
       </div>
