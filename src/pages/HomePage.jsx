@@ -42,7 +42,11 @@ export default function HomePage() {
   const [recenterTrigger, setRecenterTrigger] = useState(0);
   const [navigatingTo, setNavigatingTo] = useState(null);
   const [showLocationPrompt, setShowLocationPrompt] = useState(true);
-  const [showWelcome, setShowWelcome] = useState(true);
+  // Hide welcome screen if coming from a landing page (citta or proloco param in URL)
+  const [showWelcome, setShowWelcome] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return !params.get("citta") && !params.get("proloco");
+  });
   const [searchedCenter, setSearchedCenter] = useState(null);
   const [searchZoom, setSearchZoom] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -51,13 +55,15 @@ export default function HomePage() {
   const [camminoRoute, setCamminoRoute] = useState(null);
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
 
-  // Check if user came from a Pro Loco landing page (via URL param)
+  // Check if user came from a Pro Loco or Città/Paese landing page (via URL param)
   useEffect(() => {
-    const slug = searchParams.get("proloco");
-    if (slug && slug !== prolocoSlug) {
-      setProlocoSlug(slug);
+    const prolocoParam = searchParams.get("proloco");
+    const cittaParam = searchParams.get("citta");
+
+    if (prolocoParam && prolocoParam !== prolocoSlug) {
+      setProlocoSlug(prolocoParam);
       // Fetch Pro Loco data to get center coordinates
-      api.get(`/proloco/by-slug/${slug}`)
+      api.get(`/proloco/by-slug/${prolocoParam}`)
         .then(({ data }) => {
           if (data.center) {
             setSearchedCenter(data.center);
@@ -69,7 +75,21 @@ export default function HomePage() {
         .catch(() => {
           // Pro Loco not found, ignore
         });
-    } else if (!slug) {
+    } else if (cittaParam) {
+      // Fetch Città/Paese data to get center coordinates
+      api.get(`/citta-paese/by-slug/${cittaParam}`)
+        .then(({ data }) => {
+          if (data.center) {
+            setSearchedCenter(data.center);
+            setSearchZoom(14);
+            setShowWelcome(false);
+            setRecenterTrigger((n) => n + 1);
+          }
+        })
+        .catch(() => {
+          // Città/Paese not found, ignore
+        });
+    } else if (!prolocoParam && !cittaParam) {
       setProlocoSlug(null);
     }
   }, [searchParams, prolocoSlug]);
