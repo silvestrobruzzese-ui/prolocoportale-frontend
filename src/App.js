@@ -16,6 +16,8 @@ import ProlocoLandingPage from "@/pages/ProlocoLandingPage";
 import CittaPaeseLandingPage from "@/pages/CittaPaeseLandingPage";
 import CittaPaeseLogin from "@/pages/CittaPaeseLogin";
 import PaywallPage from "@/pages/PaywallPage";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TermsOfService from "@/pages/TermsOfService";
 
 function AppRoutes() {
   return (
@@ -29,6 +31,8 @@ function AppRoutes() {
       <Route path="/proloco/login" element={<PrologoLogin />} />
       <Route path="/proloco" element={<PrologoDashboard />} />
       <Route path="/citta/login" element={<CittaPaeseLogin />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<TermsOfService />} />
     </Routes>
   );
 }
