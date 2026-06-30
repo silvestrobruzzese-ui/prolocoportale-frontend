@@ -30,19 +30,10 @@
 
         <title>ProxiMap</title>
 
-        <!-- Make Leaflet attribution transparent (no white background) -->
+        <!-- Hide Leaflet attribution (we have custom one on the left) -->
         <style>
             .leaflet-control-attribution {
-                background: transparent !important;
-                background-color: transparent !important;
-                box-shadow: none !important;
-                color: #1F2937 !important;
-                font-size: 10px !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            .leaflet-control-attribution a {
-                color: #1F2937 !important;
+                display: none !important;
             }
         </style>
         <script>window.addEventListener("error",function(e){if(e.error instanceof DOMException&&e.error.name==="DataCloneError"&&e.message&&e.message.includes("PerformanceServerTiming")){e.stopImmediatePropagation();e.preventDefault()}},true);</script>
