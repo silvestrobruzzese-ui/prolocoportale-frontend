@@ -449,7 +449,7 @@ export default function HomePage() {
       {/* Map attribution - bottom of screen */}
       <div
         className="absolute bottom-1 left-3 z-[999]"
-        style={{ fontSize: '10px', color: '#4B5563' }}
+        style={{ fontSize: '10px', color: '#1F2937' }}
       >
         © OpenStreetMap contributors, Overture Maps Foundation
       </div>
@@ -457,7 +457,7 @@ export default function HomePage() {
       {/* Copyright MB Consulting */}
       <div
         className="absolute bottom-1 right-3 z-[999]"
-        style={{ fontSize: '10px', color: '#4B5563' }}
+        style={{ fontSize: '10px', color: '#1F2937' }}
       >
         © 2026 MB Consulting
       </div>
