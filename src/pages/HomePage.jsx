@@ -454,6 +454,14 @@ export default function HomePage() {
         © OpenStreetMap contributors, Overture Maps Foundation
       </div>
 
+      {/* Copyright MB Consulting */}
+      <div
+        className="absolute bottom-1 right-3 z-[999]"
+        style={{ fontSize: '10px', color: '#9CA3AF' }}
+      >
+        © 2026 MB Consulting
+      </div>
+
       {/* Recenter / locate / fullscreen fab */}
       <div className="absolute right-3 sm:right-4 bottom-28 z-[1000] flex flex-col gap-2">
         <button
