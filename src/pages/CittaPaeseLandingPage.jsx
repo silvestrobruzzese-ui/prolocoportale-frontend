@@ -90,17 +90,17 @@ export default function CittaPaeseLandingPage() {
 
           <Button
             onClick={handleExplore}
-            className="rounded-full bg-[#1e3a5f] hover:bg-[#2d4a6f] text-white px-10 py-6 text-lg font-semibold shadow-xl mt-2"
+            className="rounded-full bg-[#1e3a5f] hover:bg-[#2d4a6f] text-white px-10 py-6 text-lg font-semibold shadow-xl mt-2 mb-6"
             data-testid="enter-app-btn"
           >
             <MapPin className="w-5 h-5 mr-2" /> {t("explore_map") || "Esplora la Mappa"}
           </Button>
-          <p className="text-[#1e3a5f]/70 text-sm text-center max-w-xs">
-            {t("welcome_desc") || "Scopri le attività, i prodotti e le tradizioni del territorio"}
-          </p>
         </div>
         {/* Footer with Copyright and Legal Links */}
-        <div className="absolute bottom-4 flex flex-col items-center gap-1">
+        <div className="mt-6 pb-4 flex flex-col items-center gap-2">
+          <p className="text-[#1e3a5f]/70 text-sm text-center">
+            Scopri le attività e tutti i servizi della Calabria
+          </p>
           <div className="flex gap-3 text-[#1e3a5f]/60 text-xs">
             <button onClick={() => navigate("/privacy")} className="hover:text-[#1e3a5f] underline">
               Privacy Policy
