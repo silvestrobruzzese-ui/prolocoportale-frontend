@@ -70,7 +70,7 @@ export default function CittaPaeseLandingPage() {
         <img
           src={coverImage}
           alt={citta?.nome || "Città"}
-          className="max-w-full max-h-[55vh] object-contain rounded-2xl shadow-2xl"
+          className="max-w-full max-h-[50vh] object-contain rounded-2xl shadow-2xl mt-6"
           onError={(e) => {
             // Fallback to default image if image fails to load
             e.target.src = "/welcome-hero.png";

@@ -70,7 +70,7 @@ export default function ProlocoLandingPage() {
         <img
           src={coverImage}
           alt={proloco?.name || "Pro Loco"}
-          className="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl"
+          className="max-w-full max-h-[50vh] object-contain rounded-2xl shadow-2xl mt-6"
           onError={(e) => {
             // Fallback to default image if Pro Loco image fails to load
             e.target.src = "/welcome-hero.png";
