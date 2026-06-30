@@ -135,16 +135,30 @@ export default function MapView({
 }) {
   const mapRef = useRef(null);
 
-  // Remove Leaflet attribution control after map renders
+  // Remove Leaflet attribution control continuously
   useEffect(() => {
     const removeAttribution = () => {
       const attributions = document.querySelectorAll('.leaflet-control-attribution');
-      attributions.forEach(el => el.remove());
+      attributions.forEach(el => {
+        el.style.display = 'none';
+        el.remove();
+      });
     };
-    // Remove immediately and after a delay (in case it renders late)
+
+    // Remove immediately
     removeAttribution();
-    const timer = setTimeout(removeAttribution, 500);
-    return () => clearTimeout(timer);
+
+    // Keep checking and removing (Leaflet may re-add it)
+    const interval = setInterval(removeAttribution, 100);
+
+    // Also use MutationObserver to catch new additions
+    const observer = new MutationObserver(removeAttribution);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      clearInterval(interval);
+      observer.disconnect();
+    };
   }, []);
 
   const selectedBiz = useMemo(
