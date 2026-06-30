@@ -118,6 +118,21 @@ function MapRecenter({ center, zoom, trigger }) {
   return null;
 }
 
+// Component to remove attribution control from map instance
+function RemoveAttribution() {
+  const map = useMap();
+  useEffect(() => {
+    // Remove attribution control from map
+    map.attributionControl?.remove();
+
+    // Also hide via DOM just in case
+    const container = map.getContainer();
+    const attributions = container.querySelectorAll('.leaflet-control-attribution');
+    attributions.forEach(el => el.remove());
+  }, [map]);
+  return null;
+}
+
 export default function MapView({
   center,
   zoom = 18,
@@ -135,28 +150,6 @@ export default function MapView({
 }) {
   const mapRef = useRef(null);
 
-  // Hide Leaflet attribution with injected style
-  useEffect(() => {
-    // Inject style directly into head
-    const styleId = 'hide-leaflet-attribution';
-    if (!document.getElementById(styleId)) {
-      const style = document.createElement('style');
-      style.id = styleId;
-      style.textContent = `
-        .leaflet-control-attribution,
-        .leaflet-control-attribution * {
-          display: none !important;
-          visibility: hidden !important;
-          opacity: 0 !important;
-          width: 0 !important;
-          height: 0 !important;
-          position: absolute !important;
-          left: -9999px !important;
-        }
-      `;
-      document.head.appendChild(style);
-    }
-  }, []);
 
   const selectedBiz = useMemo(
     () => businesses.find((b) => b.business_id === selectedBusinessId),
@@ -230,6 +223,7 @@ export default function MapView({
       />
 
       <MapRecenter center={center} zoom={zoom} trigger={recenterTrigger} />
+      <RemoveAttribution />
 
       {hasUserPosition && (
         <Marker position={userPosition} icon={userIcon()} data-testid="user-marker" />
