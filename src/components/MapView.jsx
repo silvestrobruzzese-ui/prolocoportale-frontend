@@ -206,18 +206,26 @@ export default function MapView({
   }, [camminoTappe]);
 
   return (
-    <div className="relative w-full h-full" style={{
-      '--hide-attribution': 'none'
-    }}>
+    <div className="relative w-full h-full">
     <style>{`
-      .leaflet-control-attribution {
+      .leaflet-control-attribution,
+      .leaflet-bottom.leaflet-right,
+      .leaflet-control-container .leaflet-bottom.leaflet-right {
+        background: transparent !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+        color: transparent !important;
+        font-size: 0 !important;
+        height: 0 !important;
+        width: 0 !important;
+        overflow: hidden !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .leaflet-control-attribution a,
+      .leaflet-control-attribution span {
         display: none !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
-        position: absolute !important;
-        left: -99999px !important;
-        top: -99999px !important;
       }
     `}</style>
     <MapContainer
