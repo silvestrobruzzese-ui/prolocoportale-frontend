@@ -322,21 +322,6 @@ export default function MapView({
         />
       )}
     </MapContainer>
-    <div
-      style={{
-        position: 'absolute',
-        bottom: '4px',
-        right: '4px',
-        fontSize: '10px',
-        color: '#9CA3AF',
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        padding: '2px 6px',
-        borderRadius: '2px',
-        zIndex: 1000,
-      }}
-    >
-      © OpenStreetMap contributors, Overture Maps Foundation
-    </div>
     </div>
   );
 }
