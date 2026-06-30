@@ -135,30 +135,27 @@ export default function MapView({
 }) {
   const mapRef = useRef(null);
 
-  // Remove Leaflet attribution control continuously
+  // Hide Leaflet attribution with injected style
   useEffect(() => {
-    const removeAttribution = () => {
-      const attributions = document.querySelectorAll('.leaflet-control-attribution');
-      attributions.forEach(el => {
-        el.style.display = 'none';
-        el.remove();
-      });
-    };
-
-    // Remove immediately
-    removeAttribution();
-
-    // Keep checking and removing (Leaflet may re-add it)
-    const interval = setInterval(removeAttribution, 100);
-
-    // Also use MutationObserver to catch new additions
-    const observer = new MutationObserver(removeAttribution);
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    return () => {
-      clearInterval(interval);
-      observer.disconnect();
-    };
+    // Inject style directly into head
+    const styleId = 'hide-leaflet-attribution';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.textContent = `
+        .leaflet-control-attribution,
+        .leaflet-control-attribution * {
+          display: none !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
+          width: 0 !important;
+          height: 0 !important;
+          position: absolute !important;
+          left: -9999px !important;
+        }
+      `;
+      document.head.appendChild(style);
+    }
   }, []);
 
   const selectedBiz = useMemo(
