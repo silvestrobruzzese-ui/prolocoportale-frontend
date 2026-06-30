@@ -135,6 +135,18 @@ export default function MapView({
 }) {
   const mapRef = useRef(null);
 
+  // Remove Leaflet attribution control after map renders
+  useEffect(() => {
+    const removeAttribution = () => {
+      const attributions = document.querySelectorAll('.leaflet-control-attribution');
+      attributions.forEach(el => el.remove());
+    };
+    // Remove immediately and after a delay (in case it renders late)
+    removeAttribution();
+    const timer = setTimeout(removeAttribution, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   const selectedBiz = useMemo(
     () => businesses.find((b) => b.business_id === selectedBusinessId),
     [businesses, selectedBusinessId]
