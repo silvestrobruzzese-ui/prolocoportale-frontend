@@ -97,7 +97,7 @@ export default function CittaPaeseLandingPage() {
           </Button>
         </div>
         {/* Footer with Copyright and Legal Links */}
-        <div className="mt-8 pb-8 flex flex-col items-center gap-2">
+        <div className="mt-8 pb-12 flex flex-col items-center gap-2">
           <p className="text-[#1e3a5f]/70 text-sm text-center">
             Scopri le attività e tutti i servizi della Calabria
           </p>
