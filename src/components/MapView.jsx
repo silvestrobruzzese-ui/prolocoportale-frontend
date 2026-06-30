@@ -118,20 +118,6 @@ function MapRecenter({ center, zoom, trigger }) {
   return null;
 }
 
-// Component to remove attribution control from map instance
-function RemoveAttribution() {
-  const map = useMap();
-  useEffect(() => {
-    // Remove attribution control from map
-    map.attributionControl?.remove();
-
-    // Also hide via DOM just in case
-    const container = map.getContainer();
-    const attributions = container.querySelectorAll('.leaflet-control-attribution');
-    attributions.forEach(el => el.remove());
-  }, [map]);
-  return null;
-}
 
 export default function MapView({
   center,
@@ -207,27 +193,6 @@ export default function MapView({
 
   return (
     <div className="relative w-full h-full">
-    <style>{`
-      .leaflet-control-attribution,
-      .leaflet-bottom.leaflet-right,
-      .leaflet-control-container .leaflet-bottom.leaflet-right {
-        background: transparent !important;
-        background-color: transparent !important;
-        box-shadow: none !important;
-        border: none !important;
-        color: transparent !important;
-        font-size: 0 !important;
-        height: 0 !important;
-        width: 0 !important;
-        overflow: hidden !important;
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-      .leaflet-control-attribution a,
-      .leaflet-control-attribution span {
-        display: none !important;
-      }
-    `}</style>
     <MapContainer
       center={center}
       zoom={zoom}
@@ -236,15 +201,14 @@ export default function MapView({
       className="w-full h-full"
       ref={mapRef}
       data-testid="map-container"
-      attributionControl={false}
+      attributionControl={true}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution=""
+        attribution="&copy; OpenStreetMap contributors, Overture Maps Foundation"
       />
 
       <MapRecenter center={center} zoom={zoom} trigger={recenterTrigger} />
-      <RemoveAttribution />
 
       {hasUserPosition && (
         <Marker position={userPosition} icon={userIcon()} data-testid="user-marker" />
