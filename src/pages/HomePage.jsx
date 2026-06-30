@@ -468,7 +468,7 @@ export default function HomePage() {
 
       {/* Copyright MB Consulting - bottom right */}
       <div
-        className="absolute bottom-1 right-3 z-[999]"
+        className="absolute bottom-6 right-3 z-[999]"
         style={{ fontSize: '10px', color: '#1F2937' }}
       >
         © 2026 MB Consulting
