@@ -70,14 +70,14 @@ export default function CittaPaeseLandingPage() {
         <img
           src={coverImage}
           alt={citta?.nome || "Città"}
-          className="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl"
+          className="max-w-full max-h-[55vh] object-contain rounded-2xl shadow-2xl"
           onError={(e) => {
             // Fallback to default image if image fails to load
             e.target.src = "/welcome-hero.png";
           }}
         />
 
-        <div className="mt-6 flex flex-col items-center gap-3">
+        <div className="mt-4 flex flex-col items-center gap-2">
           {/* Città/Paese name */}
           <h1 className="text-2xl font-bold text-[#1e3a5f] text-center">
             {citta?.nome}
@@ -90,14 +90,14 @@ export default function CittaPaeseLandingPage() {
 
           <Button
             onClick={handleExplore}
-            className="rounded-full bg-[#1e3a5f] hover:bg-[#2d4a6f] text-white px-10 py-6 text-lg font-semibold shadow-xl mt-2 mb-6"
+            className="rounded-full bg-[#1e3a5f] hover:bg-[#2d4a6f] text-white px-10 py-6 text-lg font-semibold shadow-xl mt-2"
             data-testid="enter-app-btn"
           >
             <MapPin className="w-5 h-5 mr-2" /> {t("explore_map") || "Esplora la Mappa"}
           </Button>
         </div>
         {/* Footer with Copyright and Legal Links */}
-        <div className="mt-8 pb-12 flex flex-col items-center gap-2">
+        <div className="mt-4 pb-4 flex flex-col items-center gap-1">
           <p className="text-[#1e3a5f]/70 text-sm text-center">
             Scopri le attività e tutti i servizi della Calabria
           </p>
