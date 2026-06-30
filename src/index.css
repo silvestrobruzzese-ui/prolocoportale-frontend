@@ -1,6 +1,11 @@
 /* ProxiMap - Vibrant & Pop theme */
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=Fraunces:wght@400;500;600;700&display=swap');
 
+/* Hide Leaflet default attribution (we have custom one) */
+.leaflet-control-attribution {
+  display: none !important;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
