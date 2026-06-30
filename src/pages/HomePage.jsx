@@ -537,6 +537,10 @@ export default function HomePage() {
                 {t("welcome_desc") || "Scopri le attività, i prodotti e le tradizioni del territorio"}
               </p>
             </div>
+            {/* Copyright */}
+            <p className="absolute bottom-4 text-[#1e3a5f]/50 text-xs text-center">
+              © 2026 MB Consulting. Tutti i diritti riservati.
+            </p>
           </div>
         </div>
       )}
