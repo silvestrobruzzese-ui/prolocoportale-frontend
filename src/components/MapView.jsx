@@ -203,7 +203,7 @@ export default function MapView({
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="&copy; OpenStreetMap contributors"
+        attribution=""
       />
 
       <MapRecenter center={center} zoom={zoom} trigger={recenterTrigger} />
