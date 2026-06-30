@@ -14,7 +14,7 @@ export default function PrivacyPolicy() {
         <div className="max-w-4xl mx-auto px-4 py-4">
           <Button
             variant="ghost"
-            onClick={() => navigate("/")}
+            onClick={() => navigate(-1)}
             className="flex items-center gap-2 text-[#1e3a5f] hover:text-[#2d5a8f]"
           >
             <ArrowLeft size={20} />
