@@ -201,11 +201,10 @@ export default function MapView({
       className="w-full h-full"
       ref={mapRef}
       data-testid="map-container"
-      attributionControl={true}
+      attributionControl={false}
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="&copy; OpenStreetMap contributors, Overture Maps Foundation"
       />
 
       <MapRecenter center={center} zoom={zoom} trigger={recenterTrigger} />

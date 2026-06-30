@@ -2,16 +2,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&family=Fraunces:wght@400;500;600;700&display=swap');
 
 /* Hide Leaflet default attribution (we have custom one) */
-.leaflet-control-attribution,
-.leaflet-control-attribution.leaflet-control,
-.leaflet-bottom.leaflet-right .leaflet-control-attribution,
-.leaflet-container .leaflet-control-attribution {
+.leaflet-control-attribution {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
   height: 0 !important;
   width: 0 !important;
-  overflow: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+}
+.leaflet-bottom.leaflet-right {
+  display: none !important;
 }
 
 @tailwind base;
