@@ -54,6 +54,18 @@ export default function HomePage() {
   const [camminoRoute, setCamminoRoute] = useState(null);
   const [isLoadingRoute, setIsLoadingRoute] = useState(false);
 
+  // Remove Leaflet attribution continuously
+  useEffect(() => {
+    const removeAttribution = () => {
+      document.querySelectorAll('.leaflet-control-attribution').forEach(el => {
+        if (el && el.parentNode) el.parentNode.removeChild(el);
+      });
+    };
+    removeAttribution();
+    const interval = setInterval(removeAttribution, 200);
+    return () => clearInterval(interval);
+  }, []);
+
   // Check if user came from a Pro Loco or Città/Paese landing page (via URL param)
   useEffect(() => {
     const prolocoParam = searchParams.get("proloco");
