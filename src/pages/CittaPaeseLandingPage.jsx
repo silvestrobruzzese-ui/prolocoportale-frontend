@@ -99,10 +99,21 @@ export default function CittaPaeseLandingPage() {
             {t("welcome_desc") || "Scopri le attività, i prodotti e le tradizioni del territorio"}
           </p>
         </div>
-        {/* Copyright */}
-        <p className="absolute bottom-4 text-[#1e3a5f]/50 text-xs text-center">
-          © 2026 MB Consulting. Tutti i diritti riservati.
-        </p>
+        {/* Footer with Copyright and Legal Links */}
+        <div className="absolute bottom-4 flex flex-col items-center gap-1">
+          <div className="flex gap-3 text-[#1e3a5f]/60 text-xs">
+            <button onClick={() => navigate("/privacy")} className="hover:text-[#1e3a5f] underline">
+              Privacy Policy
+            </button>
+            <span>|</span>
+            <button onClick={() => navigate("/terms")} className="hover:text-[#1e3a5f] underline">
+              Termini di Servizio
+            </button>
+          </div>
+          <p className="text-[#1e3a5f]/50 text-xs text-center">
+            © 2026 MB Consulting. Tutti i diritti riservati.
+          </p>
+        </div>
       </div>
     </div>
   );
