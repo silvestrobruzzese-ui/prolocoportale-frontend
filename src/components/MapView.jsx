@@ -206,7 +206,20 @@ export default function MapView({
   }, [camminoTappe]);
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full" style={{
+      '--hide-attribution': 'none'
+    }}>
+    <style>{`
+      .leaflet-control-attribution {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        left: -99999px !important;
+        top: -99999px !important;
+      }
+    `}</style>
     <MapContainer
       center={center}
       zoom={zoom}
