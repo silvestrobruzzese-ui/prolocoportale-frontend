@@ -1,60 +1,64 @@
 // Terms of Service page for Google AdSense compliance
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function TermsOfService() {
+  const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen bg-[#F9F6F1]">
       {/* Header */}
       <div className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
-          <Link
-            to="/"
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors"
+        <div className="max-w-4xl mx-auto px-4 py-4">
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/")}
+            className="flex items-center gap-2 text-[#1e3a5f] hover:text-[#2d5a8f]"
           >
             <ArrowLeft size={20} />
             <span>Torna alla Home</span>
-          </Link>
+          </Button>
         </div>
       </div>
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-[#1e3a5f] mb-2">
           Termini di Servizio
         </h1>
         <p className="text-gray-500 mb-8">
           Ultimo aggiornamento: 30 Giugno 2026
         </p>
 
-        <div className="prose prose-blue max-w-none space-y-6">
-          {/* Introduzione */}
+        <div className="space-y-8 text-gray-700">
+          {/* Accettazione */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">
+            <h2 className="text-xl font-semibold text-[#1e3a5f] mb-3">
               1. Accettazione dei Termini
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="leading-relaxed">
               Utilizzando ProlocoPortale, accetti di essere vincolato dai
               presenti Termini di Servizio. Se non accetti questi termini, ti
               preghiamo di non utilizzare il servizio.
             </p>
-            <p className="text-gray-600 leading-relaxed mt-2">
+            <p className="leading-relaxed mt-2">
               ProlocoPortale si riserva il diritto di modificare questi termini
               in qualsiasi momento. L'uso continuato del servizio dopo eventuali
               modifiche costituisce accettazione dei nuovi termini.
             </p>
           </section>
 
-          {/* Descrizione del servizio */}
+          {/* Descrizione */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">
+            <h2 className="text-xl font-semibold text-[#1e3a5f] mb-3">
               2. Descrizione del Servizio
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="leading-relaxed">
               ProlocoPortale è una piattaforma web che permette ai turisti di:
             </p>
-            <ul className="list-disc list-inside text-gray-600 space-y-1 mt-2">
+            <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
               <li>Esplorare attività commerciali e turistiche in Calabria</li>
               <li>Visualizzare sulla mappa ristoranti, hotel, B&B, monumenti e altro</li>
               <li>Scoprire sentieri e cammini con tracciati GPS</li>
@@ -66,18 +70,15 @@ export default function TermsOfService() {
 
           {/* Uso consentito */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">
+            <h2 className="text-xl font-semibold text-[#1e3a5f] mb-3">
               3. Uso Consentito
             </h2>
-            <p className="text-gray-600 leading-relaxed mb-3">
+            <p className="leading-relaxed mb-3">
               L'utente si impegna a utilizzare ProlocoPortale in modo lecito e
               rispettoso. In particolare, l'utente NON deve:
             </p>
-            <ul className="list-disc list-inside text-gray-600 space-y-1">
-              <li>
-                Utilizzare sistemi automatizzati (bot, scraper) per estrarre
-                dati
-              </li>
+            <ul className="list-disc list-inside space-y-1 ml-4">
+              <li>Utilizzare sistemi automatizzati (bot, scraper) per estrarre dati</li>
               <li>Tentare di accedere a dati o aree non autorizzate</li>
               <li>Interferire con il funzionamento del servizio</li>
               <li>Violare i diritti di proprietà intellettuale</li>
@@ -87,43 +88,40 @@ export default function TermsOfService() {
             </ul>
           </section>
 
-          {/* Account utente */}
+          {/* Account */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">
+            <h2 className="text-xl font-semibold text-[#1e3a5f] mb-3">
               4. Account Utente
             </h2>
-            <p className="text-gray-600 leading-relaxed">
-              La registrazione di un account è facoltativa. Se scegli di
-              registrarti:
+            <p className="leading-relaxed">
+              La registrazione di un account è facoltativa. Se scegli di registrarti:
             </p>
-            <ul className="list-disc list-inside text-gray-600 space-y-1 mt-2">
+            <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
               <li>Devi fornire informazioni accurate e veritiere</li>
               <li>Sei responsabile della sicurezza del tuo account</li>
               <li>Devi notificarci immediatamente eventuali accessi non autorizzati</li>
               <li>Non puoi trasferire il tuo account a terzi</li>
             </ul>
-            <p className="text-gray-600 leading-relaxed mt-2">
-              Ci riserviamo il diritto di sospendere o eliminare account che
-              violano questi termini.
+            <p className="leading-relaxed mt-2">
+              Ci riserviamo il diritto di sospendere o eliminare account che violano questi termini.
             </p>
           </section>
 
-          {/* Contenuti */}
+          {/* Proprietà intellettuale */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">
+            <h2 className="text-xl font-semibold text-[#1e3a5f] mb-3">
               5. Contenuti e Proprietà Intellettuale
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="leading-relaxed">
               Tutti i contenuti di ProlocoPortale (testi, immagini, loghi,
-              database, software) sono protetti da diritti di proprietà
-              intellettuale.
+              database, software) sono protetti da diritti di proprietà intellettuale.
             </p>
-            <p className="text-gray-600 leading-relaxed mt-2">
+            <p className="leading-relaxed mt-2">
               L'utente può utilizzare i contenuti solo per uso personale e non
               commerciale. È vietata la riproduzione, distribuzione o
               modificazione dei contenuti senza autorizzazione scritta.
             </p>
-            <p className="text-gray-600 leading-relaxed mt-2">
+            <p className="leading-relaxed mt-2">
               I dati delle attività commerciali sono forniti dalle Pro Loco e
               dai Comuni partner. ProlocoPortale non garantisce l'accuratezza o
               la completezza di tali informazioni.
@@ -132,84 +130,58 @@ export default function TermsOfService() {
 
           {/* Limitazione responsabilità */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">
+            <h2 className="text-xl font-semibold text-[#1e3a5f] mb-3">
               6. Limitazione di Responsabilità
             </h2>
-            <p className="text-gray-600 leading-relaxed">
-              ProlocoPortale è fornito "così com'è" senza garanzie di alcun
-              tipo. In particolare:
+            <p className="leading-relaxed">
+              ProlocoPortale è fornito "così com'è" senza garanzie di alcun tipo. In particolare:
             </p>
-            <ul className="list-disc list-inside text-gray-600 space-y-1 mt-2">
-              <li>
-                Non garantiamo che il servizio sia sempre disponibile o privo di
-                errori
-              </li>
-              <li>
-                Non siamo responsabili per informazioni inesatte sulle attività
-              </li>
-              <li>
-                Non siamo responsabili per la qualità dei servizi offerti dalle
-                attività elencate
-              </li>
-              <li>
-                Non garantiamo la validità o disponibilità degli sconti indicati
-              </li>
-              <li>
-                Non siamo responsabili per danni derivanti dall'uso del servizio
-              </li>
+            <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
+              <li>Non garantiamo che il servizio sia sempre disponibile o privo di errori</li>
+              <li>Non siamo responsabili per informazioni inesatte sulle attività</li>
+              <li>Non siamo responsabili per la qualità dei servizi offerti dalle attività elencate</li>
+              <li>Non garantiamo la validità o disponibilità degli sconti indicati</li>
+              <li>Non siamo responsabili per danni derivanti dall'uso del servizio</li>
             </ul>
 
-            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
-              <p className="text-yellow-800 font-medium">
+            <div className="bg-amber-50 border-l-4 border-amber-400 p-4 mt-4 rounded">
+              <p className="text-amber-800 font-medium">
                 Avviso per Sentieri e Cammini
               </p>
-              <p className="text-yellow-700 text-sm mt-1">
+              <p className="text-amber-700 text-sm mt-1">
                 I tracciati GPS dei sentieri sono forniti a scopo indicativo.
-                Per escursioni in montagna, utilizza sempre app offline
-                dedicate, porta mappe cartacee di backup e informa qualcuno del
-                tuo percorso. ProlocoPortale non è responsabile per incidenti
-                durante le escursioni.
+                Per escursioni in montagna, utilizza sempre app offline dedicate,
+                porta mappe cartacee di backup e informa qualcuno del tuo percorso.
+                ProlocoPortale non è responsabile per incidenti durante le escursioni.
               </p>
             </div>
           </section>
 
           {/* Pubblicità */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">
+            <h2 className="text-xl font-semibold text-[#1e3a5f] mb-3">
               7. Pubblicità
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="leading-relaxed">
               ProlocoPortale può mostrare annunci pubblicitari tramite Google
               AdSense e altri network pubblicitari. Utilizzando il servizio,
               accetti di visualizzare tali annunci.
             </p>
-            <p className="text-gray-600 leading-relaxed mt-2">
+            <p className="leading-relaxed mt-2">
               Non siamo responsabili per il contenuto degli annunci di terze
               parti. L'interazione con gli annunci è a tuo rischio e pericolo.
             </p>
           </section>
 
-          {/* Link esterni */}
+          {/* Modifiche */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">
-              8. Link Esterni
+            <h2 className="text-xl font-semibold text-[#1e3a5f] mb-3">
+              8. Modifiche al Servizio
             </h2>
-            <p className="text-gray-600 leading-relaxed">
-              ProlocoPortale può contenere link a siti web di terze parti. Non
-              abbiamo controllo su tali siti e non siamo responsabili per i loro
-              contenuti o pratiche di privacy.
-            </p>
-          </section>
-
-          {/* Modifiche al servizio */}
-          <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">
-              9. Modifiche al Servizio
-            </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="leading-relaxed">
               Ci riserviamo il diritto di:
             </p>
-            <ul className="list-disc list-inside text-gray-600 space-y-1 mt-2">
+            <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
               <li>Modificare o interrompere il servizio in qualsiasi momento</li>
               <li>Aggiornare funzionalità e caratteristiche</li>
               <li>Modificare i presenti Termini di Servizio</li>
@@ -217,28 +189,12 @@ export default function TermsOfService() {
             </ul>
           </section>
 
-          {/* Risoluzione */}
-          <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">
-              10. Risoluzione
-            </h2>
-            <p className="text-gray-600 leading-relaxed">
-              Possiamo sospendere o terminare il tuo accesso al servizio in
-              qualsiasi momento, con o senza preavviso, per violazione di questi
-              termini o per qualsiasi altro motivo.
-            </p>
-            <p className="text-gray-600 leading-relaxed mt-2">
-              Puoi interrompere l'utilizzo del servizio in qualsiasi momento. Se
-              hai un account, puoi richiederne la cancellazione contattandoci.
-            </p>
-          </section>
-
           {/* Legge applicabile */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">
-              11. Legge Applicabile e Foro Competente
+            <h2 className="text-xl font-semibold text-[#1e3a5f] mb-3">
+              9. Legge Applicabile e Foro Competente
             </h2>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="leading-relaxed">
               I presenti Termini di Servizio sono regolati dalla legge italiana.
               Per qualsiasi controversia derivante dall'uso di ProlocoPortale
               sarà competente il Foro di Catanzaro.
@@ -247,49 +203,25 @@ export default function TermsOfService() {
 
           {/* Contatti */}
           <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">
-              12. Contatti
+            <h2 className="text-xl font-semibold text-[#1e3a5f] mb-3">
+              10. Contatti
             </h2>
-            <p className="text-gray-600 leading-relaxed">
-              Per qualsiasi domanda sui presenti Termini di Servizio, puoi
-              contattarci a:
-            </p>
-            <p className="text-gray-600 mt-2">
-              <strong>Email:</strong>{" "}
-              <a
-                href="mailto:info@prolocoportale.it"
-                className="text-blue-600 hover:underline"
-              >
-                info@prolocoportale.it
-              </a>
-            </p>
-          </section>
-
-          {/* Disposizioni finali */}
-          <section>
-            <h2 className="text-xl font-semibold text-gray-800 mb-3">
-              13. Disposizioni Finali
-            </h2>
-            <p className="text-gray-600 leading-relaxed">
-              Se una qualsiasi disposizione di questi Termini risultasse
-              invalida o inapplicabile, le restanti disposizioni rimarranno
-              pienamente valide ed efficaci.
-            </p>
-            <p className="text-gray-600 leading-relaxed mt-2">
-              Il mancato esercizio di un diritto previsto da questi Termini non
-              costituisce rinuncia a tale diritto.
+            <p className="leading-relaxed">
+              Per qualsiasi domanda sui presenti Termini di Servizio, puoi contattarci a:
+              <br />
+              <strong>Email:</strong> info@prolocoportale.it
             </p>
           </section>
         </div>
 
         {/* Footer links */}
-        <div className="mt-12 pt-6 border-t border-gray-200 flex flex-wrap gap-4 text-sm text-gray-500">
-          <Link to="/" className="hover:text-blue-600">
+        <div className="mt-12 pt-6 border-t border-gray-300 flex flex-wrap gap-4 text-sm text-gray-500">
+          <button onClick={() => navigate("/")} className="hover:text-[#1e3a5f]">
             Home
-          </Link>
-          <Link to="/privacy" className="hover:text-blue-600">
+          </button>
+          <button onClick={() => navigate("/privacy")} className="hover:text-[#1e3a5f]">
             Privacy Policy
-          </Link>
+          </button>
         </div>
       </div>
     </div>
