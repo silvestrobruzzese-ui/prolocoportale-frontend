@@ -1,7 +1,7 @@
 {
-  "name": "ProxiMap - Economia di Prossimità",
-  "short_name": "ProxiMap",
-  "description": "Scopri attività, promozioni e siti culturali vicino a te",
+  "name": "Mappix - Turismo Calabria",
+  "short_name": "Mappix",
+  "description": "Scopri attività, promozioni e siti culturali vicino a te in Calabria",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
