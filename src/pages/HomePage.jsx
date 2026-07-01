@@ -11,6 +11,7 @@ import InstallBanner from "@/components/InstallBanner";
 import CamminoSelector from "@/components/CamminoSelector";
 import AuthModal from "@/components/AuthModal";
 import SponsorBanner from "@/components/SponsorBanner";
+import AdBanner from "@/components/AdBanner";
 
 import { useI18n } from "@/lib/i18n";
 import { useGeolocation } from "@/lib/useGeolocation";
@@ -456,7 +457,10 @@ export default function HomePage() {
       )}
 
       {/* Sponsor banner at bottom - hidden when any panel/modal is open */}
-      {!detailOpen && !authOpen && !showWelcome && <SponsorBanner />}
+      {/* {!detailOpen && !authOpen && !showWelcome && <SponsorBanner />} */}
+
+      {/* AdSense banner - below the mirino */}
+      {!detailOpen && !authOpen && !showWelcome && <AdBanner />}
 
       {/* Map attribution - bottom left */}
       <div
