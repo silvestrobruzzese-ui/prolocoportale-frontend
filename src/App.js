@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 import { I18nProvider } from "@/lib/i18n";
 import { AuthProvider } from "@/lib/auth";
+import CookieConsent from "@/components/CookieConsent";
 
 import HomePage from "@/pages/HomePage";
 import AdminLogin from "@/pages/AdminLogin";
@@ -43,7 +44,9 @@ export default function App() {
       <I18nProvider>
         <AuthProvider>
           <BrowserRouter>
-            <AppRoutes />
+            <CookieConsent>
+              <AppRoutes />
+            </CookieConsent>
             <Toaster richColors position="top-right" />
           </BrowserRouter>
         </AuthProvider>
