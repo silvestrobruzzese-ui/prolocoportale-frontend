@@ -23,7 +23,7 @@ import TermsOfService from "@/pages/TermsOfService";
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<PaywallPage />} />
+      <Route path="/" element={<HomePage />} />
       <Route path="/portale" element={<HomePage />} />
       <Route path="/p/:slug" element={<ProlocoLandingPage />} />
       <Route path="/c/:slug" element={<CittaPaeseLandingPage />} />

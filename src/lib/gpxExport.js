@@ -28,7 +28,7 @@ export function geojsonToGpx(geojsonData, name, description = "") {
 
   // Build GPX XML
   const gpx = `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="ProlocoPortale - Sentieri e Cammini"
+<gpx version="1.1" creator="Mappix - Sentieri e Cammini"
   xmlns="http://www.topografix.com/GPX/1/1"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
@@ -37,9 +37,9 @@ export function geojsonToGpx(geojsonData, name, description = "") {
     <desc>${escapeXml(description)}</desc>
     <time>${now}</time>
     <author>
-      <name>ProlocoPortale</name>
-      <link href="https://prolocoportale-frontend.pages.dev">
-        <text>Pro Loco Calabria</text>
+      <name>Mappix</name>
+      <link href="https://mappix.it">
+        <text>Mappix - Turismo Calabria</text>
       </link>
     </author>
   </metadata>
