@@ -39,13 +39,13 @@ export default function PrivacyPolicy() {
               1. Introduzione
             </h2>
             <p className="leading-relaxed">
-              Benvenuto su ProlocoPortale. La presente Privacy Policy descrive
+              Benvenuto su Mappix. La presente Privacy Policy descrive
               come raccogliamo, utilizziamo e proteggiamo i tuoi dati personali
               quando utilizzi la nostra applicazione web dedicata al turismo di
               prossimità in Calabria.
             </p>
             <p className="leading-relaxed mt-2">
-              ProlocoPortale si impegna a proteggere la tua privacy in
+              Mappix si impegna a proteggere la tua privacy in
               conformità con il Regolamento Generale sulla Protezione dei Dati
               (GDPR - Regolamento UE 2016/679) e la normativa italiana vigente.
             </p>
@@ -57,9 +57,9 @@ export default function PrivacyPolicy() {
               2. Titolare del Trattamento
             </h2>
             <p className="leading-relaxed">
-              Il titolare del trattamento dei dati personali è ProlocoPortale.
+              Il titolare del trattamento dei dati personali è Mappix.
               Per qualsiasi richiesta relativa alla privacy, puoi contattarci
-              all'indirizzo email: privacy@prolocoportale.it
+              all'indirizzo email: info@mappix.it
             </p>
           </section>
 
@@ -69,7 +69,7 @@ export default function PrivacyPolicy() {
               3. Dati Raccolti
             </h2>
             <p className="leading-relaxed mb-3">
-              ProlocoPortale raccoglie i seguenti tipi di dati:
+              Mappix raccoglie i seguenti tipi di dati:
             </p>
 
             <h3 className="text-lg font-medium text-[#1e3a5f] mt-4 mb-2">
@@ -158,7 +158,7 @@ export default function PrivacyPolicy() {
               6. Servizi di Terze Parti
             </h2>
             <p className="leading-relaxed mb-3">
-              ProlocoPortale utilizza i seguenti servizi di terze parti:
+              Mappix utilizza i seguenti servizi di terze parti:
             </p>
             <ul className="list-disc list-inside space-y-1 ml-4">
               <li>Google AdSense - Per la visualizzazione di annunci pubblicitari</li>
@@ -186,7 +186,7 @@ export default function PrivacyPolicy() {
               <li><strong>Opposizione</strong> - Opporti al trattamento per finalità di marketing</li>
             </ul>
             <p className="leading-relaxed mt-3">
-              Per esercitare questi diritti, contattaci a: privacy@prolocoportale.it
+              Per esercitare questi diritti, contattaci a: info@mappix.it
             </p>
           </section>
 
@@ -211,7 +211,7 @@ export default function PrivacyPolicy() {
             <p className="leading-relaxed">
               Per qualsiasi domanda sulla presente Privacy Policy, puoi contattarci a:
               <br />
-              <strong>Email:</strong> privacy@prolocoportale.it
+              <strong>Email:</strong> info@mappix.it
             </p>
           </section>
         </div>

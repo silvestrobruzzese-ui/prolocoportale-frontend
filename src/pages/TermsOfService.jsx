@@ -39,12 +39,12 @@ export default function TermsOfService() {
               1. Accettazione dei Termini
             </h2>
             <p className="leading-relaxed">
-              Utilizzando ProlocoPortale, accetti di essere vincolato dai
+              Utilizzando Mappix, accetti di essere vincolato dai
               presenti Termini di Servizio. Se non accetti questi termini, ti
               preghiamo di non utilizzare il servizio.
             </p>
             <p className="leading-relaxed mt-2">
-              ProlocoPortale si riserva il diritto di modificare questi termini
+              Mappix si riserva il diritto di modificare questi termini
               in qualsiasi momento. L'uso continuato del servizio dopo eventuali
               modifiche costituisce accettazione dei nuovi termini.
             </p>
@@ -56,7 +56,7 @@ export default function TermsOfService() {
               2. Descrizione del Servizio
             </h2>
             <p className="leading-relaxed">
-              ProlocoPortale è una piattaforma web che permette ai turisti di:
+              Mappix è una piattaforma web che permette ai turisti di:
             </p>
             <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
               <li>Esplorare attività commerciali e turistiche in Calabria</li>
@@ -74,7 +74,7 @@ export default function TermsOfService() {
               3. Uso Consentito
             </h2>
             <p className="leading-relaxed mb-3">
-              L'utente si impegna a utilizzare ProlocoPortale in modo lecito e
+              L'utente si impegna a utilizzare Mappix in modo lecito e
               rispettoso. In particolare, l'utente NON deve:
             </p>
             <ul className="list-disc list-inside space-y-1 ml-4">
@@ -113,7 +113,7 @@ export default function TermsOfService() {
               5. Contenuti e Proprietà Intellettuale
             </h2>
             <p className="leading-relaxed">
-              Tutti i contenuti di ProlocoPortale (testi, immagini, loghi,
+              Tutti i contenuti di Mappix (testi, immagini, loghi,
               database, software) sono protetti da diritti di proprietà intellettuale.
             </p>
             <p className="leading-relaxed mt-2">
@@ -123,7 +123,7 @@ export default function TermsOfService() {
             </p>
             <p className="leading-relaxed mt-2">
               I dati delle attività commerciali sono forniti dalle Pro Loco e
-              dai Comuni partner. ProlocoPortale non garantisce l'accuratezza o
+              dai Comuni partner. Mappix non garantisce l'accuratezza o
               la completezza di tali informazioni.
             </p>
           </section>
@@ -134,7 +134,7 @@ export default function TermsOfService() {
               6. Limitazione di Responsabilità
             </h2>
             <p className="leading-relaxed">
-              ProlocoPortale è fornito "così com'è" senza garanzie di alcun tipo. In particolare:
+              Mappix è fornito "così com'è" senza garanzie di alcun tipo. In particolare:
             </p>
             <ul className="list-disc list-inside space-y-1 ml-4 mt-2">
               <li>Non garantiamo che il servizio sia sempre disponibile o privo di errori</li>
@@ -152,7 +152,7 @@ export default function TermsOfService() {
                 I tracciati GPS dei sentieri sono forniti a scopo indicativo.
                 Per escursioni in montagna, utilizza sempre app offline dedicate,
                 porta mappe cartacee di backup e informa qualcuno del tuo percorso.
-                ProlocoPortale non è responsabile per incidenti durante le escursioni.
+                Mappix non è responsabile per incidenti durante le escursioni.
               </p>
             </div>
           </section>
@@ -163,7 +163,7 @@ export default function TermsOfService() {
               7. Pubblicità
             </h2>
             <p className="leading-relaxed">
-              ProlocoPortale può mostrare annunci pubblicitari tramite Google
+              Mappix può mostrare annunci pubblicitari tramite Google
               AdSense e altri network pubblicitari. Utilizzando il servizio,
               accetti di visualizzare tali annunci.
             </p>
@@ -196,7 +196,7 @@ export default function TermsOfService() {
             </h2>
             <p className="leading-relaxed">
               I presenti Termini di Servizio sono regolati dalla legge italiana.
-              Per qualsiasi controversia derivante dall'uso di ProlocoPortale
+              Per qualsiasi controversia derivante dall'uso di Mappix
               sarà competente il Foro di Catanzaro.
             </p>
           </section>
@@ -209,7 +209,7 @@ export default function TermsOfService() {
             <p className="leading-relaxed">
               Per qualsiasi domanda sui presenti Termini di Servizio, puoi contattarci a:
               <br />
-              <strong>Email:</strong> info@prolocoportale.it
+              <strong>Email:</strong> info@mappix.it
             </p>
           </section>
         </div>
