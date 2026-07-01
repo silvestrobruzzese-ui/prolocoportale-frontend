@@ -8,10 +8,16 @@ export default function PaywallPage() {
           Servizio a Pagamento
         </h1>
         <p className="text-gray-600 mb-6">
-          L'accesso a ProlocoPortale è riservato agli utenti abbonati.
+          L'accesso a Mappix è riservato agli utenti abbonati.
         </p>
         <p className="text-gray-500 text-sm">
-          Per informazioni contattaci.
+          Per informazioni contattaci:{" "}
+          <a
+            href="mailto:info@mappix.it"
+            className="text-[#1e3a5f] hover:underline"
+          >
+            info@mappix.it
+          </a>
         </p>
       </div>
     </div>
