@@ -25,7 +25,7 @@ export default function AdBanner() {
   }, []);
 
   return (
-    <div className="absolute bottom-14 left-3 z-[999]">
+    <div className="absolute bottom-[400px] left-3 z-[999]">
       <div
         className="rounded-2xl overflow-hidden"
         style={{
