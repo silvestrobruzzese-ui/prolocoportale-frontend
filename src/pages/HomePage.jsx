@@ -465,7 +465,7 @@ export default function HomePage() {
       {/* Map attribution - bottom left */}
       <div
         className="absolute left-3 z-[999]"
-        style={{ fontSize: '10px', color: '#1F2937', bottom: 'calc(4px + env(safe-area-inset-bottom, 0px))' }}
+        style={{ fontSize: '10px', color: '#1F2937', bottom: 'calc(16px + env(safe-area-inset-bottom, 0px))' }}
       >
         © OpenStreetMap contributors, Overture Maps Foundation
       </div>
@@ -473,7 +473,7 @@ export default function HomePage() {
       {/* Copyright MB Consulting - bottom right */}
       <div
         className="absolute right-3 z-[999]"
-        style={{ fontSize: '10px', color: '#1F2937', bottom: 'calc(24px + env(safe-area-inset-bottom, 0px))' }}
+        style={{ fontSize: '10px', color: '#1F2937', bottom: 'calc(36px + env(safe-area-inset-bottom, 0px))' }}
       >
         © 2026 MB Consulting
       </div>
