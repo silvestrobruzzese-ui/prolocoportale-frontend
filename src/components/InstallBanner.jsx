@@ -216,7 +216,7 @@ export default function InstallBanner({ forceShow = false }) {
   // iOS but NOT Safari - show "Open with Safari" message
   if (isIOS && !isSafari) {
     return (
-      <div className="fixed bottom-[450px] left-3 right-3 z-[1100] animate-slide-up">
+      <div className="fixed bottom-[200px] left-3 right-3 z-[1100] animate-slide-up">
         <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden max-w-md mx-auto">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#D96C4A] to-[#e07f5f] p-4 text-white">
@@ -280,7 +280,7 @@ export default function InstallBanner({ forceShow = false }) {
   // iOS Safari - show instructions
   if (isIOS && isSafari) {
     return (
-      <div className="fixed bottom-[450px] left-3 right-3 z-[1100] animate-slide-up">
+      <div className="fixed bottom-[200px] left-3 right-3 z-[1100] animate-slide-up">
         <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden max-w-md mx-auto">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#D96C4A] to-[#e07f5f] p-4 text-white">
@@ -361,7 +361,7 @@ export default function InstallBanner({ forceShow = false }) {
   // Android - show install button or instructions
   if (isAndroid) {
     return (
-      <div className="fixed bottom-[450px] left-3 right-3 z-[1100] animate-slide-up">
+      <div className="fixed bottom-[200px] left-3 right-3 z-[1100] animate-slide-up">
         <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden max-w-md mx-auto">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#D96C4A] to-[#e07f5f] p-4 text-white">
