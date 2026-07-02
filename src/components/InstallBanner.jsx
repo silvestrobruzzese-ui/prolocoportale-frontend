@@ -6,7 +6,7 @@ const translations = {
   it: {
     title: "Salva questo sito",
     subtitle: "Aggiungi un'icona alla schermata Home per accedere velocemente",
-    step1ios: "Tocca l'icona Condividi in basso",
+    step1ios: "Tocca ··· in basso, poi \"Condividi\"",
     step2ios: "Scorri e tocca \"Aggiungi a Home\"",
     step3ios: "Tocca \"Aggiungi\" in alto a destra",
     step1android: "Tocca il menu (⋮) in alto a destra",
@@ -24,7 +24,7 @@ const translations = {
   en: {
     title: "Save this site",
     subtitle: "Add an icon to your Home screen for quick access",
-    step1ios: "Tap the Share icon at the bottom",
+    step1ios: "Tap ··· at the bottom, then \"Share\"",
     step2ios: "Scroll and tap \"Add to Home Screen\"",
     step3ios: "Tap \"Add\" in the top right corner",
     step1android: "Tap the menu (⋮) in the top right",
@@ -42,7 +42,7 @@ const translations = {
   es: {
     title: "Guarda este sitio",
     subtitle: "Añade un icono a la pantalla de inicio para acceder rápidamente",
-    step1ios: "Toca el icono Compartir en la parte inferior",
+    step1ios: "Toca ··· abajo, luego \"Compartir\"",
     step2ios: "Desplázate y toca \"Añadir a inicio\"",
     step3ios: "Toca \"Añadir\" en la esquina superior derecha",
     step1android: "Toca el menú (⋮) en la esquina superior derecha",
@@ -60,7 +60,7 @@ const translations = {
   fr: {
     title: "Enregistrez ce site",
     subtitle: "Ajoutez une icône à l'écran d'accueil pour un accès rapide",
-    step1ios: "Appuyez sur l'icône Partager en bas",
+    step1ios: "Appuyez sur ··· en bas, puis \"Partager\"",
     step2ios: "Faites défiler et appuyez sur \"Sur l'écran d'accueil\"",
     step3ios: "Appuyez sur \"Ajouter\" en haut à droite",
     step1android: "Appuyez sur le menu (⋮) en haut à droite",
@@ -78,7 +78,7 @@ const translations = {
   de: {
     title: "Diese Seite speichern",
     subtitle: "Fügen Sie ein Symbol zum Startbildschirm hinzu",
-    step1ios: "Tippen Sie auf das Teilen-Symbol unten",
+    step1ios: "Tippen Sie auf ··· unten, dann \"Teilen\"",
     step2ios: "Scrollen Sie und tippen Sie auf \"Zum Home-Bildschirm\"",
     step3ios: "Tippen Sie oben rechts auf \"Hinzufügen\"",
     step1android: "Tippen Sie auf das Menü (⋮) oben rechts",
@@ -96,7 +96,7 @@ const translations = {
   pt: {
     title: "Salve este site",
     subtitle: "Adicione um ícone à tela inicial para acesso rápido",
-    step1ios: "Toque no ícone Compartilhar na parte inferior",
+    step1ios: "Toque em ··· na parte inferior, depois \"Compartilhar\"",
     step2ios: "Role e toque em \"Adicionar à Tela de Início\"",
     step3ios: "Toque em \"Adicionar\" no canto superior direito",
     step1android: "Toque no menu (⋮) no canto superior direito",
