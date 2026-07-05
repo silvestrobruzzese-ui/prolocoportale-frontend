@@ -1529,6 +1529,61 @@ Per tradurre nuovi business aggiunti in futuro:
 
 ---
 
+## Funzionalità Future (Quando Disponibili Fondi)
+
+### Traduzione Automatica in Tempo Reale
+
+Quando saranno disponibili i fondi, implementare un sistema di traduzione automatica per tutti i nuovi marker aggiunti.
+
+#### Obiettivo
+
+Ogni volta che un comune o Pro Loco aggiunge una nuova attività (in qualsiasi categoria), il sistema traduce automaticamente in tempo reale:
+- `description` → `description_en`, `description_de`, `description_fr`, `description_es`
+- `promotion_title` → `promotion_title_en`, `promotion_title_de`, `promotion_title_fr`, `promotion_title_es`
+- `promotion_description` → `promotion_description_en`, `promotion_description_de`, `promotion_description_fr`, `promotion_description_es`
+
+#### Implementazione Proposta
+
+```
+1. Webhook/Trigger su MongoDB (o backend)
+   └── Quando un business viene creato/modificato
+       └── Invia i campi testuali al servizio di traduzione
+           └── Salva le traduzioni nel documento
+
+2. API di Traduzione (scelta)
+   ├── Google Translate API (~$20/milione caratteri)
+   ├── DeepL API (~$25/milione caratteri, qualità superiore)
+   └── Azure Translator (~$10/milione caratteri)
+
+3. Coda Asincrona (opzionale)
+   └── Per non bloccare il salvataggio
+   └── Redis/RabbitMQ per gestire le richieste
+```
+
+#### Stima Costi Mensili
+
+| Volume Nuovi Business | Caratteri Stimati | Costo Google | Costo DeepL |
+|----------------------|-------------------|--------------|-------------|
+| 100/mese | ~200.000 | ~$4 | ~$5 |
+| 500/mese | ~1.000.000 | ~$20 | ~$25 |
+| 1000/mese | ~2.000.000 | ~$40 | ~$50 |
+
+#### File da Modificare
+
+| File | Modifica |
+|------|----------|
+| `backend/server.py` | Aggiungere chiamata API traduzione su POST/PATCH business |
+| `backend/translate_service.py` | Nuovo file con logica traduzione |
+| `.env` | Aggiungere API key del servizio scelto |
+
+#### Priorità
+
+- **Alta**: Traduzione automatica su creazione nuovo business
+- **Media**: Traduzione automatica su modifica campi testuali
+- **Bassa**: Dashboard per monitorare traduzioni e costi
+
+---
+
 *Ultimo aggiornamento: 5 Luglio 2026 - ore 13:30*
 *Stato: PRODUZIONE ONLINE - Cloudflare Pages + Railway + MongoDB Atlas*
 *Security: HARDENING COMPLETATO*
