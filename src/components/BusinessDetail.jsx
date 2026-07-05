@@ -15,9 +15,17 @@ function formatDistance(km) {
 }
 
 export default function BusinessDetail({ open, onClose, business, onNavigate, onToggleFavorite, isFavorite, allBusinesses = [], onSelectBusiness }) {
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const [showTappeList, setShowTappeList] = useState(false);
   const [showTrailFollower, setShowTrailFollower] = useState(false);
+
+  // Helper to get translated field based on current language
+  const getTranslatedField = (fieldName) => {
+    if (!business) return "";
+    if (language === "it") return business[fieldName] || "";
+    const translatedField = `${fieldName}_${language}`;
+    return business[translatedField] || business[fieldName] || "";
+  };
 
   // Check if business has GPS track (for individual sentieri)
   const hasGpsTrack = business?.geojson_data?.geometry?.coordinates?.length > 0;
@@ -89,8 +97,8 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
             {business.category === "Sentieri e Cammini" ? t("trails_and_paths") : business.category}
           </Badge>
           <h2 className="font-display text-xl font-semibold text-[var(--text-primary)]">{biz.name}</h2>
-          {(biz.description || biz.promotion_description) && (
-            <p className="text-sm text-[var(--text-secondary)] mt-1">{biz.description || biz.promotion_description}</p>
+          {(getTranslatedField("description") || getTranslatedField("promotion_description")) && (
+            <p className="text-sm text-[var(--text-secondary)] mt-1">{getTranslatedField("description") || getTranslatedField("promotion_description")}</p>
           )}
         </div>
 
@@ -234,14 +242,14 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
             </div>
           )}
 
-          {biz.promotion_title && (
+          {getTranslatedField("promotion_title") && (
             <div className="rounded-2xl p-4 bg-[var(--warning)]/30 border border-[var(--warning)]">
               <div className="flex items-center gap-2 font-semibold text-[var(--text-primary)]">
                 <Sparkles className="w-4 h-4 text-[var(--primary)]" />
-                {biz.promotion_title}
+                {getTranslatedField("promotion_title")}
               </div>
-              {biz.promotion_description && (
-                <div className="text-sm text-[var(--text-secondary)] mt-1">{biz.promotion_description}</div>
+              {getTranslatedField("promotion_description") && (
+                <div className="text-sm text-[var(--text-secondary)] mt-1">{getTranslatedField("promotion_description")}</div>
               )}
             </div>
           )}
