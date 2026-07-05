@@ -1584,7 +1584,260 @@ Ogni volta che un comune o Pro Loco aggiunge una nuova attività (in qualsiasi c
 
 ---
 
-*Ultimo aggiornamento: 5 Luglio 2026 - ore 13:30*
+## Mappix AI - Piano di Sviluppo (Funzionalità Futura)
+
+### 1. Concetto
+
+Integrare un sistema AI in Mappix che permetta ai turisti di interagire con i dati di Mappix usando il linguaggio naturale.
+
+Non costruiamo un chatbot nostro. Lasciamo che l'utente usi l'AI che già ha.
+
+### 2. Architettura
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                        TURISTA                          │
+└─────────────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────┐
+│                    MAPPIX (webapp)                      │
+│                                                         │
+│  • Onboarding (cookie, geolocalizzazione, PWA)         │
+│  • Mappa con attività                                   │
+│  • Tasto "AI" sopra il mirino                          │
+└─────────────────────────────────────────────────────────┘
+                             │
+                       Click su "AI"
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────┐
+│           FINESTRA: Chiedi a Mappix AI                  │
+│                                                         │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │ "Quale ristorante di pesce è vicino a me?"   🎤 │   │
+│  └─────────────────────────────────────────────────┘   │
+│                                                         │
+│  Invia con:                                             │
+│  [GPT]  [Gemini]  [Copilot]  [Mappix AI]               │
+│                                                         │
+│  ⚠️ GPT/Gemini/Copilot richiedono account              │
+└─────────────────────────────────────────────────────────┘
+                             │
+         L'utente PRIMA scrive/parla la domanda
+         POI sceglie il motore
+                             │
+           ┌─────────────────┼─────────────────┐
+           ▼                 ▼                 ▼
+     ChatGPT/Gemini     Mappix AI        Copilot
+     (app utente)       (interno)        (app utente)
+           │                 │                 │
+           └─────────────────┼─────────────────┘
+                             │
+              Mappix invia automaticamente:
+              • Posizione GPS
+              • Lingua utente
+              • Categoria selezionata
+              • Domanda completa
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────┐
+│               API MAPPIX (Railway)                      │
+│                                                         │
+│  • Ricerca attività per categoria/posizione            │
+│  • Dettagli business                                    │
+│  • Info sentieri + GPX                                  │
+│  • Orari di apertura                                    │
+│  • Sessioni temporanee per contesto                    │
+└─────────────────────────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────┐
+│                   MONGODB ATLAS                         │
+│                                                         │
+│              21.000+ attività reali                     │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 3. Flusso Utente Dettagliato (Esempio con GPT)
+
+```
+1. Turista tedesco a Soverato su Mappix
+   Seleziona categoria "Ristoranti" → vede 50 marker
+                    ↓
+2. Vuole aiuto AI → clicca tasto "AI"
+                    ↓
+3. Si apre finestra in Mappix
+   Parla o scrive: "Quale ristorante di pesce è più vicino a me?"
+                    ↓
+4. Vede i motori: [GPT] [Gemini] [Copilot] [Mappix AI]
+   Sceglie GPT (ha l'app sul cellulare)
+                    ↓
+5. Si apre AUTOMATICAMENTE l'app ChatGPT
+   (se non ha login, ChatGPT chiede di accedere)
+                    ↓
+6. ChatGPT risponde SUBITO con risultati toccabili:
+
+   🐟 Il Pescatore (120m)
+      Via Roma 15 - Sconto 10%
+      Aperto fino alle 23:00
+
+   🐟 Trattoria Da Mario (250m)
+      Via Garibaldi 8
+      Aperto fino alle 22:30
+
+   🐟 Ristorante La Baia (400m)
+      Lungomare - Sconto 15%
+      Aperto fino alle 23:30
+                    ↓
+7. L'utente può continuare a chattare in GPT:
+   "È aperto ora?"
+   "Ha tavoli all'aperto?"
+   "E il secondo più vicino?"
+   → GPT risponde chiamando la nostra API
+                    ↓
+8. Tocca un risultato → si apre Mappix automaticamente
+   con quel ristorante selezionato sulla mappa
+                    ↓
+9. Se ha chiuso GPT e vuole chiedere altro
+   → deve tornare su Mappix AI e riformulare
+```
+
+### 4. Formato Risposte AI
+
+I risultati sono link toccabili. L'utente tocca → si apre Mappix.
+
+```
+Ecco i ristoranti di pesce più vicini a te:
+
+🐟 Il Pescatore (120m)
+   Via Roma 15 - Sconto 10%
+   Aperto fino alle 23:00
+
+🐟 Trattoria Da Mario (250m)
+   Via Garibaldi 8
+   Aperto fino alle 22:30
+
+🐟 Ristorante La Baia (400m)
+   Lungomare - Sconto 15%
+   Aperto fino alle 23:30
+
+Tocca un ristorante per vederlo sulla mappa.
+```
+
+Ogni risultato è un link a `mappix.it/b/:businessId` - toccandolo si apre Mappix.
+
+### 5. Valore Aggiunto di Mappix
+
+| ChatGPT da solo | ChatGPT + Mappix |
+|-----------------|------------------|
+| Conoscenza generica, datata | 21.000 attività reali e aggiornate |
+| Non sa dove sei | Calcola distanza dalla tua posizione |
+| Consigli vaghi | Indirizzo, telefono, orari, sito web |
+| Nessuno sconto | Promozioni per turisti |
+| "Cerca su Google" | Link diretto per navigare |
+| Descrive i sentieri | GPX scaricabile |
+
+### 6. Deep Link
+
+**Rotta:** `https://mappix.it/b/:businessId`
+
+**Comportamento:**
+- Apre Mappix
+- Centra la mappa sul business
+- Apre il pannello dettaglio
+
+### 7. Supporto Multi-AI
+
+| AI | Integrazione | Utente | Richiede Account |
+|----|--------------|--------|------------------|
+| ChatGPT | Custom GPT con Actions | Apre app ChatGPT | Sì (OpenAI) |
+| Gemini | Deep link con prompt | Apre app Gemini | Sì (Google) |
+| Copilot | Copilot GPT | Apre app Copilot | Sì (Microsoft) |
+| Mappix AI | Interno (API Gemini Flash) | Resta in Mappix | No |
+
+### 8. Monetizzazione
+
+**Chi usa ChatGPT/Gemini/Copilot:**
+Gratis — l'AI la paga l'utente con il suo account.
+
+**Chi usa Mappix AI (fallback):**
+
+| Utilizzo | Accesso |
+|----------|---------|
+| 1 domanda ogni 24 ore | Gratis |
+| Domande illimitate | Abbonamento |
+
+**Abbonamento Mappix AI:**
+
+| Pass | Durata | Prezzo |
+|------|--------|--------|
+| Giornaliero | 24 ore | €1.99 |
+| Settimanale | 7 giorni | €4.99 |
+
+### 9. Costi Stimati
+
+| Voce | Costo mensile |
+|------|---------------|
+| Railway (API) | €10-20 |
+| Mappix AI (Gemini Flash, 1.000 utenti) | €15-30 |
+| **Totale** | **€25-50** |
+
+**Ricavi potenziali:**
+
+| Scenario | Ricavo |
+|----------|--------|
+| 100 pass giornalieri/mese | €199 |
+| 50 pass settimanali/mese | €249 |
+| **Totale potenziale** | **€400+** |
+
+### 10. Da Implementare
+
+| # | Cosa | Priorità |
+|---|------|----------|
+| 1 | Tasto "AI" sopra il mirino | Alta |
+| 2 | Finestra domanda + scelta motore | Alta |
+| 3 | Input vocale (🎤) | Alta |
+| 4 | Sistema sessioni temporanee (backend) | Alta |
+| 5 | Custom GPT ChatGPT con Actions | Alta |
+| 6 | Deep link /b/:businessId | Alta |
+| 7 | Mappix AI interno (fallback) | Media |
+| 8 | Sistema pagamento (Stripe) | Media |
+| 9 | Gestione abbonamenti | Media |
+| 10 | Integrazione Gemini | Bassa |
+| 11 | Integrazione Copilot | Bassa |
+
+### 11. Flusso Utente Completo
+
+```
+Turista in aeroporto
+        ↓
+Scansiona QR code Mappix
+        ↓
+Onboarding (cookie, geolocalizzazione, salva in home)
+        ↓
+Esplora la mappa, seleziona categoria
+        ↓
+Clicca tasto "AI"
+        ↓
+Scrive/parla la domanda in Mappix
+        ↓
+Sceglie il motore (GPT/Gemini/Copilot/Mappix AI)
+        ↓
+Si apre l'app scelta con risposta immediata
+        ↓
+Può continuare a chattare nell'app AI
+        ↓
+Tocca un risultato → si apre Mappix automaticamente
+        ↓
+Vede il business sulla mappa con pannello dettaglio
+        ↓
+Clicca "Naviga" → parte navigazione
+```
+
+---
+
+*Ultimo aggiornamento: 5 Luglio 2026 - ore 19:30*
 *Stato: PRODUZIONE ONLINE - Cloudflare Pages + Railway + MongoDB Atlas*
 *Security: HARDENING COMPLETATO*
 *Analytics: CLOUDFLARE WEB ANALYTICS ATTIVO*
@@ -1595,3 +1848,4 @@ Ogni volta che un comune o Pro Loco aggiunge una nuova attività (in qualsiasi c
 *Paywall: ATTIVO SU ROOT PATH*
 *InstallBanner: MULTILINGUA CON SAFARI DETECTION*
 *Traduzioni Database: 17.940 BUSINESS IN 4 LINGUE (EN/DE/FR/ES)*
+*Mappix AI: PIANO DI SVILUPPO DEFINITO*
