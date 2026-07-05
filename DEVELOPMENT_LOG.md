@@ -1326,7 +1326,210 @@ export default function PaywallPage() {
 
 ---
 
-*Ultimo aggiornamento: 17 Giugno 2026 - ore 22:00*
+---
+
+## Sessione 2 Luglio 2026 - InstallBanner Multilingua + PWA
+
+### Nuova Funzionalità: Banner Installazione PWA Multilingua
+
+Completamente riscritto il banner di installazione PWA con supporto multilingua e rilevamento automatico del browser.
+
+### Lingue Supportate
+
+| Codice | Lingua | Fallback |
+|--------|--------|----------|
+| `it` | Italiano | Default |
+| `en` | English | - |
+| `es` | Español | - |
+| `fr` | Français | - |
+| `de` | Deutsch | - |
+| `pt` | Português | - |
+
+La lingua viene rilevata automaticamente dal browser (`navigator.language`). Se non supportata, usa l'italiano.
+
+### Rilevamento Safari su iOS
+
+Il banner ora rileva se l'utente iOS sta usando Safari o un altro browser:
+
+| Browser iOS | Cosa Vede |
+|-------------|-----------|
+| **Safari** | Istruzioni in 3 passaggi per aggiungere a Home |
+| **Chrome/Firefox/altro** | Messaggio "Apri con Safari" + pulsante "Copia link" |
+
+### Istruzioni iOS Safari
+
+```
+1. Tocca ··· in basso, poi "Condividi"
+2. Scorri e tocca "Aggiungi a Home"
+3. Tocca "Aggiungi" in alto a destra
+```
+
+### Comportamento Banner
+
+| Azione | Risultato |
+|--------|-----------|
+| Tocca **X** | Chiude, riappare alla prossima visita |
+| Tocca **"Ho capito"** | Chiude, riappare alla prossima visita |
+| Tocca **"Non mostrare più"** | Chiude, non riappare mai più |
+| App già installata | Banner non appare |
+
+### Posizionamento Elementi
+
+| Elemento | Posizione |
+|----------|-----------|
+| **InstallBanner** | `bottom-[200px]` (200px dal fondo) |
+| **AdBanner** | `bottom-28` (112px, allineato al mirino) |
+| **Copyright OpenStreetMap** | `max(64px, calc(48px + safe-area))` |
+| **Copyright MB Consulting** | `max(84px, calc(68px + safe-area))` |
+
+### Nuove Icone Mappix
+
+Sostituite le icone PWA con il nuovo logo Mappix (pin rosso con X):
+
+| File | Dimensioni |
+|------|------------|
+| `public/icons/icon-192x192.png` | 192×192 px |
+| `public/icons/icon-512x512.png` | 512×512 px |
+
+### File Modificati
+
+| File | Modifica |
+|------|----------|
+| `src/components/InstallBanner.jsx` | Riscritto con multilingua + Safari detection |
+| `src/components/AdBanner.jsx` | Posizione `bottom-28` |
+| `src/pages/HomePage.jsx` | Copyright con safe-area iOS |
+| `tailwind.config.js` | Aggiunta animazione `slide-up` |
+| `public/icons/icon-192x192.png` | Nuova icona Mappix |
+| `public/icons/icon-512x512.png` | Nuova icona Mappix |
+
+### Animazione Slide-Up (Tailwind)
+
+Aggiunta nuova animazione per il banner:
+
+```javascript
+// tailwind.config.js
+keyframes: {
+  'slide-up': {
+    from: { transform: 'translateY(100%)', opacity: '0' },
+    to: { transform: 'translateY(0)', opacity: '1' }
+  }
+},
+animation: {
+  'slide-up': 'slide-up 0.4s ease-out'
+}
+```
+
+### Safe Area iOS
+
+Le scritte di copyright ora usano `env(safe-area-inset-bottom)` per essere sempre visibili su tutti i modelli iPhone (con e senza Face ID).
+
+---
+
+## Sessione 5 Luglio 2026 - Traduzione Bulk Database con RunPod
+
+### Problema
+
+Le descrizioni dei business nel pannello dettaglio non erano tradotte quando l'utente selezionava una lingua diversa dall'italiano. LibreTranslate ora richiede API key a pagamento.
+
+### Soluzione Implementata
+
+Traduzione bulk di tutti i 17.940 business nel database usando GPU cloud (RunPod) e il modello M2M-100 di Facebook.
+
+### Workflow Traduzione
+
+```
+1. Export business da MongoDB → businesses_to_translate.json (17.940 record)
+2. Upload su RunPod (RTX A4000, 16GB VRAM)
+3. Traduzione con M2M-100 (~45 minuti)
+4. Download businesses_translated.json (12MB)
+5. Import traduzioni in MongoDB
+6. Update frontend per usare campi tradotti
+```
+
+### Campi Tradotti per Business
+
+| Campo Originale | Traduzioni Generate |
+|-----------------|---------------------|
+| `description` | `description_en`, `description_de`, `description_fr`, `description_es` |
+| `promotion_title` | `promotion_title_en`, `promotion_title_de`, `promotion_title_fr`, `promotion_title_es` |
+| `promotion_description` | `promotion_description_en`, `promotion_description_de`, `promotion_description_fr`, `promotion_description_es` |
+
+### Script Creati
+
+| File | Descrizione |
+|------|-------------|
+| `runpod_translate.py` | Script per RunPod con M2M-100, batch processing |
+| `backend/import_translations.py` | Script per importare traduzioni in MongoDB |
+| `backend/translate_all_businesses.py` | Alternativa con MyMemory API (più lenta) |
+
+### Configurazione RunPod
+
+| Parametro | Valore |
+|-----------|--------|
+| GPU | RTX A4000 (16GB VRAM) |
+| Template | RunPod PyTorch 2.4.0 |
+| Storage | 20GB Volume Disk |
+| Costo | ~$0.25/hr |
+| Tempo totale | ~45 minuti |
+| Costo totale | ~$0.30-0.50 |
+
+### Modello M2M-100
+
+| Caratteristica | Valore |
+|----------------|--------|
+| Nome | facebook/m2m100_418M |
+| Dimensione | ~2GB |
+| Lingue supportate | 100+ |
+| Batch size | 8 |
+| Max length | 256 token |
+
+### Modifica Frontend
+
+Aggiunto helper `getTranslatedField()` in `BusinessDetail.jsx`:
+
+```javascript
+const getTranslatedField = (fieldName) => {
+  if (!business) return "";
+  if (language === "it") return business[fieldName] || "";
+  const translatedField = `${fieldName}_${language}`;
+  return business[translatedField] || business[fieldName] || "";
+};
+```
+
+### File Modificati
+
+| File | Modifica |
+|------|----------|
+| `src/components/BusinessDetail.jsx` | Aggiunto `getTranslatedField()`, usa `language` da i18n |
+
+### Risultato Import
+
+```
+Totale processati: 17940
+Aggiornati: 17940
+Saltati: 0
+Errori: 0
+```
+
+### Comportamento Frontend
+
+| Lingua Selezionata | Campo Mostrato | Fallback |
+|--------------------|----------------|----------|
+| Italiano (IT) | `description` | - |
+| Inglese (EN) | `description_en` | `description` |
+| Tedesco (DE) | `description_de` | `description` |
+| Francese (FR) | `description_fr` | `description` |
+| Spagnolo (ES) | `description_es` | `description` |
+
+### Note Future
+
+Per tradurre nuovi business aggiunti in futuro:
+1. **Opzione economica**: Rieseguire lo script RunPod periodicamente (~$0.50 ogni volta)
+2. **Opzione automatica** (richiede budget): Implementare traduzione on-save con Google Translate API o DeepL
+
+---
+
+*Ultimo aggiornamento: 5 Luglio 2026 - ore 13:30*
 *Stato: PRODUZIONE ONLINE - Cloudflare Pages + Railway + MongoDB Atlas*
 *Security: HARDENING COMPLETATO*
 *Analytics: CLOUDFLARE WEB ANALYTICS ATTIVO*
@@ -1335,3 +1538,5 @@ export default function PaywallPage() {
 *Bandiere Blu/Verde: 50 SPIAGGE CERTIFICATE*
 *Banner Sponsor: 4 SPONSOR IN ROTAZIONE*
 *Paywall: ATTIVO SU ROOT PATH*
+*InstallBanner: MULTILINGUA CON SAFARI DETECTION*
+*Traduzioni Database: 17.940 BUSINESS IN 4 LINGUE (EN/DE/FR/ES)*
