@@ -15,15 +15,15 @@ function formatDistance(km) {
 }
 
 export default function BusinessDetail({ open, onClose, business, onNavigate, onToggleFavorite, isFavorite, allBusinesses = [], onSelectBusiness }) {
-  const { t, language } = useI18n();
+  const { t, lang } = useI18n();
   const [showTappeList, setShowTappeList] = useState(false);
   const [showTrailFollower, setShowTrailFollower] = useState(false);
 
   // Helper to get translated field based on current language
   const getTranslatedField = (fieldName) => {
     if (!business) return "";
-    if (language === "it") return business[fieldName] || "";
-    const translatedField = `${fieldName}_${language}`;
+    if (lang === "it") return business[fieldName] || "";
+    const translatedField = `${fieldName}_${lang}`;
     return business[translatedField] || business[fieldName] || "";
   };
 
