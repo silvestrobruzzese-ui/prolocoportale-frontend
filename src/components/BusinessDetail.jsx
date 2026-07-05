@@ -1,11 +1,10 @@
 // Business detail sheet (full info, promo, navigate button)
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useI18n } from "@/lib/i18n";
-import { translateFields } from "@/lib/translate";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X, Loader2, Mountain, Route, Timer, TrendingUp, RotateCcw, ChevronRight, List, Download, Compass } from "lucide-react";
+import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X, Mountain, Route, Timer, TrendingUp, RotateCcw, ChevronRight, List, Download, Compass } from "lucide-react";
 import { downloadGpx } from "@/lib/gpxExport";
 import TrailFollower from "@/components/TrailFollower";
 
@@ -15,13 +14,8 @@ function formatDistance(km) {
   return `${km.toFixed(2)} km`;
 }
 
-// Fields to translate
-const TRANSLATABLE_FIELDS = ["name", "description", "promotion_title", "promotion_description", "address", "city", "hours"];
-
 export default function BusinessDetail({ open, onClose, business, onNavigate, onToggleFavorite, isFavorite, allBusinesses = [], onSelectBusiness }) {
-  const { t, lang } = useI18n();
-  const [translatedBusiness, setTranslatedBusiness] = useState(null);
-  const [isTranslating, setIsTranslating] = useState(false);
+  const { t } = useI18n();
   const [showTappeList, setShowTappeList] = useState(false);
   const [showTrailFollower, setShowTrailFollower] = useState(false);
 
@@ -49,37 +43,10 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
   // Has cammino GPS track (from start tappa)
   const hasCamminoTrack = !!camminoStart;
 
-  // Translate business content when language changes or business changes
-  useEffect(() => {
-    if (!business || !open) {
-      setTranslatedBusiness(null);
-      return;
-    }
-
-    // If Italian, no translation needed
-    if (lang === "it") {
-      setTranslatedBusiness(business);
-      return;
-    }
-
-    // Translate the content
-    setIsTranslating(true);
-    translateFields(business, TRANSLATABLE_FIELDS, lang)
-      .then((translated) => {
-        setTranslatedBusiness(translated);
-      })
-      .catch(() => {
-        setTranslatedBusiness(business); // Fallback to original
-      })
-      .finally(() => {
-        setIsTranslating(false);
-      });
-  }, [business, lang, open]);
-
   if (!business) return null;
 
-  // Use translated content or original
-  const biz = translatedBusiness || business;
+  // Use business directly (no external translation API)
+  const biz = business;
 
   const inProx = !!business.in_proximity;
   const base = Number(business.base_discount || 0);
@@ -107,9 +74,6 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
             <span>{t("back")}</span>
           </button>
           <div className="flex items-center gap-2">
-            {isTranslating && (
-              <Loader2 className="w-4 h-4 animate-spin text-[var(--text-secondary)]" />
-            )}
             {eff > 0 && business.category !== "Sentieri e Cammini" && (
               <div className={`px-3 py-1.5 rounded-full text-white font-bold text-sm ${inProx ? "bg-[var(--primary)]" : "bg-[var(--secondary)]"}`}
                 data-testid="proximity-discount-badge"
