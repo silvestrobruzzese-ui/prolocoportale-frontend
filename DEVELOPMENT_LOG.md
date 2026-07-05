@@ -1791,13 +1791,34 @@ Gratis — l'AI la paga l'utente con il suo account.
 | 50 pass settimanali/mese | €249 |
 | **Totale potenziale** | **€400+** |
 
-### 10. Da Implementare
+### 10. Input Vocale (Web Speech API)
+
+L'utente può fare la domanda parlando. Usiamo la **Web Speech API** del browser - gratuita e funziona su tutti i dispositivi moderni.
+
+```javascript
+// Esempio implementazione
+const recognition = new webkitSpeechRecognition();
+recognition.lang = 'de-DE';  // Lingua del turista (da i18n)
+recognition.onresult = (event) => {
+  const testo = event.results[0][0].transcript;
+  // "Quale ristorante di pesce è vicino a me?"
+};
+recognition.start();
+```
+
+**Comportamento:**
+- Tocca 🎤 → inizia registrazione
+- Parla → il testo appare nel campo
+- Finisce di parlare → può modificare o inviare
+- La lingua viene impostata automaticamente in base alla selezione utente
+
+### 11. Da Implementare
 
 | # | Cosa | Priorità |
 |---|------|----------|
 | 1 | Tasto "AI" sopra il mirino | Alta |
 | 2 | Finestra domanda + scelta motore | Alta |
-| 3 | Input vocale (🎤) | Alta |
+| 3 | Input vocale con Web Speech API | Alta |
 | 4 | Sistema sessioni temporanee (backend) | Alta |
 | 5 | Custom GPT ChatGPT con Actions | Alta |
 | 6 | Deep link /b/:businessId | Alta |
@@ -1807,7 +1828,7 @@ Gratis — l'AI la paga l'utente con il suo account.
 | 10 | Integrazione Gemini | Bassa |
 | 11 | Integrazione Copilot | Bassa |
 
-### 11. Flusso Utente Completo
+### 12. Flusso Utente Completo
 
 ```
 Turista in aeroporto
