@@ -121,7 +121,9 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
         </div>
 
         <div className="p-5 pt-4 pb-0">
-          <Badge className="bg-[var(--bg)] text-[var(--text-secondary)] rounded-full mb-2">{business.category}</Badge>
+          <Badge className="bg-[var(--bg)] text-[var(--text-secondary)] rounded-full mb-2">
+            {business.category === "Sentieri e Cammini" ? t("trails_and_paths") : business.category}
+          </Badge>
           <h2 className="font-display text-xl font-semibold text-[var(--text-primary)]">{biz.name}</h2>
           {(biz.description || biz.promotion_description) && (
             <p className="text-sm text-[var(--text-secondary)] mt-1">{biz.description || biz.promotion_description}</p>
@@ -142,7 +144,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                   <Route className="w-4 h-4 text-sky-600" />
                   <span className="text-sm font-semibold text-sky-700">{business.cammino_name}</span>
                   {business.tappa_number && (
-                    <Badge className="bg-sky-100 text-sky-700 text-xs">Tappa {business.tappa_number}</Badge>
+                    <Badge className="bg-sky-100 text-sky-700 text-xs">{t("stage")} {business.tappa_number}</Badge>
                   )}
                 </div>
               )}
@@ -151,7 +153,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                   <div className="flex items-center gap-2">
                     <Mountain className="w-4 h-4 text-orange-500" />
                     <div>
-                      <div className="text-xs text-orange-600 uppercase tracking-wide">Difficoltà</div>
+                      <div className="text-xs text-orange-600 uppercase tracking-wide">{t("difficulty")}</div>
                       <div className="text-sm font-medium text-orange-800 capitalize">{business.difficulty}</div>
                     </div>
                   </div>
@@ -160,7 +162,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                   <div className="flex items-center gap-2">
                     <Route className="w-4 h-4 text-sky-500" />
                     <div>
-                      <div className="text-xs text-sky-600 uppercase tracking-wide">Distanza</div>
+                      <div className="text-xs text-sky-600 uppercase tracking-wide">{t("trail_distance")}</div>
                       <div className="text-sm font-medium text-sky-800">{business.distance}</div>
                     </div>
                   </div>
@@ -169,7 +171,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                   <div className="flex items-center gap-2">
                     <Timer className="w-4 h-4 text-orange-500" />
                     <div>
-                      <div className="text-xs text-orange-600 uppercase tracking-wide">Durata</div>
+                      <div className="text-xs text-orange-600 uppercase tracking-wide">{t("duration")}</div>
                       <div className="text-sm font-medium text-orange-800">{business.duration}</div>
                     </div>
                   </div>
@@ -178,7 +180,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                   <div className="flex items-center gap-2">
                     <TrendingUp className="w-4 h-4 text-sky-500" />
                     <div>
-                      <div className="text-xs text-sky-600 uppercase tracking-wide">Dislivello</div>
+                      <div className="text-xs text-sky-600 uppercase tracking-wide">{t("elevation_gain")}</div>
                       <div className="text-sm font-medium text-sky-800">{business.elevation_gain} m</div>
                     </div>
                   </div>
@@ -187,19 +189,19 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
               {business.is_loop && (
                 <div className="mt-3 flex items-center gap-2 text-orange-600">
                   <RotateCcw className="w-4 h-4" />
-                  <span className="text-sm font-medium">Percorso ad anello</span>
+                  <span className="text-sm font-medium">{t("loop_trail")}</span>
                 </div>
               )}
               {business.geojson_data && (
                 <div className="mt-3 text-xs text-sky-600 flex items-center gap-1">
                   <span className="w-3 h-1 bg-orange-500 rounded-full"></span>
-                  Tracciato GPS disponibile sulla mappa
+                  {t("gps_track_available")}
                 </div>
               )}
               {!business.geojson_data && hasCamminoTrack && (
                 <div className="mt-3 text-xs text-sky-600 flex items-center gap-1">
                   <span className="w-3 h-1 bg-orange-500 rounded-full"></span>
-                  Tracciato GPS del cammino completo disponibile
+                  {t("gps_track_full_available")}
                 </div>
               )}
 
@@ -211,7 +213,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                 >
                   <span className="flex items-center gap-2">
                     <List className="w-4 h-4" />
-                    Vedi tutte le {camminoTappe.length} tappe
+                    {t("view_all_stages").replace("{count}", camminoTappe.length)}
                   </span>
                   <ChevronRight className={`w-4 h-4 transition-transform ${showTappeList ? "rotate-90" : ""}`} />
                 </button>
@@ -343,7 +345,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                 className="flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-sky-300 text-sky-700 bg-white active:bg-sky-100 font-medium text-sm cursor-pointer select-none"
                 style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               >
-                <Download className="w-4 h-4" /> Scarica GPX
+                <Download className="w-4 h-4" /> {t("download_gpx")}
               </button>
               <button
                 type="button"
@@ -359,7 +361,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                 className="flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-orange-500 to-sky-500 active:from-orange-700 active:to-sky-700 text-white font-medium text-sm cursor-pointer select-none"
                 style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               >
-                <Compass className="w-4 h-4" /> Segui Sentiero
+                <Compass className="w-4 h-4" /> {t("follow_trail")}
               </button>
             </div>
           )}
@@ -381,7 +383,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                 className="flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-sky-300 text-sky-700 bg-white active:bg-sky-100 font-medium text-sm cursor-pointer select-none"
                 style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               >
-                <Download className="w-4 h-4" /> Scarica GPX
+                <Download className="w-4 h-4" /> {t("download_gpx")}
               </button>
               <button
                 type="button"
@@ -397,7 +399,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                 className="flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-orange-500 to-sky-500 active:from-orange-700 active:to-sky-700 text-white font-medium text-sm cursor-pointer select-none"
                 style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               >
-                <Compass className="w-4 h-4" /> Segui Cammino
+                <Compass className="w-4 h-4" /> {t("follow_cammino")}
               </button>
             </div>
           )}
