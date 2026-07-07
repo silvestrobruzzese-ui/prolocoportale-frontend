@@ -30,7 +30,7 @@ const CALABRIA_ZOOM = 8;
 export default function HomePage() {
   const { t } = useI18n();
   const { user } = useAuth();
-  const { position, hasPosition, status, request } = useGeolocation(true);
+  const { position, hasPosition, status, request } = useGeolocation(false);
   const [searchParams] = useSearchParams();
 
   const [businesses, setBusinesses] = useState([]);
@@ -543,7 +543,10 @@ export default function HomePage() {
             />
             <div className="mt-6 flex flex-col items-center gap-3">
               <Button
-                onClick={() => setShowWelcome(false)}
+                onClick={() => {
+                  setShowWelcome(false);
+                  request(); // Richiedi geolocalizzazione dopo interazione utente (fix Safari iOS)
+                }}
                 className="rounded-full bg-[#1e3a5f] hover:bg-[#2d4a6f] text-white px-10 py-6 text-lg font-semibold shadow-xl"
                 data-testid="enter-app-btn"
               >
