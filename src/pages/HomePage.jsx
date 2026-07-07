@@ -237,6 +237,10 @@ export default function HomePage() {
         } else if (hasPosition) {
           params.lat = position[0];
           params.lng = position[1];
+        } else {
+          // Fallback: use Calabria center if no position available
+          params.lat = CALABRIA_CENTER[0];
+          params.lng = CALABRIA_CENTER[1];
         }
       }
       if (query) params.q = query;
