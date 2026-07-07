@@ -25,7 +25,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
     if (open && business) {
       trackBusinessView(business);
     }
-  }, [open, business?.business_id]);
+  }, [open, business]);
 
   // Helper to get translated field based on current language
   const getTranslatedField = (fieldName) => {
