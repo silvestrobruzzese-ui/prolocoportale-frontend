@@ -5,6 +5,7 @@ import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n";
 import api from "@/lib/api";
+import { trackProlocoLanding, trackExploreClick } from "@/lib/analytics";
 
 export default function ProlocoLandingPage() {
   const { slug } = useParams();
@@ -19,6 +20,8 @@ export default function ProlocoLandingPage() {
       try {
         const { data } = await api.get(`/proloco/by-slug/${slug}`);
         setProloco(data);
+        // Track landing page view in Google Analytics
+        trackProlocoLanding(slug, data.name, data.comune, data.provincia);
       } catch (err) {
         setError(err.response?.status === 404 ? "Pro Loco non trovata" : "Errore nel caricamento");
       } finally {
@@ -29,6 +32,8 @@ export default function ProlocoLandingPage() {
   }, [slug]);
 
   const handleExplore = () => {
+    // Track explore click in Google Analytics
+    trackExploreClick('proloco', proloco.slug, proloco.name);
     // Navigate to homepage with Pro Loco slug in URL
     navigate(`/portale?proloco=${proloco.slug}`);
   };

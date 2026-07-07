@@ -5,6 +5,7 @@ import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/lib/i18n";
 import api from "@/lib/api";
+import { trackCittaLanding, trackExploreClick } from "@/lib/analytics";
 
 export default function CittaPaeseLandingPage() {
   const { slug } = useParams();
@@ -19,6 +20,8 @@ export default function CittaPaeseLandingPage() {
       try {
         const { data } = await api.get(`/citta-paese/by-slug/${slug}`);
         setCitta(data);
+        // Track landing page view in Google Analytics
+        trackCittaLanding(slug, data.nome, data.provincia);
       } catch (err) {
         setError(err.response?.status === 404 ? "Città o Paese non trovato" : "Errore nel caricamento");
       } finally {
@@ -29,6 +32,8 @@ export default function CittaPaeseLandingPage() {
   }, [slug]);
 
   const handleExplore = () => {
+    // Track explore click in Google Analytics
+    trackExploreClick('citta', citta.slug, citta.nome);
     // Navigate to homepage with città slug in URL
     navigate(`/portale?citta=${citta.slug}`);
   };
