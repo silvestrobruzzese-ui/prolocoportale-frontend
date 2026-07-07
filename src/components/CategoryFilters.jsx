@@ -1,5 +1,6 @@
 // Category filter buttons - horizontal scrollable bar with pop style
 import React from "react";
+import { trackCategoryFilter } from "@/lib/analytics";
 
 // SVG Column Icon Component - Greek/Roman column for Beni Culturali
 const ColumnIcon = ({ size = 24, isActive = false }) => {
@@ -105,7 +106,13 @@ export default function CategoryFilters({ value, onChange }) {
           <button
             key={c.key}
             data-testid={`category-filter-${c.key}`}
-            onClick={() => onChange(isActive ? null : c.value)}
+            onClick={() => {
+              const newValue = isActive ? null : c.value;
+              if (newValue) {
+                trackCategoryFilter(newValue);
+              }
+              onChange(newValue);
+            }}
             className={`category-btn flex-shrink-0 w-14 h-14 rounded-full inline-flex items-center justify-center ${
               isActive ? "active" : ""
             } ${isMultilineText ? "text-[10px] font-bold leading-tight" : isTextIcon ? "text-sm font-bold" : "text-2xl"}`}

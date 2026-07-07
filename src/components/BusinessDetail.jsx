@@ -1,5 +1,5 @@
 // Business detail sheet (full info, promo, navigate button)
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useI18n } from "@/lib/i18n";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X, Mountain, Route, Timer, TrendingUp, RotateCcw, ChevronRight, List, Download, Compass } from "lucide-react";
 import { downloadGpx } from "@/lib/gpxExport";
 import TrailFollower from "@/components/TrailFollower";
+import { trackBusinessView, trackNavigateClick, trackGpxDownload, trackTrailFollowStart } from "@/lib/analytics";
 
 function formatDistance(km) {
   if (km == null) return "—";
@@ -18,6 +19,13 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
   const { t, lang } = useI18n();
   const [showTappeList, setShowTappeList] = useState(false);
   const [showTrailFollower, setShowTrailFollower] = useState(false);
+
+  // Track business view when detail opens
+  useEffect(() => {
+    if (open && business) {
+      trackBusinessView(business);
+    }
+  }, [open, business?.business_id]);
 
   // Helper to get translated field based on current language
   const getTranslatedField = (fieldName) => {
@@ -283,7 +291,10 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
 
           <div className="grid grid-cols-2 gap-2 pt-2">
             <Button
-              onClick={() => onNavigate(business)}
+              onClick={() => {
+                trackNavigateClick(business);
+                onNavigate(business);
+              }}
               className="rounded-full bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white"
               data-testid="business-navigate-btn"
             >
@@ -308,10 +319,12 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  trackGpxDownload(business.name);
                   downloadGpx(business.geojson_data, business.name, business.description || "");
                 }}
                 onTouchEnd={(e) => {
                   e.preventDefault();
+                  trackGpxDownload(business.name);
                   downloadGpx(business.geojson_data, business.name, business.description || "");
                 }}
                 className="flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-sky-300 text-sky-700 bg-white active:bg-sky-100 font-medium text-sm cursor-pointer select-none"
@@ -324,10 +337,12 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  trackTrailFollowStart(business.name);
                   setShowTrailFollower(true);
                 }}
                 onTouchEnd={(e) => {
                   e.preventDefault();
+                  trackTrailFollowStart(business.name);
                   setShowTrailFollower(true);
                 }}
                 className="flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-orange-500 to-sky-500 active:from-orange-700 active:to-sky-700 text-white font-medium text-sm cursor-pointer select-none"
@@ -346,10 +361,12 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  trackGpxDownload(business.cammino_name);
                   downloadGpx(camminoStart.geojson_data, business.cammino_name, `Percorso completo - ${camminoTappe.length} tappe`);
                 }}
                 onTouchEnd={(e) => {
                   e.preventDefault();
+                  trackGpxDownload(business.cammino_name);
                   downloadGpx(camminoStart.geojson_data, business.cammino_name, `Percorso completo - ${camminoTappe.length} tappe`);
                 }}
                 className="flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-sky-300 text-sky-700 bg-white active:bg-sky-100 font-medium text-sm cursor-pointer select-none"
@@ -362,10 +379,12 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  trackTrailFollowStart(business.cammino_name);
                   setShowTrailFollower(true);
                 }}
                 onTouchEnd={(e) => {
                   e.preventDefault();
+                  trackTrailFollowStart(business.cammino_name);
                   setShowTrailFollower(true);
                 }}
                 className="flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-orange-500 to-sky-500 active:from-orange-700 active:to-sky-700 text-white font-medium text-sm cursor-pointer select-none"
