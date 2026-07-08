@@ -1,6 +1,7 @@
 // Category filter buttons - horizontal scrollable bar with pop style
 import React from "react";
 import { trackCategoryFilter } from "@/lib/analytics";
+import { useI18n } from "@/lib/i18n";
 
 // SVG Column Icon Component - Greek/Roman column for Beni Culturali
 const ColumnIcon = ({ size = 24, isActive = false }) => {
@@ -51,7 +52,7 @@ const HikerIcon = ({ size = 24, isActive = false }) => {
 };
 
 const CATEGORIES = [
-  { key: "restaurant", value: "Restaurant", icon: "🍽", color: "#E63946" },
+  { key: "restaurant", value: "Restaurant", i18nKey: "restaurant", color: "#E63946", isPill: true },
   { key: "pizzerie", value: "Pizzerie", icon: "🍕", color: "#FF6B35" },
   { key: "bar_pub", value: "Bar e Pub", icon: "🍺", color: "#8B4513" },
   { key: "hotel", value: "Hotel", icon: "🏨", color: "#FFD700" },
@@ -75,13 +76,16 @@ const CATEGORIES = [
 ];
 
 export default function CategoryFilters({ value, onChange }) {
+  const { t } = useI18n();
+
   return (
     <div className="flex gap-3 overflow-x-auto no-scrollbar px-4 py-3">
       {CATEGORIES.map((c, index) => {
         const isActive = c.value === value;
-        const isTextIcon = !c.isSvg && !c.isImage && c.icon.length > 2; // "B&B", "Sea Parks" are text, not emoji
+        const isTextIcon = !c.isSvg && !c.isImage && !c.isPill && c.icon && c.icon.length > 2; // "B&B", "Sea Parks" are text, not emoji
         const isMultilineText = c.isMultiline; // "Sea\nParks" on two lines
         const hasDualColor = c.secondColor;
+        const isPillStyle = c.isPill; // New oval pill style with text
 
         // Style for dual-color gradient border (Sentieri e Cammini)
         const dualColorStyle = hasDualColor ? {
@@ -101,6 +105,43 @@ export default function CategoryFilters({ value, onChange }) {
           borderStyle: "solid",
           borderColor: "transparent",
         } : {};
+
+        // New pill style for text-based categories
+        if (isPillStyle) {
+          return (
+            <button
+              key={c.key}
+              data-testid={`category-filter-${c.key}`}
+              onClick={() => {
+                const newValue = isActive ? null : c.value;
+                if (newValue) {
+                  trackCategoryFilter(newValue);
+                }
+                onChange(newValue);
+              }}
+              className={`category-btn flex-shrink-0 h-10 px-4 rounded-full inline-flex items-center justify-center whitespace-nowrap ${
+                isActive ? "active" : ""
+              }`}
+              style={{
+                backgroundColor: isActive ? c.color : "white",
+                borderColor: c.color,
+                borderWidth: "2px",
+                borderStyle: "solid",
+                animationDelay: `${index * 50}ms`,
+              }}
+              title={c.value}
+            >
+              <span
+                className="text-sm font-medium"
+                style={{
+                  color: isActive ? "white" : "#1f2937",
+                }}
+              >
+                {t(c.i18nKey)}
+              </span>
+            </button>
+          );
+        }
 
         return (
           <button
