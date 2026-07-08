@@ -34,8 +34,24 @@ export default function ProlocoLandingPage() {
   const handleExplore = () => {
     // Track explore click in Google Analytics
     trackExploreClick('proloco', proloco.slug, proloco.name);
-    // Navigate to homepage with Pro Loco slug in URL
-    navigate(`/portale?proloco=${proloco.slug}`);
+
+    // Request geolocation before navigating (fix Safari iOS - needs user interaction)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          // Success - navigate to homepage
+          navigate(`/portale?proloco=${proloco.slug}`);
+        },
+        () => {
+          // Error or denied - still navigate to homepage
+          navigate(`/portale?proloco=${proloco.slug}`);
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      );
+    } else {
+      // Geolocation not supported - navigate anyway
+      navigate(`/portale?proloco=${proloco.slug}`);
+    }
   };
 
   if (loading) {

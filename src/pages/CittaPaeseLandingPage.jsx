@@ -34,8 +34,24 @@ export default function CittaPaeseLandingPage() {
   const handleExplore = () => {
     // Track explore click in Google Analytics
     trackExploreClick('citta', citta.slug, citta.nome);
-    // Navigate to homepage with città slug in URL
-    navigate(`/portale?citta=${citta.slug}`);
+
+    // Request geolocation before navigating (fix Safari iOS - needs user interaction)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          // Success - navigate to homepage
+          navigate(`/portale?citta=${citta.slug}`);
+        },
+        () => {
+          // Error or denied - still navigate to homepage
+          navigate(`/portale?citta=${citta.slug}`);
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      );
+    } else {
+      // Geolocation not supported - navigate anyway
+      navigate(`/portale?citta=${citta.slug}`);
+    }
   };
 
   if (loading) {
