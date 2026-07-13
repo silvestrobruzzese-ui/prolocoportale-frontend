@@ -257,7 +257,7 @@ function BusinessForm({ initial, onSave, onCancel, prolocos }) {
           <Select value={form.category} onValueChange={(v) => set("category", v)}>
             <SelectTrigger data-testid="business-form-category"><SelectValue /></SelectTrigger>
             <SelectContent>
-              {["Restaurant", "Pizzerie", "Hotel", "B&B", "Monumenti", "Musei", "Spiagge", "Archeologia", "Discoteche", "Supermercati", "Shop", "Pharmacy", "Bancomat", "Other"].map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+              {["Restaurant", "Pizzerie", "Bar e Pub", "Hotel", "B&B", "Sentieri e Cammini", "Beni Culturali", "Itinerari", "Monumenti", "Musei", "Spiagge", "Bandiera Blu", "Bandiera Verde", "Sea Park", "Archeologia", "Discoteche", "Supermercati", "Shop", "Pharmacy", "Bancomat", "Other"].map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>
