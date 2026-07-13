@@ -334,10 +334,11 @@ export default function PrologoDashboard() {
   }, [businesses, searchBusiness, filterCategory]);
 
   // All available categories (fixed list to show all options even if no businesses in that category yet)
+  // Note: "Sentieri e Cammini" excluded - managed centrally, not by Pro Loco/cities
   const categories = useMemo(() => {
     const allCategories = [
       "Restaurant", "Pizzerie", "Bar e Pub", "Hotel", "B&B",
-      "Sentieri e Cammini", "Beni Culturali", "Itinerari",
+      "Beni Culturali", "Itinerari",
       "Monumenti", "Musei", "Spiagge", "Bandiera Blu", "Bandiera Verde",
       "Sea Park", "Archeologia", "Discoteche", "Supermercati",
       "Shop", "Pharmacy", "Bancomat", "Bar e Pasticcerie"
