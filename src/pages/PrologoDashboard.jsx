@@ -333,11 +333,17 @@ export default function PrologoDashboard() {
       .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
   }, [businesses, searchBusiness, filterCategory]);
 
-  // Get unique categories from businesses
+  // All available categories (fixed list to show all options even if no businesses in that category yet)
   const categories = useMemo(() => {
-    const cats = [...new Set(businesses.map((b) => b.category).filter(Boolean))];
-    return cats.sort();
-  }, [businesses]);
+    const allCategories = [
+      "Restaurant", "Pizzerie", "Bar e Pub", "Hotel", "B&B",
+      "Sentieri e Cammini", "Beni Culturali", "Itinerari",
+      "Monumenti", "Musei", "Spiagge", "Bandiera Blu", "Bandiera Verde",
+      "Sea Park", "Archeologia", "Discoteche", "Supermercati",
+      "Shop", "Pharmacy", "Bancomat", "Other"
+    ];
+    return allCategories.sort();
+  }, []);
 
   const fetchAll = useCallback(async () => {
     try {
