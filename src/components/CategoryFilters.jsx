@@ -72,7 +72,7 @@ const CATEGORIES = [
   { key: "shop", value: "Shop", i18nKey: "shop", color: "#14B8A6", isPill: true },
   { key: "pharmacy", value: "Pharmacy", i18nKey: "pharmacy", color: "#22C55E", isPill: true },
   { key: "bancomat", value: "Bancomat", i18nKey: "bancomat", color: "#00843D", isPill: true },
-  { key: "other", value: "Other", i18nKey: "other", color: "#6366F1", isPill: true },
+  { key: "bar_pasticcerie", value: "Bar e Pasticcerie", i18nKey: "bar_pasticcerie", color: "#EC4899", isPill: true },
 ];
 
 export default function CategoryFilters({ value, onChange }) {

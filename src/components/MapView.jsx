@@ -29,7 +29,7 @@ const categoryColors = {
   Itinerari: "#10B981",   // Smeraldo
   "Sentieri e Cammini": "linear-gradient(135deg, #F97316 0%, #38BDF8 100%)", // Orange + Sky Blue gradient
   Bancomat: "#00843D",    // Verde BCC
-  Other: "#6366F1",       // Indaco
+  "Bar e Pasticcerie": "#EC4899",  // Rosa (gelato)
 };
 
 const categoryEmoji = {
@@ -54,7 +54,7 @@ const categoryEmoji = {
   Itinerari: "🥾",
   "Sentieri e Cammini": "🏔",
   Bancomat: "🏧",
-  Other: "📍",
+  "Bar e Pasticcerie": "🍦",
 };
 
 // SVG Hiker icon for map markers - stylized version matching reference
@@ -79,8 +79,8 @@ const categoryLogos = {
 };
 
 function pinIcon(business, inProximity) {
-  const color = categoryColors[business.category] || categoryColors.Other;
-  const emoji = categoryEmoji[business.category] || categoryEmoji.Other;
+  const color = categoryColors[business.category] || "#6366F1";
+  const emoji = categoryEmoji[business.category] || "📍";
   const proximityClass = inProximity ? "in-proximity" : "";
   const isSentieriCammini = business.category === "Sentieri e Cammini";
   const isSeaPark = business.category === "Sea Park";
