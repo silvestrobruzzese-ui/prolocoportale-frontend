@@ -55,6 +55,7 @@ const CATEGORIES = [
   { key: "restaurant", value: "Restaurant", i18nKey: "restaurant", color: "#E63946", isPill: true },
   { key: "pizzerie", value: "Pizzerie", i18nKey: "pizzerie", color: "#FF6B35", isPill: true },
   { key: "bar_pub", value: "Bar e Pub", i18nKey: "bar_pub", color: "#8B4513", isPill: true },
+  { key: "bar_pasticcerie", value: "Bar e Pasticcerie", i18nKey: "bar_pasticcerie", color: "#EC4899", isPill: true },
   { key: "hotel", value: "Hotel", i18nKey: "hotel", color: "#FFD700", isPill: true },
   { key: "bb", value: "B&B", i18nKey: "bb", color: "#22C55E", isPill: true },
   { key: "sentieri", value: "Sentieri e Cammini", i18nKey: "trails_and_paths", color: "#F97316", isPill: true },
@@ -72,7 +73,6 @@ const CATEGORIES = [
   { key: "shop", value: "Shop", i18nKey: "shop", color: "#14B8A6", isPill: true },
   { key: "pharmacy", value: "Pharmacy", i18nKey: "pharmacy", color: "#22C55E", isPill: true },
   { key: "bancomat", value: "Bancomat", i18nKey: "bancomat", color: "#00843D", isPill: true },
-  { key: "bar_pasticcerie", value: "Bar e Pasticcerie", i18nKey: "bar_pasticcerie", color: "#EC4899", isPill: true },
 ];
 
 export default function CategoryFilters({ value, onChange }) {
