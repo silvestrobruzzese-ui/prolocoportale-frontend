@@ -267,7 +267,7 @@ export default function MapView({
           key={track.id}
           positions={track.coords}
           pathOptions={{
-            color: "#F97316", // Orange
+            color: "#E63946", // Red
             weight: 3,
             opacity: 0.7,
           }}
@@ -279,7 +279,7 @@ export default function MapView({
         <Polyline
           positions={trailTrack}
           pathOptions={{
-            color: "#F97316", // Orange
+            color: "#E63946", // Red
             weight: 5,
             opacity: 1,
           }}
@@ -317,7 +317,7 @@ export default function MapView({
         <Polyline
           positions={camminoRoute}
           pathOptions={{
-            color: "#F97316", // Orange - matches trail style
+            color: "#E63946", // Red - matches trail style
             weight: 4,
             opacity: 0.85,
           }}
