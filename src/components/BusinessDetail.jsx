@@ -4,7 +4,7 @@ import { useI18n } from "@/lib/i18n";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X, Mountain, Route, Timer, TrendingUp, RotateCcw, ChevronRight, List, Download, Compass } from "lucide-react";
+import { Phone, Globe, MapPin, Navigation2, Clock, Heart, Sparkles, X, Mountain, Route, Timer, TrendingUp, RotateCcw, ChevronRight, List, Download, Compass, ExternalLink } from "lucide-react";
 import { downloadGpx } from "@/lib/gpxExport";
 import TrailFollower from "@/components/TrailFollower";
 import { trackBusinessView, trackNavigateClick, trackGpxDownload, trackTrailFollowStart } from "@/lib/analytics";
@@ -13,6 +13,49 @@ function formatDistance(km) {
   if (km == null) return "—";
   if (km < 1) return `${Math.round(km * 1000)} m`;
   return `${km.toFixed(2)} km`;
+}
+
+// Open route in Komoot for turn-by-turn navigation
+function openInKomoot(geojsonData, isCycling = false) {
+  if (!geojsonData?.geometry?.coordinates?.length) return;
+
+  const coords = geojsonData.geometry.coordinates;
+  const startCoord = coords[0];
+  const endCoord = coords[coords.length - 1];
+
+  // Komoot uses [lng, lat] in GeoJSON but needs lat,lng in URL
+  const startLat = startCoord[1];
+  const startLng = startCoord[0];
+  const endLat = endCoord[1];
+  const endLng = endCoord[0];
+
+  // Sport type: racebike, mtb, touringbicycle, or hike
+  const sport = isCycling ? "touringbicycle" : "hike";
+
+  // Komoot deep link URL
+  const komootUrl = `https://www.komoot.com/plan/@${startLat},${startLng},12z?sport=${sport}`;
+
+  // Try to open in app first (mobile), fallback to web
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    // Try komoot:// deep link for mobile app
+    const appUrl = `komoot://www.komoot.com/plan/@${startLat},${startLng},12z?sport=${sport}`;
+
+    // Create a hidden iframe to try the app URL
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = appUrl;
+    document.body.appendChild(iframe);
+
+    // Fallback to web after short delay
+    setTimeout(() => {
+      document.body.removeChild(iframe);
+      window.open(komootUrl, '_blank');
+    }, 1500);
+  } else {
+    window.open(komootUrl, '_blank');
+  }
 }
 
 export default function BusinessDetail({ open, onClose, business, onNavigate, onToggleFavorite, isFavorite, allBusinesses = [], onSelectBusiness }) {
@@ -396,52 +439,75 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
 
           {/* Trail-specific buttons for GPS tracks (individual sentieri or cicloturismo) */}
           {hasGpsTrack && (
-            <div className="grid grid-cols-2 gap-2 pt-2" style={{ touchAction: "manipulation" }}>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  trackGpxDownload(business.name);
-                  downloadGpx(business.geojson_data, business.name, business.description || "");
-                }}
-                onTouchEnd={(e) => {
-                  e.preventDefault();
-                  trackGpxDownload(business.name);
-                  downloadGpx(business.geojson_data, business.name, business.description || "");
-                }}
-                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-full border bg-white font-medium text-sm cursor-pointer select-none ${
-                  business.category === "Ciclo Turismo"
-                    ? "border-cyan-300 text-cyan-700 active:bg-cyan-100"
-                    : "border-sky-300 text-sky-700 active:bg-sky-100"
-                }`}
-                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
-              >
-                <Download className="w-4 h-4" /> {t("download_gpx")}
-              </button>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  trackTrailFollowStart(business.name);
-                  setShowTrailFollower(true);
-                }}
-                onTouchEnd={(e) => {
-                  e.preventDefault();
-                  trackTrailFollowStart(business.name);
-                  setShowTrailFollower(true);
-                }}
-                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-full text-white font-medium text-sm cursor-pointer select-none ${
-                  business.category === "Ciclo Turismo"
-                    ? "bg-gradient-to-r from-cyan-500 to-teal-500 active:from-cyan-700 active:to-teal-700"
-                    : "bg-gradient-to-r from-orange-500 to-sky-500 active:from-orange-700 active:to-sky-700"
-                }`}
-                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
-              >
-                <Compass className="w-4 h-4" /> {t("follow_trail")}
-              </button>
-            </div>
+            <>
+              <div className="grid grid-cols-2 gap-2 pt-2" style={{ touchAction: "manipulation" }}>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    trackGpxDownload(business.name);
+                    downloadGpx(business.geojson_data, business.name, business.description || "");
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    trackGpxDownload(business.name);
+                    downloadGpx(business.geojson_data, business.name, business.description || "");
+                  }}
+                  className={`flex items-center justify-center gap-2 px-4 py-3 rounded-full border bg-white font-medium text-sm cursor-pointer select-none ${
+                    business.category === "Ciclo Turismo"
+                      ? "border-cyan-300 text-cyan-700 active:bg-cyan-100"
+                      : "border-sky-300 text-sky-700 active:bg-sky-100"
+                  }`}
+                  style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+                >
+                  <Download className="w-4 h-4" /> {t("download_gpx")}
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    trackTrailFollowStart(business.name);
+                    setShowTrailFollower(true);
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    trackTrailFollowStart(business.name);
+                    setShowTrailFollower(true);
+                  }}
+                  className={`flex items-center justify-center gap-2 px-4 py-3 rounded-full text-white font-medium text-sm cursor-pointer select-none ${
+                    business.category === "Ciclo Turismo"
+                      ? "bg-gradient-to-r from-cyan-500 to-teal-500 active:from-cyan-700 active:to-teal-700"
+                      : "bg-gradient-to-r from-orange-500 to-sky-500 active:from-orange-700 active:to-sky-700"
+                  }`}
+                  style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+                >
+                  <Compass className="w-4 h-4" /> {t("follow_trail")}
+                </button>
+              </div>
+              {/* Komoot button for cycling routes */}
+              {business.category === "Ciclo Turismo" && (
+                <div className="pt-2" style={{ touchAction: "manipulation" }}>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      openInKomoot(business.geojson_data, true);
+                    }}
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      openInKomoot(business.geojson_data, true);
+                    }}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-green-400 text-green-700 bg-green-50 hover:bg-green-100 active:bg-green-200 font-medium text-sm cursor-pointer select-none"
+                    style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+                  >
+                    <ExternalLink className="w-4 h-4" /> {t("open_in_komoot")}
+                  </button>
+                </div>
+              )}
+            </>
           )}
 
           {/* Cammino-specific buttons for GPS tracks (when viewing any tappa) */}
