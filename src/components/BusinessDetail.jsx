@@ -59,6 +59,20 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
   // Has cammino GPS track (from start tappa)
   const hasCamminoTrack = !!camminoStart;
 
+  // Find Ciclo Turismo main route with GPS track (for tappe)
+  const cicloturismoMainRoute = React.useMemo(() => {
+    if (business?.category !== "Ciclo Turismo" || !allBusinesses.length) return null;
+    // Find the main route (Ciclovia Parchi Calabria) that has geojson_data
+    return allBusinesses.find(b =>
+      b.category === "Ciclo Turismo" &&
+      b.name?.includes("Ciclovia") &&
+      b.geojson_data?.geometry?.coordinates?.length > 0
+    );
+  }, [business, allBusinesses]);
+
+  // Has Ciclo Turismo GPS track (from main route)
+  const hasCicloturismoTrack = !!cicloturismoMainRoute;
+
   if (!business) return null;
 
   // Use business directly (no external translation API)
@@ -116,6 +130,71 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
         </SheetHeader>
 
         <div className="p-5 space-y-4">
+          {/* Ciclo Turismo info panel */}
+          {business.category === "Ciclo Turismo" && (business.difficulty || business.distance || business.duration || business.cammino_name) && (
+            <div className="rounded-2xl p-4 bg-gradient-to-r from-cyan-50 to-teal-50 border border-cyan-200">
+              {business.cammino_name && (
+                <div className="flex items-center gap-2 mb-3">
+                  <Route className="w-4 h-4 text-cyan-600" />
+                  <span className="text-sm font-semibold text-cyan-700">{business.cammino_name}</span>
+                  {business.tappa_number && (
+                    <Badge className="bg-cyan-100 text-cyan-700 text-xs">{t("stage")} {business.tappa_number}</Badge>
+                  )}
+                </div>
+              )}
+              <div className="grid grid-cols-2 gap-3">
+                {business.difficulty && (
+                  <div className="flex items-center gap-2">
+                    <Mountain className="w-4 h-4 text-teal-500" />
+                    <div>
+                      <div className="text-xs text-teal-600 uppercase tracking-wide">{t("difficulty")}</div>
+                      <div className="text-sm font-medium text-teal-800 capitalize">{business.difficulty}</div>
+                    </div>
+                  </div>
+                )}
+                {business.distance && (
+                  <div className="flex items-center gap-2">
+                    <Route className="w-4 h-4 text-cyan-500" />
+                    <div>
+                      <div className="text-xs text-cyan-600 uppercase tracking-wide">{t("trail_distance")}</div>
+                      <div className="text-sm font-medium text-cyan-800">{business.distance}</div>
+                    </div>
+                  </div>
+                )}
+                {business.duration && (
+                  <div className="flex items-center gap-2">
+                    <Timer className="w-4 h-4 text-teal-500" />
+                    <div>
+                      <div className="text-xs text-teal-600 uppercase tracking-wide">{t("duration")}</div>
+                      <div className="text-sm font-medium text-teal-800">{business.duration}</div>
+                    </div>
+                  </div>
+                )}
+                {business.elevation_gain && (
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-cyan-500" />
+                    <div>
+                      <div className="text-xs text-cyan-600 uppercase tracking-wide">{t("elevation_gain")}</div>
+                      <div className="text-sm font-medium text-cyan-800">{business.elevation_gain} m</div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              {business.geojson_data && (
+                <div className="mt-3 text-xs text-cyan-600 flex items-center gap-1">
+                  <span className="w-3 h-1 bg-cyan-500 rounded-full"></span>
+                  {t("gps_track_available")}
+                </div>
+              )}
+              {!business.geojson_data && hasCicloturismoTrack && (
+                <div className="mt-3 text-xs text-cyan-600 flex items-center gap-1">
+                  <span className="w-3 h-1 bg-cyan-500 rounded-full"></span>
+                  {t("gps_track_full_available")}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Trail info panel - only for Sentieri e Cammini */}
           {business.category === "Sentieri e Cammini" && (business.difficulty || business.distance || business.duration || business.cammino_name) && (
             <div className="rounded-2xl p-4 bg-gradient-to-r from-orange-50 to-sky-50 border border-orange-200">
@@ -394,6 +473,48 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
               </button>
             </div>
           )}
+
+          {/* Ciclo Turismo buttons for GPS tracks (main route or tappe) */}
+          {business.category === "Ciclo Turismo" && !hasGpsTrack && hasCicloturismoTrack && (
+            <div className="grid grid-cols-2 gap-2 pt-2" style={{ touchAction: "manipulation" }}>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  trackGpxDownload(cicloturismoMainRoute.name);
+                  downloadGpx(cicloturismoMainRoute.geojson_data, cicloturismoMainRoute.name, cicloturismoMainRoute.description || "Ciclovia Parchi Calabria - 545 km");
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  trackGpxDownload(cicloturismoMainRoute.name);
+                  downloadGpx(cicloturismoMainRoute.geojson_data, cicloturismoMainRoute.name, cicloturismoMainRoute.description || "Ciclovia Parchi Calabria - 545 km");
+                }}
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-cyan-300 text-cyan-700 bg-white active:bg-cyan-100 font-medium text-sm cursor-pointer select-none"
+                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+              >
+                <Download className="w-4 h-4" /> {t("download_gpx")}
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  trackTrailFollowStart(cicloturismoMainRoute.name);
+                  setShowTrailFollower(true);
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  trackTrailFollowStart(cicloturismoMainRoute.name);
+                  setShowTrailFollower(true);
+                }}
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-teal-500 active:from-cyan-700 active:to-teal-700 text-white font-medium text-sm cursor-pointer select-none"
+                style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
+              >
+                <Compass className="w-4 h-4" /> {t("follow_trail")}
+              </button>
+            </div>
+          )}
         </div>
       </SheetContent>
     </Sheet>
@@ -413,6 +534,18 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
           ...camminoStart,
           name: business.cammino_name,
           description: `Percorso completo - ${camminoTappe.length} tappe`
+        }}
+        onClose={() => setShowTrailFollower(false)}
+      />
+    )}
+
+    {/* Trail Follower Modal for Ciclo Turismo - uses the main route */}
+    {showTrailFollower && business.category === "Ciclo Turismo" && !hasGpsTrack && hasCicloturismoTrack && (
+      <TrailFollower
+        trail={{
+          ...cicloturismoMainRoute,
+          name: cicloturismoMainRoute.name,
+          description: cicloturismoMainRoute.description || "Ciclovia Parchi Calabria - 545 km"
         }}
         onClose={() => setShowTrailFollower(false)}
       />
