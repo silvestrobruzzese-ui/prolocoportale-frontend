@@ -28,6 +28,7 @@ const categoryColors = {
   "Beni Culturali": "#8B5CF6", // Viola
   Itinerari: "#10B981",   // Smeraldo
   "Sentieri e Cammini": "linear-gradient(135deg, #F97316 0%, #38BDF8 100%)", // Orange + Sky Blue gradient
+  "Ciclo Turismo": "#0891B2",  // Cyan cicloturismo
   Bancomat: "#00843D",    // Verde BCC
   "Bar e Pasticcerie": "#EC4899",  // Rosa (gelato)
 };
@@ -53,6 +54,7 @@ const categoryEmoji = {
   "Beni Culturali": "🏛",
   Itinerari: "🥾",
   "Sentieri e Cammini": "🏔",
+  "Ciclo Turismo": "🚴",
   Bancomat: "🏧",
   "Bar e Pasticcerie": "🍦",
 };

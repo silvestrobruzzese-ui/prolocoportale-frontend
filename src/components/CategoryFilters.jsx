@@ -59,6 +59,7 @@ const CATEGORIES = [
   { key: "hotel", value: "Hotel", i18nKey: "hotel", color: "#FFD700", isPill: true },
   { key: "bb", value: "B&B", i18nKey: "bb", color: "#22C55E", isPill: true },
   { key: "sentieri", value: "Sentieri e Cammini", i18nKey: "trails_and_paths", color: "#F97316", isPill: true },
+  { key: "ciclo_turismo", value: "Ciclo Turismo", i18nKey: "ciclo_turismo", color: "#0891B2", isPill: true },
   { key: "beni_culturali", value: "Beni Culturali", i18nKey: "beni_culturali", color: "#8B5CF6", isPill: true },
   { key: "itinerari", value: "Itinerari", i18nKey: "itinerari", color: "#10B981", isPill: true },
   { key: "monumenti", value: "Monumenti", i18nKey: "monumenti", color: "#A855F7", isPill: true },
