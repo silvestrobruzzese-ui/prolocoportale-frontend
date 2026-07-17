@@ -291,7 +291,7 @@ export default function MapView({
         <Polyline
           positions={cicloturismoTrack}
           pathOptions={{
-            color: "#F97316", // Orange
+            color: "#E63946", // Red
             weight: 4,
             opacity: 0.9,
           }}
