@@ -223,10 +223,11 @@ export default function HomePage() {
       return;
     }
     try {
-      // For "Sentieri e Cammini" and "Sea Park", fetch ALL without location filter (they're few)
+      // For "Sentieri e Cammini", "Sea Park" and "Ciclo Turismo", fetch ALL without location filter
       const isSentieriCammini = category === "Sentieri e Cammini";
       const isSeaPark = category === "Sea Park";
-      const fetchAll = isSentieriCammini || isSeaPark;
+      const isCicloTurismo = category === "Ciclo Turismo";
+      const fetchAll = isSentieriCammini || isSeaPark || isCicloTurismo;
       const params = { category, limit: fetchAll ? 500 : 100 };
 
       // Only add location params for other categories
@@ -324,6 +325,19 @@ export default function HomePage() {
       });
     return tappe.length > 1 ? tappe : null;
   }, [businesses, selectedCammino]);
+
+  // Get cicloturismo track for "Ciclo Turismo" category
+  const cicloturismoTrack = useMemo(() => {
+    if (category !== "Ciclo Turismo") return null;
+    // Find the main route business with geojson_data
+    const mainRoute = businesses.find(b =>
+      b.name?.includes("Ciclovia") && b.geojson_data?.geometry?.coordinates
+    );
+    if (!mainRoute?.geojson_data?.geometry?.coordinates) return null;
+    // Convert from GeoJSON [lng, lat] to Leaflet [lat, lng]
+    const coords = mainRoute.geojson_data.geometry.coordinates;
+    return coords.map(c => [c[1], c[0]]);
+  }, [businesses, category]);
 
   // Get cammino route - prefer pre-generated from database, fallback to OSRM
   useEffect(() => {
@@ -532,6 +546,7 @@ export default function HomePage() {
             camminoTappe={camminoTappe}
             camminoRoute={camminoRoute}
             showAllTracks={selectedCammino === "__sentieri__"}
+            cicloturismoTrack={cicloturismoTrack}
           />
         </main>
       </div>

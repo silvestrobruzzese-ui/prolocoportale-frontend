@@ -135,6 +135,7 @@ export default function MapView({
   camminoTappe, // array of tappe for drawing connecting line
   camminoRoute, // actual walking route coordinates from OSRM
   showAllTracks, // show all sentieri tracks at once
+  cicloturismoTrack, // cicloturismo main route track
 }) {
   const mapRef = useRef(null);
 
@@ -281,6 +282,18 @@ export default function MapView({
             color: "#F97316", // Orange
             weight: 5,
             opacity: 1,
+          }}
+        />
+      )}
+
+      {/* Cicloturismo main route track */}
+      {cicloturismoTrack && cicloturismoTrack.length > 1 && (
+        <Polyline
+          positions={cicloturismoTrack}
+          pathOptions={{
+            color: "#F97316", // Orange
+            weight: 4,
+            opacity: 0.9,
           }}
         />
       )}
