@@ -306,8 +306,8 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
             </div>
           )}
 
-          {/* Proximity panel - hidden for trails */}
-          {business.category !== "Sentieri e Cammini" && (
+          {/* Proximity panel - hidden for trails and cycling routes */}
+          {business.category !== "Sentieri e Cammini" && business.category !== "Ciclo Turismo" && (
             <div className={`rounded-2xl p-4 border ${inProx ? "border-[var(--primary)] bg-[var(--proximity)]" : "border-[var(--border)] bg-white"}`}>
               <div className="flex items-center justify-between">
                 <div className="text-xs uppercase tracking-widest text-[var(--text-secondary)] font-semibold">
@@ -390,7 +390,7 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
             </Button>
           </div>
 
-          {/* Trail-specific buttons for GPS tracks (individual sentieri) */}
+          {/* Trail-specific buttons for GPS tracks (individual sentieri or cicloturismo) */}
           {hasGpsTrack && (
             <div className="grid grid-cols-2 gap-2 pt-2" style={{ touchAction: "manipulation" }}>
               <button
@@ -406,7 +406,11 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                   trackGpxDownload(business.name);
                   downloadGpx(business.geojson_data, business.name, business.description || "");
                 }}
-                className="flex items-center justify-center gap-2 px-4 py-3 rounded-full border border-sky-300 text-sky-700 bg-white active:bg-sky-100 font-medium text-sm cursor-pointer select-none"
+                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-full border bg-white font-medium text-sm cursor-pointer select-none ${
+                  business.category === "Ciclo Turismo"
+                    ? "border-cyan-300 text-cyan-700 active:bg-cyan-100"
+                    : "border-sky-300 text-sky-700 active:bg-sky-100"
+                }`}
                 style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               >
                 <Download className="w-4 h-4" /> {t("download_gpx")}
@@ -424,7 +428,11 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                   trackTrailFollowStart(business.name);
                   setShowTrailFollower(true);
                 }}
-                className="flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-orange-500 to-sky-500 active:from-orange-700 active:to-sky-700 text-white font-medium text-sm cursor-pointer select-none"
+                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-full text-white font-medium text-sm cursor-pointer select-none ${
+                  business.category === "Ciclo Turismo"
+                    ? "bg-gradient-to-r from-cyan-500 to-teal-500 active:from-cyan-700 active:to-teal-700"
+                    : "bg-gradient-to-r from-orange-500 to-sky-500 active:from-orange-700 active:to-sky-700"
+                }`}
                 style={{ touchAction: "manipulation", WebkitTapHighlightColor: "transparent" }}
               >
                 <Compass className="w-4 h-4" /> {t("follow_trail")}
