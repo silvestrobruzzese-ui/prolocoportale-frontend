@@ -203,7 +203,11 @@ export default function BusinessDetail({ open, onClose, business, onNavigate, on
                   <Route className="w-4 h-4 text-sky-600" />
                   <span className="text-sm font-semibold text-sky-700">{business.cammino_name}</span>
                   {business.tappa_number && (
-                    <Badge className="bg-sky-100 text-sky-700 text-xs">{t("stage")} {business.tappa_number}</Badge>
+                    <Badge className="bg-sky-100 text-sky-700 text-xs">
+                      {business.tappa_number.includes(";")
+                        ? `${t("stages")} ${business.tappa_number.replace(/;/g, ", ")}`
+                        : `${t("stage")} ${business.tappa_number}`}
+                    </Badge>
                   )}
                 </div>
               )}

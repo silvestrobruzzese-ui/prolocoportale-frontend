@@ -139,6 +139,7 @@ const dict = {
     // Sentieri e Cammini
     trails_and_paths: "Sentieri e Cammini",
     stage: "Tappa",
+    stages: "Tappe",
     difficulty: "Difficoltà",
     trail_distance: "Distanza",
     duration: "Durata",
@@ -282,6 +283,7 @@ const dict = {
     // Trails and Paths
     trails_and_paths: "Trails and Paths",
     stage: "Stage",
+    stages: "Stages",
     difficulty: "Difficulty",
     trail_distance: "Distance",
     duration: "Duration",
@@ -414,6 +416,7 @@ const dict = {
     // Sentiers et Chemins
     trails_and_paths: "Sentiers et Chemins",
     stage: "Étape",
+    stages: "Étapes",
     difficulty: "Difficulté",
     trail_distance: "Distance",
     duration: "Durée",
@@ -546,6 +549,7 @@ const dict = {
     // Wanderwege und Pfade
     trails_and_paths: "Wanderwege und Pfade",
     stage: "Etappe",
+    stages: "Etappen",
     difficulty: "Schwierigkeit",
     trail_distance: "Entfernung",
     duration: "Dauer",
@@ -678,6 +682,7 @@ const dict = {
     // Senderos y Caminos
     trails_and_paths: "Senderos y Caminos",
     stage: "Etapa",
+    stages: "Etapas",
     difficulty: "Dificultad",
     trail_distance: "Distancia",
     duration: "Duración",

@@ -545,7 +545,7 @@ export default function HomePage() {
             routeTo={navigatingTo}
             camminoTappe={camminoTappe}
             camminoRoute={camminoRoute}
-            showAllTracks={selectedCammino === "__sentieri__"}
+            showAllTracks={selectedCammino && !selectedCammino.startsWith("__sentiero__")}
             cicloturismoTrack={cicloturismoTrack}
           />
         </main>
